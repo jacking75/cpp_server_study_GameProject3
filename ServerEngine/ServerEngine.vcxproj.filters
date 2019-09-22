@@ -1,0 +1,63 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="AstarFinder.cpp" />
+    <ClCompile Include="CommandLine.cpp" />
+    <ClCompile Include="CommonConvert.cpp" />
+    <ClCompile Include="CommonFunc.cpp" />
+    <ClCompile Include="CommonSocket.cpp" />
+    <ClCompile Include="CommonThreadFunc.cpp" />
+    <ClCompile Include="CommonWorkThread.cpp" />
+    <ClCompile Include="ConfigFile.cpp" />
+    <ClCompile Include="Connection.cpp" />
+    <ClCompile Include="CrashReport.cpp" />
+    <ClCompile Include="DataBuffer.cpp" />
+    <ClCompile Include="DFA.cpp" />
+    <ClCompile Include="Log.cpp" />
+    <ClCompile Include="NetManager.cpp" />
+    <ClCompile Include="ServiceBase.cpp" />
+    <ClCompile Include="SharedMemory.cpp" />
+    <ClCompile Include="TimerManager.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="AstarFinder.h" />
+    <ClInclude Include="atomic_ops.h" />
+    <ClInclude Include="AVLTree.h" />
+    <ClInclude Include="CheckMacroDefine.h" />
+    <ClInclude Include="CommandDef.h" />
+    <ClInclude Include="CommandLine.h" />
+    <ClInclude Include="CommonConvert.h" />
+    <ClInclude Include="CommonEvent.h" />
+    <ClInclude Include="CommonFunc.h" />
+    <ClInclude Include="CommonMsgQueue.h" />
+    <ClInclude Include="CommonMsgQueueEx.h" />
+    <ClInclude Include="CommonSocket.h" />
+    <ClInclude Include="CommonThreadFunc.h" />
+    <ClInclude Include="CommonWorkThread.h" />
+    <ClInclude Include="ConfigFile.h" />
+    <ClInclude Include="Connection.h" />
+    <ClInclude Include="CrashReport.h" />
+    <ClInclude Include="CritSec.h" />
+    <ClInclude Include="CritSecNotify.h" />
+    <ClInclude Include="DataBuffer.h" />
+    <ClInclude Include="DFA.h" />
+    <ClInclude Include="EventFuncManager.h" />
+    <ClInclude Include="IBufferHandler.h" />
+    <ClInclude Include="LockFreeQueue.h" />
+    <ClInclude Include="LockFreeQueueImpl.h" />
+    <ClInclude Include="Log.h" />
+    <ClInclude Include="MemObjectPool.h" />
+    <ClInclude Include="NetManager.h" />
+    <ClInclude Include="PacketHeader.h" />
+    <ClInclude Include="Platform.h" />
+    <ClInclude Include="Position.h" />
+    <ClInclude Include="RandomValue.h" />
+    <ClInclude Include="Rank.h" />
+    <ClInclude Include="ServerEngine.h" />
+    <ClInclude Include="ServiceBase.h" />
+    <ClInclude Include="SharedMemory.h" />
+    <ClInclude Include="SpinLock.h" />
+    <ClInclude Include="TimerManager.h" />
+    <ClInclude Include="WindowsDump.h" />
+  </ItemGroup>
+</Project>
