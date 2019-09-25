@@ -1,61 +1,64 @@
-﻿#ifndef __SPIN_LOCK_h__
-#define __SPIN_LOCK_h__
+﻿#pragma once
+
 #include <atomic>
 
-class CSpinLock
+namespace ServerEngine
 {
-	std::atomic_flag m_flag = ATOMIC_FLAG_INIT;
-public:
-	CSpinLock()
+	class CSpinLock
 	{
-		
-	};
+		std::atomic_flag m_flag = ATOMIC_FLAG_INIT;
 
-	~CSpinLock()
-	{
-	};
-
-	void Lock()
-	{
-		for (unsigned k = 0; TryLock(); ++k)
+	public:
+		CSpinLock()
 		{
-			if (k % 1024 == 0)
+
+		};
+
+		~CSpinLock()
+		{
+		};
+
+		void Lock()
+		{
+			for (unsigned k = 0; TryLock(); ++k)
 			{
-				CommonFunc::Sleep(1);
+				if (k % 1024 == 0)
+				{
+					CommonFunc::Sleep(1);
+				}
 			}
+
+			return;
 		}
 
-		return ;
-	}
-
-	bool TryLockTimes(unsigned nTimes)
-	{
-		for (unsigned k = 0; TryLock(); ++k)
+		bool TryLockTimes(unsigned nTimes)
 		{
-			if (k >= nTimes)
+			for (unsigned k = 0; TryLock(); ++k)
 			{
-				return false;
+				if (k >= nTimes)
+				{
+					return false;
+				}
 			}
+
+			return true;
 		}
 
-		return true;
-	}
+		bool TryLock()
+		{
+			bool bRet = m_flag.test_and_set(/*std::memory_order_acquire*/);
 
-	bool TryLock()
-	{
-		bool bRet = m_flag.test_and_set(/*std::memory_order_acquire*/);
+			return bRet;
+		}
 
-		return bRet;
-	}
+		void Unlock()
+		{
+			m_flag.clear(/*std::memory_order_release*/);
 
-	void Unlock()
-	{
-		m_flag.clear(/*std::memory_order_release*/);
-	
-		return ;
-	}
+			return;
+		}
 
-};
+	};
 
-#endif /* __SPIN_LOCK_h__ */
 
+}

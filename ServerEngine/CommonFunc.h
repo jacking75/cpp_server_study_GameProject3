@@ -1,11 +1,16 @@
-﻿#ifndef __COMMON_FUNCTION__
-#define __COMMON_FUNCTION__
+﻿#pragma once
+
+#include <string>
+#include <vector>
+
+#include "Platform.h"
+
 
 #define GET_BIT(X,Y) (((X) >> (Y-1)) & 1)
 #define SET_BIT(X,Y) ((X) |= (1 << (Y)))
 #define CLR_BIT(X,Y) ((X) &= (~(1<<Y)))
 
-namespace CommonFunc
+namespace ServerEngine
 {
 UINT32			GetProcessorNum();
 
@@ -67,4 +72,3 @@ INT32			Min(INT32 nValue1, INT32 nValue2);
 }
 
 
-#endif /* __COMMON_FUNCTION__*/

@@ -1,6 +1,4 @@
-﻿#ifndef __CHECK_MACRO_DEFINE_H__
-#define __CHECK_MACRO_DEFINE_H__
-
+﻿#pragma once
 #include <assert.h>
 
 #define ASSERT_FAIELD (assert(false))
@@ -11,4 +9,4 @@
 ////////////////////////////////////////////
 
 
-#endif //__CHECK_MACRO_DEFINE_H__
+

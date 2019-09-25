@@ -1,5 +1,4 @@
-﻿#ifndef __MSG_DEFINE_H__
-#define __MSG_DEFINE_H__
+﻿#pragma once
 
 #define BEGIN_PROCESS_MESSAGE(ClassName) \
 BOOL ClassName##::DispatchPacket(NetPacket *pNetPacket) \
@@ -26,6 +25,5 @@ BOOL ClassName##::DispatchPacket(NetPacket *pNetPacket) \
 	return TRUE;\
 }
 
-#endif /* __MSG_DEFINE_H__ */
 
 

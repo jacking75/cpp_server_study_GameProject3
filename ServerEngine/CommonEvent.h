@@ -1,7 +1,8 @@
-﻿#ifndef __COMMONEVENT__
-#define __COMMONEVENT__
+﻿#pragma once
 
-#ifdef WIN32
+#include "Platform.h"
+
+#ifdef _MSC_BUILD
 
 class CCommonEvent
 {
@@ -129,5 +130,5 @@ public:
 };
 #endif  //#ifdef WINDOWS
 
-#endif /* __COMMONEVENT__ */
+
 

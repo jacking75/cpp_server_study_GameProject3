@@ -1,213 +1,208 @@
-﻿#ifndef _TIMER_MANAGER__
-#define _TIMER_MANAGER__
+﻿#pragma once
+
 #include "CommonFunc.h"
-class CTimerSlotBase
+
+namespace ServerEngine
 {
-public:
-	virtual ~CTimerSlotBase() {}
-	virtual BOOL operator()(UINT32 pData) { return TRUE; }
-	virtual VOID* GetThisAddr() { return 0; }
-};
-
-
-
-template<typename T>
-class CTimerSlot : public CTimerSlotBase
-{
-	typedef BOOL (T::*FuncType)(UINT32);
-public:
-	CTimerSlot(BOOL (T::*FuncType)(UINT32), T* pObj)
-		: m_pFuncPtr(FuncType), m_pThis(pObj)
+	class CTimerSlotBase
 	{
+	public:
+		virtual ~CTimerSlotBase() {}
+		virtual BOOL operator()(UINT32 pData) { return TRUE; }
+		virtual VOID* GetThisAddr() { return 0; }
+	};
 
-	}
-	virtual ~CTimerSlot() {}
 
-	virtual BOOL operator() (UINT32 pData)
-	{
-		if (m_pThis != NULL && m_pFuncPtr != NULL)
-		{
-			(m_pThis->*m_pFuncPtr)(pData);
-			return true;
-		}
-		else
-		{ return false; }
-	}
-
-	virtual VOID* GetThisAddr()
-	{
-		return reinterpret_cast<VOID*>(m_pThis);
-	}
-
-private:
-	FuncType m_pFuncPtr;
-	T*		m_pThis;
-};
-
-struct TimeEvent
-{
-public:
-	TimeEvent()
-	{
-		m_dwFireTime     = 0;
-		m_dwSec			 = 0;
-		m_dwData         = 0;
-		m_pNext          = NULL;
-		m_pPrev          = NULL;
-		m_dwRepeateTimes = 0x0FFFFFFF;
-		m_pTimerFuncSlot = NULL;
-	}
-
-	~TimeEvent()
-	{
-		Reset();
-	}
-
-	void Reset()
-	{
-		m_dwFireTime     = 0;
-		m_dwSec			 = 0;
-		m_dwData         = 0;
-		m_pNext          = NULL;
-		m_pPrev          = NULL;
-		m_dwRepeateTimes = 0x0FFFFFFF;
-		if(m_pTimerFuncSlot != NULL)
-		{
-			delete m_pTimerFuncSlot;
-		}
-	}
-
-	UINT64 m_dwFireTime;  //触发时间
-	UINT32 m_dwSec;
-	UINT32 m_dwData;
-	TimeEvent* m_pPrev; //前一节点
-	TimeEvent* m_pNext; //后一节点
-	UINT32  m_dwType;   //事件类型,1 绝对时间定时器,2 相对时间定时器
-	INT32   m_dwRepeateTimes;
-	CTimerSlotBase* m_pTimerFuncSlot;
-};
-
-class EngineClass TimerManager
-{
-	TimerManager();
-	~TimerManager();
-
-public:
-	static TimerManager* GetInstancePtr();
-
-public:
 
 	template<typename T>
-	BOOL AddFixTimer(UINT32 dwSec, UINT32 dwData, BOOL (T::*FuncPtr)(UINT32), T* pObj)
+	class CTimerSlot : public CTimerSlotBase
 	{
-		TimeEvent* pNewEvent = NULL;
-		if(m_pFree == NULL)
+		typedef BOOL(T::* FuncType)(UINT32);
+	public:
+		CTimerSlot(BOOL(T::* FuncType)(UINT32), T* pObj)
+			: m_pFuncPtr(FuncType), m_pThis(pObj)
 		{
-			pNewEvent = new TimeEvent;
+
 		}
-		else
+		virtual ~CTimerSlot() {}
+
+		virtual BOOL operator() (UINT32 pData)
 		{
-			pNewEvent = m_pFree;
-			m_pFree = m_pFree->m_pNext;
-			m_pFree->m_pPrev = NULL;
-		}
-
-		pNewEvent->m_pNext = NULL;
-		pNewEvent->m_pPrev = NULL;
-
-		pNewEvent->m_dwData = dwData;
-		pNewEvent->m_dwFireTime = CommonFunc::GetDayBeginTime() + dwSec;
-
-		pNewEvent->m_dwSec = dwSec;
-		pNewEvent->m_dwType = 1;
-		pNewEvent->m_pTimerFuncSlot = new CTimerSlot<T>(FuncPtr, pObj);
-
-		if(m_pHead == NULL)
-		{
-			m_pHead = pNewEvent;
-		}
-		else
-		{
-			pNewEvent->m_pNext = m_pHead;
-			m_pHead->m_pPrev = pNewEvent;
-			m_pHead = pNewEvent;
-			m_pHead->m_pPrev = NULL;
+			if (m_pThis != NULL && m_pFuncPtr != NULL)
+			{
+				(m_pThis->*m_pFuncPtr)(pData);
+				return true;
+			}
+			else
+			{
+				return false;
+			}
 		}
 
-		//TimeEvent *pInserPos = m_pHead;
-		//while(pInserPos != NULL)
-		//{
-		//	if(pNewEvent->dwFireTime < pInserPos->dwFireTime)
-		//	{
-		//
-		//
-		//		return TRUE;
-		//	}
-		//}
+		virtual VOID* GetThisAddr()
+		{
+			return reinterpret_cast<VOID*>(m_pThis);
+		}
 
-		return TRUE;
-	}
+	private:
+		FuncType m_pFuncPtr;
+		T* m_pThis;
+	};
 
-	template<typename T>
-	BOOL AddDiffTimer(UINT32 dwSec, UINT32 dwData, BOOL (T::*FuncPtr)(UINT32), T* pObj)
+	struct TimeEvent
 	{
-		TimeEvent* pNewEvent = NULL;
-		if(m_pFree == NULL)
+	public:
+		TimeEvent()
 		{
-			pNewEvent = new TimeEvent;
-		}
-		else
-		{
-			pNewEvent = m_pFree;
-			m_pFree = m_pFree->m_pNext;
-			m_pFree->m_pPrev = NULL;
-		}
-
-		pNewEvent->m_pNext = NULL;
-		pNewEvent->m_pPrev = NULL;
-
-		pNewEvent->m_dwData = dwData;
-
-		pNewEvent->m_dwFireTime = CommonFunc::GetDayBeginTime() + dwSec;
-		pNewEvent->m_dwSec = dwSec;
-		pNewEvent->m_dwType = 2;
-
-		pNewEvent->m_pTimerFuncSlot = new CTimerSlot<T>(FuncPtr, pObj);
-		if(m_pHead == NULL)
-		{
-			m_pHead = pNewEvent;
-		}
-		else
-		{
-			pNewEvent->m_pNext = m_pHead;
-			m_pHead->m_pPrev = pNewEvent;
-			m_pHead = pNewEvent;
-			m_pHead->m_pPrev = NULL;
+			m_dwFireTime = 0;
+			m_dwSec = 0;
+			m_dwData = 0;
+			m_pNext = NULL;
+			m_pPrev = NULL;
+			m_dwRepeateTimes = 0x0FFFFFFF;
+			m_pTimerFuncSlot = NULL;
 		}
 
-		return TRUE;
-	}
+		~TimeEvent()
+		{
+			Reset();
+		}
 
-	BOOL DelTimer( UINT32 dwSec, UINT32 dwData);
+		void Reset()
+		{
+			m_dwFireTime = 0;
+			m_dwSec = 0;
+			m_dwData = 0;
+			m_pNext = NULL;
+			m_pPrev = NULL;
+			m_dwRepeateTimes = 0x0FFFFFFF;
+			if (m_pTimerFuncSlot != NULL)
+			{
+				delete m_pTimerFuncSlot;
+			}
+		}
 
-	VOID UpdateTimer();
-
-	VOID OnTimerEvent( TimeEvent* pEvent );
-
-	BOOL InitTimer();
-
-	BOOL Clear();
-
-	TimeEvent* m_pHead;
-
-	TimeEvent* m_pFree;
-
-	UINT64     m_dwCurTime;
-
-	UINT64     m_dwInitTime;  //定时器开始工作时间(不对开始工作时间之前的定时器发生作用)
-public:
-};
+		UINT64 m_dwFireTime;  //트리거 시간
+		UINT32 m_dwSec;
+		UINT32 m_dwData;
+		TimeEvent* m_pPrev; //이전 노드
+		TimeEvent* m_pNext; //다음 노드
+		UINT32  m_dwType;   //이벤트 유형, 1 절대 시간 타이머, 2 상대 시간 타이머
+		INT32   m_dwRepeateTimes;
+		CTimerSlotBase* m_pTimerFuncSlot;
+	};
 
 
+	class TimerManager
+	{
+		TimerManager();
+		~TimerManager();
 
-#endif /* _TIMER_MANAGER__ */
+	public:
+		static TimerManager* GetInstancePtr();
+
+	public:
+
+		template<typename T>
+		BOOL AddFixTimer(UINT32 dwSec, UINT32 dwData, BOOL(T::* FuncPtr)(UINT32), T* pObj)
+		{
+			TimeEvent* pNewEvent = NULL;
+			if (m_pFree == NULL)
+			{
+				pNewEvent = new TimeEvent;
+			}
+			else
+			{
+				pNewEvent = m_pFree;
+				m_pFree = m_pFree->m_pNext;
+				m_pFree->m_pPrev = NULL;
+			}
+
+			pNewEvent->m_pNext = NULL;
+			pNewEvent->m_pPrev = NULL;
+
+			pNewEvent->m_dwData = dwData;
+			pNewEvent->m_dwFireTime = CommonFunc::GetDayBeginTime() + dwSec;
+
+			pNewEvent->m_dwSec = dwSec;
+			pNewEvent->m_dwType = 1;
+			pNewEvent->m_pTimerFuncSlot = new CTimerSlot<T>(FuncPtr, pObj);
+
+			if (m_pHead == NULL)
+			{
+				m_pHead = pNewEvent;
+			}
+			else
+			{
+				pNewEvent->m_pNext = m_pHead;
+				m_pHead->m_pPrev = pNewEvent;
+				m_pHead = pNewEvent;
+				m_pHead->m_pPrev = NULL;
+			}
+					
+			return TRUE;
+		}
+
+		template<typename T>
+		BOOL AddDiffTimer(UINT32 dwSec, UINT32 dwData, BOOL(T::* FuncPtr)(UINT32), T* pObj)
+		{
+			TimeEvent* pNewEvent = NULL;
+			if (m_pFree == NULL)
+			{
+				pNewEvent = new TimeEvent;
+			}
+			else
+			{
+				pNewEvent = m_pFree;
+				m_pFree = m_pFree->m_pNext;
+				m_pFree->m_pPrev = NULL;
+			}
+
+			pNewEvent->m_pNext = NULL;
+			pNewEvent->m_pPrev = NULL;
+
+			pNewEvent->m_dwData = dwData;
+
+			pNewEvent->m_dwFireTime = CommonFunc::GetDayBeginTime() + dwSec;
+			pNewEvent->m_dwSec = dwSec;
+			pNewEvent->m_dwType = 2;
+
+			pNewEvent->m_pTimerFuncSlot = new CTimerSlot<T>(FuncPtr, pObj);
+			if (m_pHead == NULL)
+			{
+				m_pHead = pNewEvent;
+			}
+			else
+			{
+				pNewEvent->m_pNext = m_pHead;
+				m_pHead->m_pPrev = pNewEvent;
+				m_pHead = pNewEvent;
+				m_pHead->m_pPrev = NULL;
+			}
+
+			return TRUE;
+		}
+
+		BOOL DelTimer(UINT32 dwSec, UINT32 dwData);
+
+		VOID UpdateTimer();
+
+		VOID OnTimerEvent(TimeEvent* pEvent);
+
+		BOOL InitTimer();
+
+		BOOL Clear();
+
+		TimeEvent* m_pHead;
+
+		TimeEvent* m_pFree;
+
+		UINT64     m_dwCurTime;
+
+		UINT64     m_dwInitTime;  //타이머 작동 시작(작업 시간 시작 전 타이머가 아님)
+	
+	};
+
+
+
+}
