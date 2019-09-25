@@ -1,43 +1,46 @@
-﻿#ifndef _COMMON_WORK_THREAD_H_
-#define _COMMON_WORK_THREAD_H_
+﻿#pragma once
+
 #include "CommonThreadFunc.h"
 #include "CommonMsgQueue.h"
 #include "IBufferHandler.h"
 #include "LockFreeQueue.h"
 
-Th_RetName _CommonWorkThread( void* pParam );
-
-class CCommonWorkThread
+namespace ServerEngine
 {
-public:
-	CCommonWorkThread();
+	Th_RetName _CommonWorkThread(void* pParam);
 
-	~CCommonWorkThread();
+	class CCommonWorkThread
+	{
+	public:
+		CCommonWorkThread();
 
-	BOOL			Start();
+		~CCommonWorkThread();
 
-	BOOL			Stop();
+		BOOL			Start();
 
-	void			Run();
+		BOOL			Stop();
 
-	BOOL			AddMessage(NetPacket* pNetPacket);
+		void			Run();
 
-	BOOL			SetThreadHandler(IThreadHandler* pThreadHandler);
+		BOOL			AddMessage(NetPacket* pNetPacket);
 
-	BOOL			OnThreadBegin();
+		BOOL			SetThreadHandler(IThreadHandler* pThreadHandler);
 
-	BOOL			OnThreadEnd();
+		BOOL			OnThreadBegin();
 
-protected:
-	THANDLE					m_hThread;
+		BOOL			OnThreadEnd();
 
-	BOOL					m_bRun;
+	protected:
+		THANDLE					m_hThread;
 
-	IThreadHandler*			m_pThreadHandler;
+		BOOL					m_bRun;
 
-	UINT64					m_dwLastTick;
+		IThreadHandler* m_pThreadHandler;
 
-	ArrayLockFreeQueue<NetPacket*>   m_PacketQueue;
-};
+		UINT64					m_dwLastTick;
 
-#endif //_COMMON_WORK_THREAD_H_
+		ArrayLockFreeQueue<NetPacket*>   m_PacketQueue;
+	};
+
+
+}

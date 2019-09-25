@@ -36,14 +36,14 @@
 /// 
 // ============================================================================
 
-#ifndef __ARRAY_LOCK_FREE_QUEUE_IMPL_H__
-#define __ARRAY_LOCK_FREE_QUEUE_IMPL_H__
+#pragma once
 
 #include <assert.h> // assert()
 
-#ifndef WIN32
+#ifndef _MSC_BUILD
 #include <sched.h>  // sched_yield()
 #else
+#define WIN32_LEAN_AND_MEAN
 #include <windows.h>
 #define sched_yield SwitchToThread
 #endif
@@ -204,5 +204,4 @@ bool ArrayLockFreeQueue<ELEM_T, Q_SIZE>::pop(ELEM_T &a_data)
     return false;
 }
 
-#endif // __ARRAY_LOCK_FREE_QUEUE_IMPL_H__
 

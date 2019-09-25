@@ -1,5 +1,5 @@
-﻿#ifndef __COMMON_MESSAGE_QUEUE_
-#define __COMMON_MESSAGE_QUEUE_
+﻿#pragma once
+
 #include "CritSecNotify.h"
 
 namespace CommonQueue
@@ -119,4 +119,4 @@ namespace CommonQueue
     };
 }
 
-#endif /* __COMMON_MESSAGE_QUEUE_ */
+

@@ -1,54 +1,56 @@
-﻿#ifndef _GLOBAL_LOG_H_
-#define _GLOBAL_LOG_H_
+﻿#pragma once
 
+#include <string>
 #include "CritSec.h"
 
-enum LogLevel
+namespace ServerEngine
 {
-	Log_All,
-	Log_Info,
-	Log_Warnning,
-	Log_Error,
-	Log_None
-};
+	enum LogLevel
+	{
+		Log_All,
+		Log_Info,
+		Log_Warnning,
+		Log_Error,
+		Log_None
+	};
 
 
-class CLog
-{
-private:
-	CLog(void);
-	~CLog(void);
+	class CLog
+	{
+	private:
+		CLog(void);
+		~CLog(void);
 
-public:
-	static CLog* GetInstancePtr();
+	public:
+		static CLog* GetInstancePtr();
 
-	BOOL StartLog(std::string strPrefix, std::string strLogDir = "log");
+		BOOL StartLog(std::string strPrefix, std::string strLogDir = "log");
 
-	BOOL CloseLog();
+		BOOL CloseLog();
 
-	void LogWarnning(char* lpszFormat, ...);
+		void LogWarnning(char* lpszFormat, ...);
 
-	void LogError(char* lpszFormat, ...);
+		void LogError(const char* lpszFormat, ...);
 
-	void LogInfo(char* lpszFormat, ...);
+		void LogInfo(char* lpszFormat, ...);
 
-	void SetLogLevel(int Level);
+		void SetLogLevel(int Level);
 
-	void SetTitle(char* lpszFormat, ...);
+		void SetTitle(const char* lpszFormat, ...);
 
-	void Flush();
+		void Flush();
 
-protected:
-	CCritSec			m_CritSec;
+	protected:
+		CCritSec			m_CritSec;
 
-	INT32				m_LogCount;
+		INT32				m_LogCount;
 
-	FILE*				m_pLogFile;
+		FILE* m_pLogFile;
 
-	INT32				m_LogLevel;
+		INT32				m_LogLevel;
 
-	std::string         m_strPrefix;
-};
+		std::string         m_strPrefix;
+	};
 
 #define LOG_ERROR  CLog::GetInstancePtr()->LogError("Error : File:%s, Func: %s Line:%d", __FILE__ , __FUNCTION__, __LINE__);
 
@@ -103,5 +105,4 @@ protected:
     continue; \
 }
 
-
-#endif
+}

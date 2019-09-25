@@ -1,272 +1,274 @@
-﻿#ifndef __OBJECT_POOL_H__
-#define __OBJECT_POOL_H__
+﻿#pragma once
 
-template<typename T>
-class MemObjectNode
+
+namespace ServerEngine
 {
-public:
-	T m_Value;
-	MemObjectNode<T>* m_pNext;
-	MemObjectNode<T>* m_pPrev;
-};
-
-
-template <typename T>
-class MemObjectPool
-{
-public:
-	MemObjectPool(void) {}
-	~MemObjectPool(void) {FreeNodeBuffer();}
-public:
-	T*		CreateMemObject();
-	void    FreeMemObject(T* pValue);
-private:
-	bool	AllocNodeBuffer(int nSize = 64);
-	bool	FreeNodeBuffer();
-private:
-	MemObjectNode<T>* m_pFreeHead;
-	std::vector<MemObjectNode<T>*> m_NodeBuff;
-};
-
-template <typename T>
-void MemObjectPool<T>::FreeMemObject( T* pValue )
-{
-	if(pValue == NULL)
+	template<typename T>
+	class MemObjectNode
 	{
-		return;
-	}
+	public:
+		T m_Value;
+		MemObjectNode<T>* m_pNext;
+		MemObjectNode<T>* m_pPrev;
+	};
 
-	MemObjectNode<T>* pNode = (MemObjectNode<T>*)pValue;
 
-	pNode->m_pNext = m_pFreeHead;
-	if (m_pFreeHead != NULL)
+	template <typename T>
+	class MemObjectPool
 	{
-		m_pFreeHead->m_pPrev = pNode;
-	}
+	public:
+		MemObjectPool(void) {}
+		~MemObjectPool(void) { FreeNodeBuffer(); }
+	public:
+		T* CreateMemObject();
+		void    FreeMemObject(T* pValue);
+	private:
+		bool	AllocNodeBuffer(int nSize = 64);
+		bool	FreeNodeBuffer();
+	private:
+		MemObjectNode<T>* m_pFreeHead;
+		std::vector<MemObjectNode<T>*> m_NodeBuff;
+	};
 
-	m_pFreeHead = pNode;
-	m_pFreeHead->m_pPrev = NULL;
-
-	return ;
-}
-
-template <typename T>
-T* MemObjectPool<T>::CreateMemObject()
-{
-	if(m_pFreeHead == NULL)
+	template <typename T>
+	void MemObjectPool<T>::FreeMemObject(T* pValue)
 	{
-		AllocNodeBuffer();
-	}
+		if (pValue == NULL)
+		{
+			return;
+		}
 
-	if(m_pFreeHead == NULL)
-	{
-		return NULL;
-	}
+		MemObjectNode<T>* pNode = (MemObjectNode<T>*)pValue;
 
-	MemObjectNode<T>* pValidNode = m_pFreeHead;
+		pNode->m_pNext = m_pFreeHead;
+		if (m_pFreeHead != NULL)
+		{
+			m_pFreeHead->m_pPrev = pNode;
+		}
 
-	m_pFreeHead = m_pFreeHead->m_pNext;
-	if (m_pFreeHead != NULL)
-	{
+		m_pFreeHead = pNode;
 		m_pFreeHead->m_pPrev = NULL;
-	}
 
-	pValidNode->m_pNext		= NULL;
-	pValidNode->m_pPrev		= NULL;
-
-	return &pValidNode->m_Value;
-}
-
-
-
-template <typename T>
-bool MemObjectPool<T>::AllocNodeBuffer( int nSize /*= 1024*/ )
-{
-	MemObjectNode<T>* pNode = (MemObjectNode<T>*)malloc(sizeof(MemObjectNode<T>) * nSize);
-	if(pNode == NULL)
-	{
-		return false;
-	}
-
-	memset(pNode, 0, sizeof(MemObjectNode<T>) * nSize);
-
-	m_NodeBuff.push_back(pNode);
-
-	for(int i = 0; i < nSize; i++)
-	{
-		if(m_pFreeHead == NULL)
-		{
-			m_pFreeHead = pNode;
-		}
-		else
-		{
-			pNode->m_pNext			= m_pFreeHead;
-			m_pFreeHead->m_pPrev	= pNode;
-			m_pFreeHead				= pNode;
-			m_pFreeHead->m_pPrev	= NULL;
-		}
-
-		pNode ++;
-	}
-
-	return true;
-}
-
-template <typename T>
-bool MemObjectPool<T>::FreeNodeBuffer()
-{
-	for(size_t i = 0; i < m_NodeBuff.size(); ++i)
-	{
-		MemObjectNode<T>* pNode = m_NodeBuff.at(i);
-		if(pNode != NULL)
-		{
-			free(pNode);
-		}
-	}
-
-	return true;
-}
-
-////////////////////////////////////////////////
-template <typename T>
-class MemObjectMTPool
-{
-public:
-	MemObjectMTPool(void)
-	{
-		m_nUsedCount = 0;
-	}
-	~MemObjectMTPool(void) {}
-public:
-	T*		CreateMemObject();
-	void    FreeMemObject(T* pValue);
-	bool    GetObjectCount(int& total, int& used);
-private:
-	bool	AllocNodeBuffer(int nSize = 64);
-	bool	FreeNodeBuffer();
-private:
-	MemObjectNode<T>* m_pFreeHead;
-	std::vector<MemObjectNode<T>*> m_NodeBuff;
-	boost::mutex       m_pool_mutex; //池锁
-	int				   m_nUsedCount;
-};
-
-template <typename T>
-bool MemObjectMTPool<T>::GetObjectCount(int& total, int& used)
-{
-	m_pool_mutex.lock();
-	total = m_NodeBuff.size() * 64;
-	used = m_nUsedCount;
-	m_pool_mutex.unlock();
-	return true;
-}
-
-template <typename T>
-void MemObjectMTPool<T>::FreeMemObject( T* pValue )
-{
-	if(pValue == NULL)
-	{
 		return;
 	}
 
-	m_pool_mutex.lock();
-	MemObjectNode<T>* pNode = (MemObjectNode<T>*)pValue;
-	pNode->m_pNext = m_pFreeHead;
-	if (m_pFreeHead != NULL)
+	template <typename T>
+	T* MemObjectPool<T>::CreateMemObject()
 	{
-		m_pFreeHead->m_pPrev = pNode;
+		if (m_pFreeHead == NULL)
+		{
+			AllocNodeBuffer();
+		}
+
+		if (m_pFreeHead == NULL)
+		{
+			return NULL;
+		}
+
+		MemObjectNode<T>* pValidNode = m_pFreeHead;
+
+		m_pFreeHead = m_pFreeHead->m_pNext;
+		if (m_pFreeHead != NULL)
+		{
+			m_pFreeHead->m_pPrev = NULL;
+		}
+
+		pValidNode->m_pNext = NULL;
+		pValidNode->m_pPrev = NULL;
+
+		return &pValidNode->m_Value;
 	}
-	m_pFreeHead = pNode;
-	m_pFreeHead->m_pPrev = NULL;
-	m_nUsedCount -= 1;
-	m_pool_mutex.unlock();
 
-	return ;
-}
 
-template <typename T>
-T* MemObjectMTPool<T>::CreateMemObject()
-{
-	m_pool_mutex.lock();
-	if(m_pFreeHead == NULL)
+
+	template <typename T>
+	bool MemObjectPool<T>::AllocNodeBuffer(int nSize /*= 1024*/)
 	{
-		AllocNodeBuffer();
+		MemObjectNode<T>* pNode = (MemObjectNode<T>*)malloc(sizeof(MemObjectNode<T>) * nSize);
+		if (pNode == NULL)
+		{
+			return false;
+		}
+
+		memset(pNode, 0, sizeof(MemObjectNode<T>) * nSize);
+
+		m_NodeBuff.push_back(pNode);
+
+		for (int i = 0; i < nSize; i++)
+		{
+			if (m_pFreeHead == NULL)
+			{
+				m_pFreeHead = pNode;
+			}
+			else
+			{
+				pNode->m_pNext = m_pFreeHead;
+				m_pFreeHead->m_pPrev = pNode;
+				m_pFreeHead = pNode;
+				m_pFreeHead->m_pPrev = NULL;
+			}
+
+			pNode++;
+		}
+
+		return true;
 	}
 
-	if(m_pFreeHead == NULL)
+	template <typename T>
+	bool MemObjectPool<T>::FreeNodeBuffer()
 	{
+		for (size_t i = 0; i < m_NodeBuff.size(); ++i)
+		{
+			MemObjectNode<T>* pNode = m_NodeBuff.at(i);
+			if (pNode != NULL)
+			{
+				free(pNode);
+			}
+		}
+
+		return true;
+	}
+
+	////////////////////////////////////////////////
+	template <typename T>
+	class MemObjectMTPool
+	{
+	public:
+		MemObjectMTPool(void)
+		{
+			m_nUsedCount = 0;
+		}
+		~MemObjectMTPool(void) {}
+	public:
+		T* CreateMemObject();
+		void    FreeMemObject(T* pValue);
+		bool    GetObjectCount(int& total, int& used);
+	private:
+		bool	AllocNodeBuffer(int nSize = 64);
+		bool	FreeNodeBuffer();
+	private:
+		MemObjectNode<T>* m_pFreeHead;
+		std::vector<MemObjectNode<T>*> m_NodeBuff;
+		boost::mutex       m_pool_mutex; //池锁
+		int				   m_nUsedCount;
+	};
+
+	template <typename T>
+	bool MemObjectMTPool<T>::GetObjectCount(int& total, int& used)
+	{
+		m_pool_mutex.lock();
+		total = m_NodeBuff.size() * 64;
+		used = m_nUsedCount;
 		m_pool_mutex.unlock();
-		return NULL;
+		return true;
 	}
 
-	MemObjectNode<T>* pValidNode = m_pFreeHead;
-
-	m_pFreeHead = m_pFreeHead->m_pNext;
-	if (m_pFreeHead != NULL)
+	template <typename T>
+	void MemObjectMTPool<T>::FreeMemObject(T* pValue)
 	{
+		if (pValue == NULL)
+		{
+			return;
+		}
+
+		m_pool_mutex.lock();
+		MemObjectNode<T>* pNode = (MemObjectNode<T>*)pValue;
+		pNode->m_pNext = m_pFreeHead;
+		if (m_pFreeHead != NULL)
+		{
+			m_pFreeHead->m_pPrev = pNode;
+		}
+		m_pFreeHead = pNode;
 		m_pFreeHead->m_pPrev = NULL;
+		m_nUsedCount -= 1;
+		m_pool_mutex.unlock();
+
+		return;
 	}
 
-	pValidNode->m_pNext		= NULL;
-	pValidNode->m_pPrev		= NULL;
-	m_nUsedCount += 1;
-	m_pool_mutex.unlock();
-	return &pValidNode->m_Value;
-}
-
-
-
-template <typename T>
-bool MemObjectMTPool<T>::AllocNodeBuffer( int nSize /*= 1024*/ )
-{
-	MemObjectNode<T>* pNode = (MemObjectNode<T>*)malloc(sizeof(MemObjectNode<T>) * nSize);
-	if(pNode == NULL)
+	template <typename T>
+	T* MemObjectMTPool<T>::CreateMemObject()
 	{
-		return false;
-	}
-
-	memset(pNode, 0, sizeof(MemObjectNode<T>) * nSize);
-
-	m_NodeBuff.push_back(pNode);
-
-	for(int i = 0; i < nSize; i++)
-	{
-		if(m_pFreeHead == NULL)
+		m_pool_mutex.lock();
+		if (m_pFreeHead == NULL)
 		{
-			m_pFreeHead = pNode;
-		}
-		else
-		{
-			pNode->m_pNext			= m_pFreeHead;
-			m_pFreeHead->m_pPrev	= pNode;
-			m_pFreeHead				= pNode;
-			m_pFreeHead->m_pPrev	= NULL;
+			AllocNodeBuffer();
 		}
 
-		pNode ++;
-	}
-
-	return true;
-}
-
-template <typename T>
-bool MemObjectMTPool<T>::FreeNodeBuffer()
-{
-	m_pool_mutex.lock();
-	for(size_t i = 0; i < m_NodeBuff.size(); ++i)
-	{
-		MemObjectNode* pNode = m_NodeBuff.at(i);
-		if(pNode != NULL)
+		if (m_pFreeHead == NULL)
 		{
-			free(pNode);
+			m_pool_mutex.unlock();
+			return NULL;
 		}
+
+		MemObjectNode<T>* pValidNode = m_pFreeHead;
+
+		m_pFreeHead = m_pFreeHead->m_pNext;
+		if (m_pFreeHead != NULL)
+		{
+			m_pFreeHead->m_pPrev = NULL;
+		}
+
+		pValidNode->m_pNext = NULL;
+		pValidNode->m_pPrev = NULL;
+		m_nUsedCount += 1;
+		m_pool_mutex.unlock();
+		return &pValidNode->m_Value;
 	}
-	m_pool_mutex.unlock();
-	return true;
-}
 
 
-//////////////////////////////////////////////////////////////
+
+	template <typename T>
+	bool MemObjectMTPool<T>::AllocNodeBuffer(int nSize /*= 1024*/)
+	{
+		MemObjectNode<T>* pNode = (MemObjectNode<T>*)malloc(sizeof(MemObjectNode<T>) * nSize);
+		if (pNode == NULL)
+		{
+			return false;
+		}
+
+		memset(pNode, 0, sizeof(MemObjectNode<T>) * nSize);
+
+		m_NodeBuff.push_back(pNode);
+
+		for (int i = 0; i < nSize; i++)
+		{
+			if (m_pFreeHead == NULL)
+			{
+				m_pFreeHead = pNode;
+			}
+			else
+			{
+				pNode->m_pNext = m_pFreeHead;
+				m_pFreeHead->m_pPrev = pNode;
+				m_pFreeHead = pNode;
+				m_pFreeHead->m_pPrev = NULL;
+			}
+
+			pNode++;
+		}
+
+		return true;
+	}
+
+	template <typename T>
+	bool MemObjectMTPool<T>::FreeNodeBuffer()
+	{
+		m_pool_mutex.lock();
+		for (size_t i = 0; i < m_NodeBuff.size(); ++i)
+		{
+			MemObjectNode* pNode = m_NodeBuff.at(i);
+			if (pNode != NULL)
+			{
+				free(pNode);
+			}
+		}
+		m_pool_mutex.unlock();
+		return true;
+	}
+
+
+	//////////////////////////////////////////////////////////////
 
 
 #define MEM_OBJECT_POOL_SUPORT(ClassName) \
@@ -310,4 +312,4 @@ bool MemObjectMTPool<T>::FreeNodeBuffer()
 		return &s_MemObjectPool; \
 	}
 
-#endif //__OBJECT_POOL_H__
+}

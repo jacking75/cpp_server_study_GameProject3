@@ -1,10 +1,9 @@
-﻿#include "stdafx.h"
-#include "CommonThreadFunc.h"
+﻿#include "CommonThreadFunc.h"
 
 THANDLE CommonThreadFunc::CreateThread( Th_RetName (*pThreadFunc) (void*),  void* pArg)
 {
 	THANDLE hThread = (THANDLE)0;
-#ifdef WIN32
+#ifdef _MSC_BUILD
 	hThread = (THANDLE)_beginthread(pThreadFunc, 0, pArg);
 #else
 	pthread_create(&hThread, NULL, pThreadFunc, pArg);
@@ -14,7 +13,7 @@ THANDLE CommonThreadFunc::CreateThread( Th_RetName (*pThreadFunc) (void*),  void
 
 void CommonThreadFunc::ExitThread()
 {
-#ifdef WIN32
+#ifdef _MSC_BUILD
 	_endthread();
 #else
 	pthread_exit(NULL);
@@ -23,7 +22,7 @@ void CommonThreadFunc::ExitThread()
 
 BOOL CommonThreadFunc::WaitThreadExit( THANDLE hThread )
 {
-#ifdef WIN32
+#ifdef _MSC_BUILD
 	WaitForSingleObject(hThread, INFINITE);
 #else
 	void* pStatue = NULL;

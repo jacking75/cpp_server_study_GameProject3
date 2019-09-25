@@ -1,117 +1,121 @@
-﻿#ifndef _NET_MANAGER_H_
-#define _NET_MANAGER_H_
+﻿#pragma once
+
+#include <string>
+
 #include "IBufferHandler.h"
 #include "CommonThreadFunc.h"
 #include "CommonMsgQueue.h"
 
-Th_RetName _NetEventThread( void* pParam );
-
-Th_RetName _NetListenThread( void* pParam );
-
-struct EventNode
+namespace ServerEngine
 {
-	UINT32		dwEvent;
-	void*		pPtr;
-};
+	Th_RetName _NetEventThread(void* pParam);
 
-////////////////////////////////////////////////
+	Th_RetName _NetListenThread(void* pParam);
 
-class CNetManager
-{
-	CNetManager(void);
-
-	virtual ~CNetManager(void);
-public:
-	static CNetManager* GetInstancePtr()
+	struct EventNode
 	{
-		static CNetManager NetManager;
+		UINT32		dwEvent;
+		void* pPtr;
+	};
 
-		return &NetManager;
-	}
-public:
-	BOOL	Start(UINT16 nPortNum,  UINT32 nMaxConn, IDataHandler* pBufferHandler);
+	////////////////////////////////////////////////
 
-	BOOL	Close();
+	class CNetManager
+	{
+		CNetManager(void);
 
-	BOOL	SendMessageByConnID(UINT32 dwConnID,  UINT32 dwMsgID, UINT64 u64TargetID, UINT32 dwUserData,  const char* pData, UINT32 dwLen);
+		virtual ~CNetManager(void);
+	public:
+		static CNetManager* GetInstancePtr()
+		{
+			static CNetManager NetManager;
 
-	BOOL    SendMsgBufByConnID(UINT32 dwConnID, IDataBuffer* pBuffer);
-public:
-	BOOL	InitNetwork();
+			return &NetManager;
+		}
+	public:
+		BOOL	Start(UINT16 nPortNum, UINT32 nMaxConn, IDataHandler* pBufferHandler);
 
-	BOOL	UninitNetwork();
+		BOOL	Close();
 
-	BOOL	StartListen(UINT16 nPortNum);
+		BOOL	SendMessageByConnID(UINT32 dwConnID, UINT32 dwMsgID, UINT64 u64TargetID, UINT32 dwUserData, const char* pData, UINT32 dwLen);
 
-	BOOL	StopListen();
+		BOOL    SendMsgBufByConnID(UINT32 dwConnID, IDataBuffer* pBuffer);
+	public:
+		BOOL	InitNetwork();
 
-	//以下是完成端口部分
-public:
-	BOOL	CreateCompletePort();
+		BOOL	UninitNetwork();
 
-	BOOL	DestroyCompletePort();
+		BOOL	StartListen(UINT16 nPortNum);
 
-	BOOL	CreateEventThread(UINT32 nNum);
+		BOOL	StopListen();
 
-	BOOL    CloseEventThread();
+		//以下是完成端口部分
+	public:
+		BOOL	CreateCompletePort();
 
-	BOOL	WorkThread_ProcessEvent(UINT32 nParam);
+		BOOL	DestroyCompletePort();
 
-	BOOL	WorkThread_Listen();
+		BOOL	CreateEventThread(UINT32 nNum);
 
-	BOOL	EventDelete(CConnection* pConnection);
+		BOOL    CloseEventThread();
 
-	BOOL	PostSendOperation(CConnection* pConnection, BOOL bCheck = TRUE);
+		BOOL	WorkThread_ProcessEvent(UINT32 nParam);
 
-	CConnection*	AssociateCompletePort(SOCKET hSocket, BOOL bConnect);
+		BOOL	WorkThread_Listen();
 
-	CConnection*	ConnectTo_Sync(std::string strIpAddr, UINT16 sPort);
+		BOOL	EventDelete(CConnection* pConnection);
 
-	CConnection*	ConnectTo_Async(std::string strIpAddr, UINT16 sPort);
+		BOOL	PostSendOperation(CConnection* pConnection, BOOL bCheck = TRUE);
 
-public:
-	SOCKET				m_hListenSocket;
+		CConnection* AssociateCompletePort(SOCKET hSocket, BOOL bConnect);
 
-	HANDLE				m_hCompletePort;
+		CConnection* ConnectTo_Sync(std::string strIpAddr, UINT16 sPort);
 
-	BOOL				m_bCloseEvent;		//是否关闭事件处理线程
+		CConnection* ConnectTo_Async(std::string strIpAddr, UINT16 sPort);
 
-	IDataHandler*		m_pBufferHandler;
-	THANDLE				 m_hListenThread;
-	std::vector<THANDLE> m_vtEventThread;
+	public:
+		SOCKET				m_hListenSocket;
+
+		HANDLE				m_hCompletePort;
+
+		BOOL				m_bCloseEvent;		//是否关闭事件处理线程
+
+		IDataHandler* m_pBufferHandler;
+		THANDLE				 m_hListenThread;
+		std::vector<THANDLE> m_vtEventThread;
 
 #ifndef WIN32
 
-	static void SignalHandler(int nValue)
-	{
-		return;
-	}
+		static void SignalHandler(int nValue)
+		{
+			return;
+		}
 
-	BOOL  ClearSignal()
-	{
-		m_NewAct.sa_handler = CNetManager::SignalHandler;
+		BOOL  ClearSignal()
+		{
+			m_NewAct.sa_handler = CNetManager::SignalHandler;
 
-		sigemptyset(&m_NewAct.sa_mask); //清空此信号集
+			sigemptyset(&m_NewAct.sa_mask); //清空此信号集
 
-		m_NewAct.sa_flags = 0;
+			m_NewAct.sa_flags = 0;
 
-		sigaction(SIGPIPE, &m_NewAct, &m_OldAct);
+			sigaction(SIGPIPE, &m_NewAct, &m_OldAct);
 
-		return TRUE;
-	}
+			return TRUE;
+		}
 
-	BOOL RestoreSignal()
-	{
-		sigaction(SIGPIPE, &m_OldAct, NULL); //恢复成原始状态
+		BOOL RestoreSignal()
+		{
+			sigaction(SIGPIPE, &m_OldAct, NULL); //恢复成原始状态
 
-		return TRUE;
-	}
+			return TRUE;
+		}
 
-	struct sigaction m_NewAct, m_OldAct;
-
-#endif
-
-};
+		struct sigaction m_NewAct, m_OldAct;
 
 #endif
+
+	};
+
+}
 

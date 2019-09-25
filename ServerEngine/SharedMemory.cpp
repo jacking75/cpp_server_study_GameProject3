@@ -1,4 +1,6 @@
 ﻿#include "Platform.h"
+#include "CheckMacroDefine.h"
+#include "CommonFunc.h"
 #include "SharedMemory.h"
 
 namespace ServerEngine
@@ -90,14 +92,14 @@ namespace ServerEngine
 
 		shareMemoryPage newpage;
 
-		newpage.m_shm = CommonFunc::CreateShareMemory(m_nModuleID, m_nPageCount, size);
+		newpage.m_shm = CreateShareMemory(m_nModuleID, m_nPageCount, size);
 		if (newpage.m_shm == NULL)
 		{
 			ASSERT_FAIELD;
 			return FALSE;
 		}
 
-		newpage.m_pdata = (CHAR*)CommonFunc::GetShareMemory(newpage.m_shm);
+		newpage.m_pdata = (CHAR*)GetShareMemory(newpage.m_shm);
 		if (newpage.m_pdata == NULL)
 		{
 			ASSERT_FAIELD;
@@ -185,12 +187,12 @@ namespace ServerEngine
 		while (1)
 		{
 			shareMemoryPage page;
-			page.m_shm = CommonFunc::OpenShareMemory(m_nModuleID, m_nPageCount);
+			page.m_shm = OpenShareMemory(m_nModuleID, m_nPageCount);
 			if (page.m_shm == NULL)
 			{
 				break;
 			}
-			page.m_pdata = (CHAR*)CommonFunc::GetShareMemory(page.m_shm);
+			page.m_pdata = (CHAR*)GetShareMemory(page.m_shm);
 			if (page.m_pdata == NULL)
 			{
 				break;
@@ -217,10 +219,10 @@ namespace ServerEngine
 		m_nPageCount = 0;
 
 		shareMemoryPage firstpage;
-		firstpage.m_shm = CommonFunc::OpenShareMemory(m_nModuleID, 0);
+		firstpage.m_shm = OpenShareMemory(m_nModuleID, 0);
 		if (firstpage.m_shm != NULL)
 		{
-			firstpage.m_pdata = (CHAR*)CommonFunc::GetShareMemory(firstpage.m_shm);
+			firstpage.m_pdata = (CHAR*)GetShareMemory(firstpage.m_shm);
 			if (firstpage.m_pdata != NULL)
 			{
 				firstpage.m_pBlock = (_SMBlock*)(firstpage.m_pdata + m_rawblockSize * m_nCountperPage);
@@ -239,14 +241,14 @@ namespace ServerEngine
 			{
 				shareMemoryPage firstpage;
 
-				firstpage.m_shm = CommonFunc::CreateShareMemory(m_nModuleID, 0, size);
+				firstpage.m_shm = CreateShareMemory(m_nModuleID, 0, size);
 				if (firstpage.m_shm == NULL)
 				{
 					ASSERT_FAIELD;
 					return;
 				}
 
-				firstpage.m_pdata = (CHAR*)CommonFunc::GetShareMemory(firstpage.m_shm);
+				firstpage.m_pdata = (CHAR*)GetShareMemory(firstpage.m_shm);
 
 				///找到头数据块的头
 				firstpage.m_pBlock = (_SMBlock*)(firstpage.m_pdata + m_rawblockSize * m_nCountperPage);
@@ -268,8 +270,8 @@ namespace ServerEngine
 	{
 		for (UINT32 r = 0; r < (UINT32)m_ShareMemoryPageMapping.size(); r++)
 		{
-			CommonFunc::ReleaseShareMemory(m_ShareMemoryPageMapping[r].m_pdata);
-			CommonFunc::CloseShareMemory(m_ShareMemoryPageMapping[r].m_shm);
+			ReleaseShareMemory(m_ShareMemoryPageMapping[r].m_pdata);
+			CloseShareMemory(m_ShareMemoryPageMapping[r].m_shm);
 			m_ShareMemoryPageMapping[r].m_shm = INVALID_HANDLE_VALUE;
 		}
 	}

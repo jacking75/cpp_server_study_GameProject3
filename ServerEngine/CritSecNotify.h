@@ -1,65 +1,70 @@
-﻿
-#ifndef __CCRITSECT_NOTIFY__
-#define __CCRITSECT_NOTIFY__
+﻿#pragma once
 
-#ifdef WIN32
+#ifdef _MSC_BUILD
+#define WIN32_LEAN_AND_MEAN
+#include <Windows.h>
 // wrapper for whatever critical section we have
-class CCritSecNotify 
+namespace ServerEngine
 {
-private:
-    // make copy constructor and assignment operator inaccessible
-
-    CCritSecNotify(const CCritSecNotify &refCritSec);
-    CCritSecNotify &operator=(const CCritSecNotify &refCritSec);
-
-    CRITICAL_SECTION m_CritSec;
-
-	HANDLE			 m_hEvent;
-
-public:
-    CCritSecNotify() 
+	class CCritSecNotify
 	{
-        InitializeCriticalSection(&m_CritSec);
+	private:
+		// make copy constructor and assignment operator inaccessible
 
-		m_hEvent = CreateEvent(NULL, FALSE, FALSE, "");
-    };
+		CCritSecNotify(const CCritSecNotify& refCritSec);
+		CCritSecNotify& operator=(const CCritSecNotify& refCritSec);
 
-    ~CCritSecNotify() 
-	{
-        DeleteCriticalSection(&m_CritSec);
+		CRITICAL_SECTION m_CritSec;
 
-		CloseHandle(m_hEvent);
+		HANDLE			 m_hEvent;
 
-    };
+	public:
+		CCritSecNotify()
+		{
+			InitializeCriticalSection(&m_CritSec);
 
-    void Lock() 
-	{
-        EnterCriticalSection(&m_CritSec);
-    };
+			m_hEvent = CreateEvent(NULL, FALSE, FALSE, L"");
+		};
 
-    void Unlock() 
-	{
-        LeaveCriticalSection(&m_CritSec);
-    };
+		~CCritSecNotify()
+		{
+			DeleteCriticalSection(&m_CritSec);
+
+			CloseHandle(m_hEvent);
+
+		};
+
+		void Lock()
+		{
+			EnterCriticalSection(&m_CritSec);
+		};
+
+		void Unlock()
+		{
+			LeaveCriticalSection(&m_CritSec);
+		};
 
 
-	void Wait(UINT32 dwTime = INFINITE)
-	{
-		Unlock();
-		WaitForSingleObject(m_hEvent, dwTime);
-	}
+		void Wait(UINT32 dwTime = INFINITE)
+		{
+			Unlock();
+			WaitForSingleObject(m_hEvent, dwTime);
+		}
 
 
-	BOOL Notify()
-	{
-		return SetEvent(m_hEvent);
-	}
+		BOOL Notify()
+		{
+			return SetEvent(m_hEvent);
+		}
 
-};
-
+	};
+}
 #else //LINUX
 #define INFINITE (0xffffffff)
 #include <pthread.h>
+
+namespace ServerEngine
+{
 class CCritSecNotify 
 {
     // make copy constructor and assignment operator inaccessible
@@ -145,7 +150,7 @@ public:
 
 
 };
+}
 #endif  //#ifdef WINDOWS
 
-#endif /* __CCRITSECT_NOTIFY__ */
 

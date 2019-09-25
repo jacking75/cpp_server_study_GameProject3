@@ -1,7 +1,8 @@
-﻿#include "stdafx.h"
+﻿#ifdef _MSC_BUILD
+#include <string>
 
-#ifdef WIN32
 #pragma warning(disable: 4996)
+#define WIN32_LEAN_AND_MEAN
 #include <windows.h>
 
 #include <stdio.h>
@@ -25,12 +26,11 @@ long   __stdcall  CrashCallBack(_EXCEPTION_POINTERS* pExInfo)
 	time_t ctTime;
 	time(&ctTime);
 	pTime = localtime( &ctTime );
-	TCHAR tem[256];
-	memset(tem, 0, 256);
+	char tem[256] = { 0, };
 	snprintf(tem, 256, ("%s-%d-%d-%d_%d-%d-%d.dmp"), g_AppName.c_str(),
 	         1900 + pTime->tm_year, 1 + pTime->tm_mon, pTime->tm_mday, pTime->tm_hour, pTime->tm_min, pTime->tm_sec);
 
-	HANDLE hFile = ::CreateFile( tem, GENERIC_WRITE, 0, NULL, CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL, NULL);
+	HANDLE hFile = ::CreateFileA(tem, GENERIC_WRITE, 0, NULL, CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL, NULL);
 	if( hFile != INVALID_HANDLE_VALUE)
 	{
 		MINIDUMP_EXCEPTION_INFORMATION einfo;

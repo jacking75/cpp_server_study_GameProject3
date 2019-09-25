@@ -1,5 +1,4 @@
-﻿#ifndef _SERVER_ENGINE_H_
-#define _SERVER_ENGINE_H_
+﻿#pragma once
 
 #include <map>
 #include <vector>
@@ -19,4 +18,4 @@
 #include "SharedMemory.h"
 #include "SpinLock.h"
 #include "ServiceBase.h"
-#endif //_SERVER_ENGINE_H_
+

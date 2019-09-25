@@ -9,7 +9,7 @@ namespace ServerEngine
 
 		m_pFree = NULL;
 
-		m_dwInitTime = CommonFunc::GetCurrTime();
+		m_dwInitTime = GetCurrTime();
 	}
 
 	TimerManager::~TimerManager()
@@ -77,7 +77,7 @@ namespace ServerEngine
 
 	VOID TimerManager::UpdateTimer()
 	{
-		m_dwCurTime = CommonFunc::GetCurrTime();
+		m_dwCurTime = GetCurrTime();
 		TimeEvent* pCurEvent = m_pHead;
 		while (pCurEvent != NULL)
 		{
@@ -125,7 +125,7 @@ namespace ServerEngine
 
 	BOOL TimerManager::InitTimer()
 	{
-		m_dwInitTime = CommonFunc::GetCurrTime();
+		m_dwInitTime = GetCurrTime();
 		return TRUE;
 	}
 

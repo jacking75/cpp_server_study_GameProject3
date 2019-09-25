@@ -40,8 +40,9 @@
 #ifndef __ATOMIC_OPS_H
 #define __ATOMIC_OPS_H
 
-#ifdef WIN32
+#ifdef _MSC_BUILD
 #include <wtypes.h>
+#define WIN32_LEAN_AND_MEAN
 #include <Windows.h>
 #endif
 

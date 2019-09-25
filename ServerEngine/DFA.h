@@ -1,47 +1,53 @@
-#ifndef __D_F_A_H__
-#define __D_F_A_H__
+#pragma once
 
-class DFANode;
-typedef char KeyType;
-typedef std::map<KeyType, DFANode*> DFANodeMap;
-typedef std::set<KeyType> DFANodeSet;
+#include <map>
+#include <set>
+#include <string>
 
-class DFANode
+
+namespace ServerEngine
 {
-public:
-	DFANode(KeyType key);
+	class DFANode;
+	typedef char KeyType;
+	typedef std::map<KeyType, DFANode*> DFANodeMap;
+	typedef std::set<KeyType> DFANodeSet;
 
-	~DFANode();
+	class DFANode
+	{
+	public:
+		DFANode(KeyType key);
 
-	DFANode* AddNode(KeyType key);
+		~DFANode();
 
-	BOOL AddNode(const KeyType* key, INT32 len);
+		DFANode* AddNode(KeyType key);
 
-	DFANode* GetNode(KeyType key) const;
+		BOOL AddNode(const KeyType* key, INT32 len);
 
-	BOOL HasKeyWord(const KeyType* pdata, INT32 len, BOOL bReturn = TRUE);
+		DFANode* GetNode(KeyType key) const;
 
-	BOOL LoadFile(const std::string& filename);
+		BOOL HasKeyWord(const KeyType* pdata, INT32 len, BOOL bReturn = TRUE);
 
-	BOOL IsFileterWord(const std::string& word);
+		BOOL LoadFile(const std::string& filename);
 
-	BOOL FilterKeyWords(std::string& word, const std::string& dest = "*");
+		BOOL IsFileterWord(const std::string& word);
 
-private:
-	void GetKeyPos(INT32& nStart, INT32& nLen);
+		BOOL FilterKeyWords(std::string& word, const std::string& dest = "*");
 
-	void ClearChildNode();
+	private:
+		void GetKeyPos(INT32& nStart, INT32& nLen);
 
-	BOOL HasEnding();
+		void ClearChildNode();
 
-	INT32 GetChildCount() const;
-protected:
-	KeyType		m_key;
-	INT32		m_start;
-	DFANodeMap	m_childNodeMap;
+		BOOL HasEnding();
 
-	static INT32 s_length;
-	static INT32 s_maxlen;
-};
+		INT32 GetChildCount() const;
+	protected:
+		KeyType		m_key;
+		INT32		m_start;
+		DFANodeMap	m_childNodeMap;
 
-#endif
+		static INT32 s_length;
+		static INT32 s_maxlen;
+	};
+
+}

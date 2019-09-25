@@ -1,13 +1,12 @@
-﻿#ifndef __COMMON_THREAD_FUNC__
-#define __COMMON_THREAD_FUNC__
+﻿#pragma once
 
-#ifndef WIN32
+#ifndef _MSC_BUILD
 #include <pthread.h>
 typedef pthread_t THANDLE;
 #define Th_RetName void*
 #define Th_RetValue NULL
 #else
-#include <process.h>
+#include "Platform.h"
 typedef HANDLE THANDLE;
 #define Th_RetName void
 #define Th_RetValue
@@ -24,5 +23,3 @@ VOID		ExitThread();
 BOOL		WaitThreadExit(THANDLE hThread);
 }
 
-
-#endif /* __COMMON_THREAD_FUNC__ */

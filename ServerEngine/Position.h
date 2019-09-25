@@ -1,26 +1,28 @@
-﻿#ifndef _OBJECT_POS_
-#define _OBJECT_POS_
+﻿#pragma once
 
-class CPosition
+
+namespace ServerEngine
 {
-public:
-	CPosition(void)
+	class CPosition
 	{
-		x = 0.0f;
-		y = 0.0f;
-		z = 0.0f;
-		d = 0.0f;
-	}
+	public:
+		CPosition(void)
+		{
+			x = 0.0f;
+			y = 0.0f;
+			z = 0.0f;
+			d = 0.0f;
+		}
 
-	~CPosition(void)
-	{
+		~CPosition(void)
+		{
 
-	}
+		}
 
-public:
+	public:
 
-	FLOAT x, y, z, d;
+		FLOAT x, y, z, d;
 
-};
+	};
 
-#endif //_OBJECT_POS_
+}

@@ -1,9 +1,8 @@
-﻿#ifndef __COMMON_SOCKET__
-#define __COMMON_SOCKET__
+﻿#pragma once
 
 #define SOCKET_ERROR 		(-1)
 
-namespace CommonSocket
+namespace ServerEngine
 {
 //设置套接字为可重用状态
 BOOL		SetSocketReuseable(SOCKET hSocket);
@@ -66,4 +65,3 @@ BOOL		AcceptSocketEx(SOCKET hListenSocket, LPOVERLAPPED lpOverlapped);
 }
 
 
-#endif /* __COMMON_SOCKET__*/
