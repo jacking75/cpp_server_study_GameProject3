@@ -3,12 +3,14 @@
 #include <deque>
 
 #include "IBufferHandler.h"
-#include "Connection.h"
 //#include "google/protobuf/message.h"
 #include "ConfigFile.h"
+#include "SpinLock.h"
 
 namespace ServerEngine
 {
+	class Connection;
+
 	class ServiceBase : public IDataHandler//, public CEventFuncManager
 	{
 	protected:

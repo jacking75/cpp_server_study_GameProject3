@@ -3,6 +3,11 @@
 namespace ServerEngine
 {
 #ifdef _MSC_BUILD
+#define WIN32_LEAN_AND_MEAN
+#include <Windows.h>
+
+#include "Platform.h"
+
 	class CCritSec
 	{
 	private:

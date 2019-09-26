@@ -1,10 +1,12 @@
-﻿#include "Platform.h"
+﻿
+#include "Connection.h"
+
 #include "CheckMacroDefine.h"
 #include "Log.h"
-#include "Connection.h"
 #include "DataBuffer.h"
 #include "CommonSocket.h"
 #include "PacketHeader.h"
+
 
 namespace ServerEngine
 {

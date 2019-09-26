@@ -2,6 +2,7 @@
 
 #include <map>
 #include <vector>
+#include <time.h>
 
 namespace ServerEngine
 {
@@ -233,129 +234,129 @@ namespace ServerEngine
 		}
 
 		/**数据库修改*/
-		BOOL SaveModifyToDB(IDBInterface* pdb)
-		{
-			///共享内存不存在直接返回
-			if (m_MemoryPool == NULL)
-			{
-				m_MemoryPool = new SharedMemory<T>(m_nModuleID, m_nCount, true);
-			}
-			if (m_MemoryPool == NULL)
-			{
-				return false;
-			}
+		//BOOL SaveModifyToDB(IDBInterface* pdb)
+		//{
+		//	///共享内存不存在直接返回
+		//	if (m_MemoryPool == NULL)
+		//	{
+		//		m_MemoryPool = new SharedMemory<T>(m_nModuleID, m_nCount, true);
+		//	}
+		//	if (m_MemoryPool == NULL)
+		//	{
+		//		return false;
+		//	}
 
-			if (m_MemoryPool->IsFirstCreated())
-			{
-				///共享内存还没创建
-				delete m_MemoryPool;
-				m_MemoryPool = NULL;
-				return false;
-			}
+		//	if (m_MemoryPool->IsFirstCreated())
+		//	{
+		//		///共享内存还没创建
+		//		delete m_MemoryPool;
+		//		m_MemoryPool = NULL;
+		//		return false;
+		//	}
 
-			INT32 newtimes = 0, writetimes = 0, deletetimes = 0, releasetime = 0;
-			BOOL hasOprate = false; //是否有操作
-			///获取所有修改过的数据,getRawMemoryBlockSize会重新计算所有共享块，
-			UINT32 temblockSize = m_MemoryPool->GetRawMemoryBlockSize();
-			for (UINT32 r = 0; r < temblockSize; r++)
-			{
-				_SMBlock* pBlock = m_MemoryPool->GetSMBbyRawIndex(r);
-				if (pBlock == NULL)
-				{
-					continue;
-				}
-				if (pBlock->m_bUse == false)
-				{
-					continue;
-				}
-				T* pdata = m_MemoryPool->GetObjectByRawindex(r);
-				if (pdata == NULL)
-				{
-					continue;
-				}
-				if (pdata->GetCheckCode() != BLOCK_CHECK_CODE)
-				{
-					continue;
-				}
-				if (!pdata->isUse())
-				{
-					continue;
-				}
-				///正在修改数据,跳过
-				if (pdata->islock())
-				{
-					continue;
-				}
-				///优先回调删除
-				if (pdata->isDestroy())
-				{
-					pdata->Delete(pdb);
-					m_MemoryPool->DestoryObject(pdata);
-					hasOprate = true;
-					deletetimes++;
-					continue;
-				}
-				///其次回调新建
-				if (pBlock->m_bNewBlock)
-				{
-					pBlock->m_beforeTime = time(NULL);
-					pdata->Create(pdb);
-					pBlock->m_bNewBlock = false;
-					pBlock->m_afterTime = time(NULL);
-					hasOprate = true;
-					newtimes++;
-					continue;
-				}
+		//	INT32 newtimes = 0, writetimes = 0, deletetimes = 0, releasetime = 0;
+		//	BOOL hasOprate = false; //是否有操作
+		//	///获取所有修改过的数据,getRawMemoryBlockSize会重新计算所有共享块，
+		//	UINT32 temblockSize = m_MemoryPool->GetRawMemoryBlockSize();
+		//	for (UINT32 r = 0; r < temblockSize; r++)
+		//	{
+		//		_SMBlock* pBlock = m_MemoryPool->GetSMBbyRawIndex(r);
+		//		if (pBlock == NULL)
+		//		{
+		//			continue;
+		//		}
+		//		if (pBlock->m_bUse == false)
+		//		{
+		//			continue;
+		//		}
+		//		T* pdata = m_MemoryPool->GetObjectByRawindex(r);
+		//		if (pdata == NULL)
+		//		{
+		//			continue;
+		//		}
+		//		if (pdata->GetCheckCode() != BLOCK_CHECK_CODE)
+		//		{
+		//			continue;
+		//		}
+		//		if (!pdata->isUse())
+		//		{
+		//			continue;
+		//		}
+		//		///正在修改数据,跳过
+		//		if (pdata->islock())
+		//		{
+		//			continue;
+		//		}
+		//		///优先回调删除
+		//		if (pdata->isDestroy())
+		//		{
+		//			pdata->Delete(pdb);
+		//			m_MemoryPool->DestoryObject(pdata);
+		//			hasOprate = true;
+		//			deletetimes++;
+		//			continue;
+		//		}
+		//		///其次回调新建
+		//		if (pBlock->m_bNewBlock)
+		//		{
+		//			pBlock->m_beforeTime = time(NULL);
+		//			pdata->Create(pdb);
+		//			pBlock->m_bNewBlock = false;
+		//			pBlock->m_afterTime = time(NULL);
+		//			hasOprate = true;
+		//			newtimes++;
+		//			continue;
+		//		}
 
-				time_t lastMotifyTime;
-				time_t beforeTime, afterTime;
-				lastMotifyTime = pdata->getLastMotifyTime();
-				beforeTime = pBlock->m_beforeTime;
-				afterTime = pBlock->m_afterTime;
-				BOOL needsave = false;
-				///保存完毕的时间大于保存前的时间,那么上一次保存成功的
-				if (afterTime >= beforeTime)
-				{
-					if (lastMotifyTime > beforeTime)
-					{
-						needsave = true;
-					}
-				}
-				else
-				{
-					needsave = true;///上一次保存失败,立即保存
-				}
+		//		time_t lastMotifyTime;
+		//		time_t beforeTime, afterTime;
+		//		lastMotifyTime = pdata->getLastMotifyTime();
+		//		beforeTime = pBlock->m_beforeTime;
+		//		afterTime = pBlock->m_afterTime;
+		//		BOOL needsave = false;
+		//		///保存完毕的时间大于保存前的时间,那么上一次保存成功的
+		//		if (afterTime >= beforeTime)
+		//		{
+		//			if (lastMotifyTime > beforeTime)
+		//			{
+		//				needsave = true;
+		//			}
+		//		}
+		//		else
+		//		{
+		//			needsave = true;///上一次保存失败,立即保存
+		//		}
 
-				if (needsave)
-				{
-					pBlock->m_beforeTime = time(NULL);
-					pdata->Update(pdb);
-					hasOprate = true;
-					writetimes++;
-					pBlock->m_afterTime = time(NULL);
-					continue;
-				}
+		//		if (needsave)
+		//		{
+		//			pBlock->m_beforeTime = time(NULL);
+		//			pdata->Update(pdb);
+		//			hasOprate = true;
+		//			writetimes++;
+		//			pBlock->m_afterTime = time(NULL);
+		//			continue;
+		//		}
 
 
-				if (pdata->isRelease())
-				{
-					///释放的时候执行一次保存...如果上次没有保存成功或者，释放前修改了就再保存一次
-					if ((lastMotifyTime > 0) && (afterTime < beforeTime || lastMotifyTime > beforeTime))
-					{
-						pBlock->m_beforeTime = time(NULL);/// add by dsq
-						pdata->Update(pdb);
-						hasOprate = true;
-						writetimes++;
-						continue;
-					}
-					m_MemoryPool->DestoryObject(pdata);
-					releasetime++;
-				}
+		//		if (pdata->isRelease())
+		//		{
+		//			///释放的时候执行一次保存...如果上次没有保存成功或者，释放前修改了就再保存一次
+		//			if ((lastMotifyTime > 0) && (afterTime < beforeTime || lastMotifyTime > beforeTime))
+		//			{
+		//				pBlock->m_beforeTime = time(NULL);/// add by dsq
+		//				pdata->Update(pdb);
+		//				hasOprate = true;
+		//				writetimes++;
+		//				continue;
+		//			}
+		//			m_MemoryPool->DestoryObject(pdata);
+		//			releasetime++;
+		//		}
 
-			}
+		//	}
 
-			return hasOprate;
-		}
+		//	return hasOprate;
+		//}
 	private:
 		SharedMemory<T>* m_MemoryPool;///模块内存池
 		UINT32				m_nCount;///共享内存大小

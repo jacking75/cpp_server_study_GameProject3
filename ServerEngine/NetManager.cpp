@@ -1,8 +1,8 @@
-﻿#include "CheckMacroDefine.h"
+﻿
+#include "NetManager.h"
+#include "CheckMacroDefine.h"
 #include "Log.h"
 #include "CommonFunc.h"
-#include "NetManager.h"
-#include "Connection.h"
 #include "CommonSocket.h"
 #include "DataBuffer.h"
 #include "PacketHeader.h"
@@ -12,7 +12,8 @@ namespace ServerEngine
 {
 	CNetManager::CNetManager(void)
 	{
-		m_hListenThread = (THANDLE)NULL;
+		//TODO 수정하기
+		//m_hListenThread = (THANDLE)NULL;
 		m_hListenSocket = NULL;
 		m_hCompletePort = NULL;
 		m_bCloseEvent = TRUE;
@@ -38,12 +39,12 @@ namespace ServerEngine
 #ifndef _MSC_BUILD
 		nNum = 1;
 #endif
-
-		for (UINT32 i = 0; i < nNum; ++i)
+		//TODO 수정하기
+		/*for (UINT32 i = 0; i < nNum; ++i)
 		{
-			THANDLE hThread = CommonThreadFunc::CreateThread(_NetEventThread, (void*)NULL);
+			THANDLE hThread = CommonThreadFunc::CreateThreadWrapFunc(_NetEventThread, (void*)NULL);
 			m_vtEventThread.push_back(hThread);
-		}
+		}*/
 
 		return TRUE;
 	}
@@ -116,11 +117,12 @@ namespace ServerEngine
 			return FALSE;
 		}
 
-		if ((m_hListenThread = CommonThreadFunc::CreateThread(_NetListenThread, (void*)NULL)) == NULL)
+		//TODO 수정하기
+		/*if ((m_hListenThread = CommonThreadFunc::CreateThreadWrapFunc(_NetListenThread, (void*)NULL)) == NULL)
 		{
 			CLog::GetInstancePtr()->LogError("创建监听线程失败:%s!", GetLastErrorStr(GetSocketLastError()).c_str());
 			return FALSE;
-		}
+		}*/
 
 		return TRUE;
 	}
@@ -563,7 +565,8 @@ namespace ServerEngine
 	{
 		CloseSocket(m_hListenSocket);
 
-		CommonThreadFunc::WaitThreadExit(m_hListenThread);
+		//TODO 수정하기
+		//CommonThreadFunc::WaitThreadExit(m_hListenThread);
 
 		return TRUE;
 	}
@@ -738,19 +741,21 @@ namespace ServerEngine
 		return FALSE;
 	}
 
-	BOOL CNetManager::CloseEventThread()
+	BOOL CNetManager::CloseEventThread()	
 	{
-		m_bCloseEvent = TRUE;
+		//TODO 수정하기
+		/*m_bCloseEvent = TRUE;
 
 		for (std::vector<THANDLE>::iterator itor = m_vtEventThread.begin(); itor != m_vtEventThread.end(); ++itor)
 		{
 			CommonThreadFunc::WaitThreadExit(*itor);
-		}
+		}*/
 
 		return TRUE;
 	}
 
-	Th_RetName _NetEventThread(void* pParam)
+	//TODO 수정하기
+	/*Th_RetName _NetEventThread(void* pParam)
 	{
 		CNetManager* pNetManager = CNetManager::GetInstancePtr();
 
@@ -770,7 +775,7 @@ namespace ServerEngine
 		CommonThreadFunc::ExitThread();
 
 		return Th_RetValue;
-	}
+	}*/
 
 
 	BOOL CNetManager::PostSendOperation(CConnection* pConnection, BOOL bCheck)

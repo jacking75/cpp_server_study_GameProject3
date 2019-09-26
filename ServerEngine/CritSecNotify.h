@@ -1,11 +1,14 @@
 ﻿#pragma once
 
 #ifdef _MSC_BUILD
-#define WIN32_LEAN_AND_MEAN
-#include <Windows.h>
 // wrapper for whatever critical section we have
 namespace ServerEngine
 {
+	#ifndef WIN32_LEAN_AND_MEAN
+	#define WIN32_LEAN_AND_MEAN
+	#endif
+	#include <Windows.h>
+
 	class CCritSecNotify
 	{
 	private:
@@ -62,6 +65,8 @@ namespace ServerEngine
 #else //LINUX
 #define INFINITE (0xffffffff)
 #include <pthread.h>
+
+#include "Platform.h"
 
 namespace ServerEngine
 {

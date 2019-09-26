@@ -1,4 +1,6 @@
-﻿#include "Platform.h"
+﻿#include <stdlib.h>
+
+#include "Platform.h"
 #include "AstarFinder.h"
 
 

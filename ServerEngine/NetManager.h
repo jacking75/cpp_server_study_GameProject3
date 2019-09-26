@@ -2,15 +2,16 @@
 
 #include <string>
 
+
+
+#include "Connection.h"
 #include "IBufferHandler.h"
-#include "CommonThreadFunc.h"
 #include "CommonMsgQueue.h"
 
 namespace ServerEngine
 {
-	Th_RetName _NetEventThread(void* pParam);
-
-	Th_RetName _NetListenThread(void* pParam);
+	//Th_RetName _NetEventThread(void* pParam);
+	//Th_RetName _NetListenThread(void* pParam);
 
 	struct EventNode
 	{
@@ -81,10 +82,16 @@ namespace ServerEngine
 		BOOL				m_bCloseEvent;		//是否关闭事件处理线程
 
 		IDataHandler* m_pBufferHandler;
-		THANDLE				 m_hListenThread;
-		std::vector<THANDLE> m_vtEventThread;
 
-#ifndef WIN32
+#ifdef _MSC_BUILD
+		HANDLE				 m_hListenThread;
+		std::vector<HANDLE> m_vtEventThread;
+#else
+		pthread_t				 m_hListenThread;
+		std::vector<pthread_t> m_vtEventThread;
+#endif
+
+#ifndef _MSC_BUILD
 
 		static void SignalHandler(int nValue)
 		{

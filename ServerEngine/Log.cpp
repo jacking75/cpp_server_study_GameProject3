@@ -1,4 +1,6 @@
-﻿#include "Platform.h"
+﻿#define _CRT_SECURE_NO_WARNINGS  //TODO 이 매크로 뒤에 삭제해야 한다
+
+#include "Platform.h"
 #include "CommonFunc.h"
 #include "Log.h"
 

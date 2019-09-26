@@ -11,16 +11,6 @@
 
 
 #ifdef OS_PLATFORM_WINDOWS
-#define WIN32_LEAN_AND_MEAN
-#include <io.h>
-#include <direct.h>
-#include <process.h>
-#include <ws2tcpip.h>
-#include <Windows.h>
-#include <mswsock.h>
-#include "Mstcpip.h"
-#include <time.h>
-#include <stdarg.h>
 #pragma  comment(lib,"ws2_32")
 #pragma  comment(lib, "Mswsock")
 
@@ -92,7 +82,6 @@ typedef unsigned int		UINT32;
 typedef int					BOOL;
 typedef void				VOID;
 typedef float				FLOAT;
-typedef double				DOUBLE;
 typedef long long			INT64;
 typedef unsigned long long	UINT64;
 typedef char				BYTE;
@@ -100,11 +89,14 @@ typedef char				CHAR;
 typedef int					SOCKET;
 typedef int					HANDLE;
 
+
 #define INVALID_SOCKET		(-1)
 #define TRUE				1
 #define FALSE				0
 #define INVALID_HANDLE_VALUE 0
 #endif
+
+typedef double				DOUBLE;
 
 #ifdef OS_PLATFORM_WINDOWS
 #ifdef SERVER_ENGINE

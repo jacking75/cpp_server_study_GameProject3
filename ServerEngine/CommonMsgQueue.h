@@ -1,10 +1,12 @@
 ﻿#pragma once
 
+#include "Platform.h"
+#include "CheckMacroDefine.h"
 #include "CritSecNotify.h"
 
 namespace CommonQueue
 {
-	template <typename ELEM_T, INT32 dwSize=512>
+	template <typename ELEM_T, int dwSize=512>
 	class CMessageQueue
 	{
 	public:
@@ -19,13 +21,13 @@ namespace CommonQueue
 		{
 		}
 
-		BOOL Pop(ELEM_T &_Value)
+		bool Pop(ELEM_T &_Value)
 		{
 			m_CritSec.Lock();
 			if(m_nReadPos == m_nWritePos)
 			{
 				m_CritSec.Wait();
-				return FALSE;
+				return false;
 			}
 
 			_Value = m_vtData[m_nReadPos];
@@ -34,17 +36,17 @@ namespace CommonQueue
 			
 			m_CritSec.Unlock();
 			
-			return TRUE;
+			return true;
 		}
 
-		BOOL Push(ELEM_T &_Value)
+		bool Push(ELEM_T &_Value)
 		{
 			m_CritSec.Lock();
 			if(((m_nWritePos + 1)%dwSize) == m_nReadPos)
 			{
 				m_CritSec.Unlock();
 				ASSERT_FAIELD;
-				return FALSE;
+				return false;
 			}
 
 			m_vtData[m_nWritePos] = _Value;
@@ -55,20 +57,20 @@ namespace CommonQueue
 
 			m_CritSec.Notify();
 
-			return TRUE; 
+			return true; 
 		}
 
 		ELEM_T m_vtData[dwSize];
 
-		INT32 m_nWritePos;
+		int m_nWritePos;
 		
-		INT32 m_nReadPos;
+		int m_nReadPos;
 
-		CCritSecNotify m_CritSec;
+		ServerEngine::CCritSecNotify m_CritSec;
 	};
 
 
-    template <typename ELEM_T, UINT32 dwSize=512>
+    template <typename ELEM_T, unsigned int dwSize=512>
     class CRingQueue
     {
     public:
@@ -83,39 +85,39 @@ namespace CommonQueue
 
         }
 
-        BOOL Pop(ELEM_T &_Value)
+        bool Pop(ELEM_T &_Value)
         {
             if(m_nReadIndex == m_nWriteIndex)
             {
-                return FALSE;
+                return false;
             }
 
             _Value = m_vtData[m_nReadIndex];
 
             m_nReadIndex = (m_nReadIndex+1)%dwSize;
 
-            return TRUE;
+            return true;
         }
 
-        BOOL Push(ELEM_T &_Value)
+		bool Push(ELEM_T &_Value)
         {
             if(((m_nWriteIndex + 1)%dwSize) == m_nReadIndex)
             {
-                return FALSE;
+                return false;
             }
 
             m_vtData[m_nWriteIndex] = _Value;
 
             m_nWriteIndex = (m_nWriteIndex+1)%dwSize;
 
-            return TRUE; 
+            return true; 
         }
 
         ELEM_T m_vtData[dwSize];
 
-        INT32 m_nWriteIndex;
+        int m_nWriteIndex;
 
-        INT32 m_nReadIndex;
+        int m_nReadIndex;
     };
 }
 

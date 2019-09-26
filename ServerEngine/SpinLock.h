@@ -24,7 +24,8 @@ namespace ServerEngine
 			{
 				if (k % 1024 == 0)
 				{
-					CommonFunc::Sleep(1);
+					//TODO 수정하기
+					//CommonFunc::Sleep(1);
 				}
 			}
 

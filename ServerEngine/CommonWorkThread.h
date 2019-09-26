@@ -1,14 +1,11 @@
 ﻿#pragma once
 
-#include "CommonThreadFunc.h"
 #include "CommonMsgQueue.h"
 #include "IBufferHandler.h"
 #include "LockFreeQueue.h"
 
 namespace ServerEngine
-{
-	Th_RetName _CommonWorkThread(void* pParam);
-
+{	
 	class CCommonWorkThread
 	{
 	public:
@@ -31,8 +28,11 @@ namespace ServerEngine
 		BOOL			OnThreadEnd();
 
 	protected:
-		THANDLE					m_hThread;
-
+#ifdef _MSC_BUILD
+		HANDLE					m_hThread;
+#else
+		pthread_t					m_hThread;
+#endif
 		BOOL					m_bRun;
 
 		IThreadHandler* m_pThreadHandler;

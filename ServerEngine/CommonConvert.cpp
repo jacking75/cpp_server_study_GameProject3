@@ -135,7 +135,7 @@ namespace ServerEngine
 		}
 
 		char szTempBuf[256] = { 0 };
-		strncpy(szTempBuf, pStr, strlen(pStr));
+		strncpy_s(szTempBuf, 256, pStr, strlen(pStr));
 
 		char* pPos = strchr(szTempBuf, ',');
 		if (pPos == NULL)
@@ -245,7 +245,7 @@ namespace ServerEngine
 		}
 
 		char szBuf[1024] = { 0 };
-		strncpy(szBuf, pStrValue, 1024);
+		strncpy_s(szBuf, 1024, pStrValue, 1024);
 
 		char* pBeginPos = szBuf;
 		char* pEndPos = strchr(pBeginPos, cDelim);

@@ -1,5 +1,6 @@
 ﻿#pragma once
 
+#include "CheckMacroDefine.h"
 #include "CritSec.h"
 #include "IBufferHandler.h"
 

@@ -3,6 +3,9 @@
 #include <string>
 #include <vector>
 
+#define WIN32_LEAN_AND_MEAN
+#include <Windows.h>
+
 #include "Platform.h"
 
 
@@ -36,7 +39,7 @@ UINT64			GetWeekBeginTime(); //获取当前0点的秒数
 
 time_t			YearTimeToSec(INT32 nYear, INT32 nMonth, INT32 nDay, INT32 nHour, INT32 nMin, INT32 nSec);
 
-UINT64			GetTickCount();
+UINT64			GetTickCountRefFunc();
 
 UINT32			GetCurThreadID();
 
@@ -48,7 +51,7 @@ UINT32			GetFreePhysMemory();
  
 INT32           GetRandNum(INT32 nType);
 
-UINT32			GetLastError();
+UINT32			GetLastErrorWrapFunc();
 
 // HANDLE       CreateShareMemory(std::string strName, INT32 nSize);
 //

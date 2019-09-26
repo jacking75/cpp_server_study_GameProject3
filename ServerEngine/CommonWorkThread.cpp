@@ -1,4 +1,9 @@
-﻿#include "CheckMacroDefine.h"
+﻿#ifndef WIN32_LEAN_AND_MEAN
+#define WIN32_LEAN_AND_MEAN
+#endif
+#include <Windows.h>
+
+#include "CheckMacroDefine.h"
 #include "CommonWorkThread.h"
 #include "CommonEvent.h"
 #include "DataBuffer.h"
@@ -42,12 +47,13 @@ namespace ServerEngine
 	{
 		m_bRun = TRUE;
 
-		m_hThread = CommonThreadFunc::CreateThread(_CommonWorkThread, this);
+		//TODO 수정하기
+		/*m_hThread = CommonThreadFunc::CreateThreadWrapFunc(_CommonWorkThread, this);
 
 		if (m_hThread != NULL)
 		{
 			return TRUE;
-		}
+		}*/
 
 		return FALSE;
 	}
@@ -56,7 +62,8 @@ namespace ServerEngine
 	{
 		m_bRun = FALSE;
 
-		CommonThreadFunc::WaitThreadExit(m_hThread);
+		//TODO 수정하기
+		//CommonThreadFunc::WaitThreadExitWrapFunc(m_hThread);
 
 		return TRUE;
 	}
@@ -100,7 +107,8 @@ namespace ServerEngine
 	}
 
 
-	Th_RetName _CommonWorkThread(void* pParam)
+	//TODO 수정하기
+	/*Th_RetName _CommonWorkThread(void* pParam)
 	{
 		CCommonWorkThread* pThread = (CCommonWorkThread*)pParam;
 
@@ -116,5 +124,5 @@ namespace ServerEngine
 		pThread->OnThreadEnd();
 
 		return Th_RetValue;
-	}
+	}*/
 }

@@ -1,9 +1,17 @@
 ﻿#pragma once
 
-#define SOCKET_ERROR 		(-1)
+#define WIN32_LEAN_AND_MEAN
+#include <ws2tcpip.h>
+#include <mswsock.h>
+#include <Mstcpip.h>
+
+#include "Platform.h"
+
 
 namespace ServerEngine
 {
+#define SOCKET_ERROR 		(-1)
+
 //设置套接字为可重用状态
 BOOL		SetSocketReuseable(SOCKET hSocket);
 
@@ -57,7 +65,7 @@ std::string IpAddrIntToStr(UINT32 dwIpAddr);
 
 BOOL		SetSocketBuffSize(SOCKET hSocket, INT32 nRecvSize, INT32 nSendSize);
 
-#ifdef WIN32
+#ifdef _MSC_BUILD
 BOOL		ConnectSocketEx(SOCKET hSocket, const char* pAddr, short sPort, LPOVERLAPPED lpOverlapped);
 
 BOOL		AcceptSocketEx(SOCKET hListenSocket, LPOVERLAPPED lpOverlapped);

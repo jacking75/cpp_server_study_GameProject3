@@ -1,4 +1,9 @@
-﻿#include "ConfigFile.h"
+﻿#define _CRT_SECURE_NO_WARNINGS  //TODO 이 매크로 뒤에 삭제해야 한다
+
+#include "CommonConvert.h"
+#include "ConfigFile.h"
+
+
 
 namespace ServerEngine
 {
@@ -81,12 +86,12 @@ namespace ServerEngine
 		return atoi(GetStringValue(VarName).c_str());
 	}
 
-	DOUBLE ConfigFile::GetFloatValue(std::string VarName)
+	FLOAT ConfigFile::GetFloatValue(std::string VarName)
 	{
 		return (float)atof(GetStringValue(VarName).c_str());
 	}
 
-	double ConfigFile::GetDoubleValue(std::string VarName)
+	DOUBLE ConfigFile::GetDoubleValue(std::string VarName)
 	{
 		return atof(GetStringValue(VarName).c_str());
 	}

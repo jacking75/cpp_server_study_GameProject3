@@ -1,4 +1,6 @@
-﻿#include <string>
+﻿#define _WINSOCK_DEPRECATED_NO_WARNINGS  //TODO 이 매크로 뒤에 삭제해야 한다
+
+#include <string>
 
 #include "Platform.h"
 #include "CommonSocket.h"
@@ -126,7 +128,7 @@ std::string ServerEngine::GetLocalIP()
 	}
 
 	char szIp[256] = { 0 };
-	strcpy(szIp, inet_ntoa(*(in_addr*)*host->h_addr_list));
+	strcpy_s(szIp, 256, inet_ntoa(*(in_addr*)*host->h_addr_list));
 	return std::string(szIp);
 }
 
@@ -223,7 +225,7 @@ std::string  ServerEngine::GetLastErrorStr(INT32 nError)
 {
 	std::string strErrorText;
 #ifdef _MSC_BUILD
-	LPSTR lpMsgBuf;
+	LPSTR lpMsgBuf = nullptr;
 	FormatMessageA(FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM | FORMAT_MESSAGE_IGNORE_INSERTS, NULL, nError, MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT), lpMsgBuf, 0, NULL);
 
 	strErrorText = (char*)lpMsgBuf;

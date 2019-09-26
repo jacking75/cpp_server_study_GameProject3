@@ -4,6 +4,14 @@
 #include <set>
 #include <string>
 
+#ifdef _MSC_BUILD
+#ifndef WIN32_LEAN_AND_MEAN
+#define WIN32_LEAN_AND_MEAN
+#endif
+#include <Windows.h>
+#else
+#include "Platform.h"
+#endif
 
 namespace ServerEngine
 {

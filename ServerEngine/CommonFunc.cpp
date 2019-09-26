@@ -1,4 +1,8 @@
-﻿
+﻿#define _CRT_SECURE_NO_WARNINGS  //TODO 이 매크로 뒤에 삭제해야 한다
+
+#include <io.h>
+#include <direct.h>
+#include <time.h>
 #include "CommonFunc.h"
 
 namespace ServerEngine
@@ -120,7 +124,7 @@ namespace ServerEngine
 		return mktime(&newtm);;
 	}
 
-	UINT64 GetTickCount()
+	UINT64 GetTickCountRefFunc()
 	{
 #ifdef _MSC_BUILD
 		return ::GetTickCount64();
@@ -346,7 +350,7 @@ namespace ServerEngine
 		return  vtGlobalRankValue[(nRandIndex[nType]++) % 10000];
 	}
 
-	UINT32 GetLastError()
+	UINT32 GetLastErrorWrapFunc()
 	{
 #ifdef _MSC_BUILD
 		return ::GetLastError();
@@ -364,7 +368,7 @@ namespace ServerEngine
 		hShare = CreateFileMapping(INVALID_HANDLE_VALUE, NULL, PAGE_READWRITE, 0, nSize, szMemName);
 		if (hShare != NULL)
 		{
-			if (GetLastError() == ERROR_ALREADY_EXISTS)
+			if (GetLastErrorWrapFunc() == ERROR_ALREADY_EXISTS)
 			{
 				CloseHandle(hShare);
 				hShare = NULL;
