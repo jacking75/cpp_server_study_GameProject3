@@ -81,7 +81,7 @@ namespace ServerEngine
 			}
 			else
 			{
-				CLog::GetInstancePtr()->LogError("accept 错误 原因:%s!", GetLastErrorStr(GetSocketLastError()).c_str());
+				CLog::GetInstancePtr()->LogError("accept 오류 이유:%s!", GetLastErrorStr(GetSocketLastError()).c_str());
 			}
 		}
 
@@ -99,7 +99,7 @@ namespace ServerEngine
 		m_hListenSocket = CreateSocket(AF_INET, SOCK_STREAM, 0);
 		if (m_hListenSocket == INVALID_SOCKET)
 		{
-			CLog::GetInstancePtr()->LogError("创建监听套接字失败原因:%s!", GetLastErrorStr(GetSocketLastError()).c_str());
+			CLog::GetInstancePtr()->LogError("청취 소켓 장애를 생성하는 이유:%s!", GetLastErrorStr(GetSocketLastError()).c_str());
 			return FALSE;
 		}
 
@@ -107,13 +107,13 @@ namespace ServerEngine
 
 		if (!BindSocket(m_hListenSocket, (sockaddr*)&SvrAddr, sizeof(SvrAddr)))
 		{
-			CLog::GetInstancePtr()->LogError("邦定套接字失败原因:%s!", GetLastErrorStr(GetSocketLastError()).c_str());
+			CLog::GetInstancePtr()->LogError("소켓 바인딩 장애 이유:%s!", GetLastErrorStr(GetSocketLastError()).c_str());
 			return FALSE;
 		}
 
 		if (!ListenSocket(m_hListenSocket, 20))
 		{
-			CLog::GetInstancePtr()->LogError("监听线程套接字失败:%s!", GetLastErrorStr(GetSocketLastError()).c_str());
+			CLog::GetInstancePtr()->LogError("스레드 소켓 청취 실패:%s!", GetLastErrorStr(GetSocketLastError()).c_str());
 			return FALSE;
 		}
 
@@ -149,7 +149,7 @@ namespace ServerEngine
 				{
 					if (ERROR_ABANDONED_WAIT_0 == GetSocketLastError())
 					{
-						CLog::GetInstancePtr()->LogError("完成端口被外部关闭!");
+						CLog::GetInstancePtr()->LogError("완성 포트는 외부에서 닫힙니다!");
 						return FALSE;
 					}
 
@@ -168,7 +168,7 @@ namespace ServerEngine
 				CConnection* pConnection = (CConnection*)CompleteKey;
 				if (pConnection == NULL)
 				{
-					CLog::GetInstancePtr()->LogError("触发了NET_MSG_RECV1, pConnection == NULL");
+					CLog::GetInstancePtr()->LogError("트리거 NET_MSG_RECV1, pConnection == NULL");
 					break;
 				}
 
@@ -177,7 +177,7 @@ namespace ServerEngine
 					//说明对方己经关闭
 					if (pConnection->GetConnectionID() != pIoPeratorData->dwConnID)
 					{
-						CLog::GetInstancePtr()->LogError("触发了NET_MSG_RECV2, 对方己经关闭连接，但可能我们这边更快, 连接己经被重用了。nowid:%d, oldid:%d", pConnection->GetConnectionID(), pIoPeratorData->dwConnID);
+						CLog::GetInstancePtr()->LogError("트리거 NET_MSG_RECV2, 상대방이 연결을 닫았지만 여기서 더 빠를 수 있습니다. 연결이 재사용되었습니다. nowid:%d, oldid:%d", pConnection->GetConnectionID(), pIoPeratorData->dwConnID);
 						break;
 					}
 					pConnection->Close();
@@ -186,7 +186,7 @@ namespace ServerEngine
 				{
 					if (pConnection->GetConnectionID() != pIoPeratorData->dwConnID)
 					{
-						CLog::GetInstancePtr()->LogError("触发了NET_MSG_RECV3，确实有数据, 但连接己经被重用了。nowid:%d, oldid:%d", pConnection->GetConnectionID(), pIoPeratorData->dwConnID);
+						CLog::GetInstancePtr()->LogError("트리거 NET_MSG_RECV3，실제로 데이터가 있지만 연결이 재사용되었습니다. nowid:%d, oldid:%d", pConnection->GetConnectionID(), pIoPeratorData->dwConnID);
 						break;
 					}
 
@@ -197,7 +197,7 @@ namespace ServerEngine
 							//收数据失败，基本就是连接己断开
 							if (pConnection->GetConnectionID() != pIoPeratorData->dwConnID)
 							{
-								CLog::GetInstancePtr()->LogError("触发了NET_MSG_RECV4, 但连接己经被关闭重用了。nowid:%d, oldid:%d", pConnection->GetConnectionID(), pIoPeratorData->dwConnID);
+								CLog::GetInstancePtr()->LogError("트리거 NET_MSG_RECV4, 그러나 연결이 닫히고 재사용되었습니다. nowid:%d, oldid:%d", pConnection->GetConnectionID(), pIoPeratorData->dwConnID);
 								break;
 							}
 							pConnection->Close();
@@ -205,7 +205,7 @@ namespace ServerEngine
 					}
 					else
 					{
-						CLog::GetInstancePtr()->LogError("严重的错误, 没有连接上，却收到的数据!", pConnection);
+						CLog::GetInstancePtr()->LogError("심각한 오류, 연결되지 않았지만 수신 된 데이터!", pConnection);
 						ASSERT_FAIELD;
 					}
 				}
@@ -217,14 +217,14 @@ namespace ServerEngine
 				CConnection* pConnection = (CConnection*)CompleteKey;
 				if (pConnection == NULL)
 				{
-					CLog::GetInstancePtr()->LogError("触发了NET_MSG_SEND, pConnection == NULL。");
+					CLog::GetInstancePtr()->LogError("트리거 NET_MSG_SEND, pConnection == NULL。");
 					ASSERT_FAIELD;
 					break;
 				}
 
 				if (pConnection->GetConnectionID() != pIoPeratorData->dwConnID)
 				{
-					CLog::GetInstancePtr()->LogError("触发了NET_MSG_SEND, 但连接己经被关闭重用了。");
+					CLog::GetInstancePtr()->LogError("트리거 NET_MSG_SEND, 그러나 연결이 닫히고 재사용되었습니다.");
 					break;
 				}
 
@@ -236,14 +236,14 @@ namespace ServerEngine
 				CConnection* pConnection = (CConnection*)CompleteKey;
 				if (pConnection == NULL)
 				{
-					CLog::GetInstancePtr()->LogError("触发了NET_MSG_POST1, pConnection == NULL。");
+					CLog::GetInstancePtr()->LogError("트리거 NET_MSG_POST1, pConnection == NULL。");
 					ASSERT_FAIELD;
 					break;
 				}
 
 				if (pConnection->GetConnectionID() != pIoPeratorData->dwConnID)
 				{
-					CLog::GetInstancePtr()->LogError("触发了NET_MSG_POST2, 但连接己经被关闭重用了。");
+					CLog::GetInstancePtr()->LogError("트리거 NET_MSG_POST2, 그러나 연결이 닫히고 재사용되었습니다.");
 					break;
 				}
 
@@ -255,13 +255,13 @@ namespace ServerEngine
 				CConnection* pConnection = (CConnection*)CompleteKey;
 				if (pConnection == NULL)
 				{
-					CLog::GetInstancePtr()->LogError("触发了NET_MSG_CONNECT, pConnection == NULL。");
+					CLog::GetInstancePtr()->LogError("트리거 NET_MSG_CONNECT, pConnection == NULL。");
 					break;
 				}
 
 				if (pConnection->GetConnectionID() != pIoPeratorData->dwConnID)
 				{
-					CLog::GetInstancePtr()->LogError("触发了NET_MSG_CONNECT, 事件ID和连接ID不一致。");
+					CLog::GetInstancePtr()->LogError("트리거 NET_MSG_CONNECT, 이벤트 ID와 연결 ID가 일치하지 않습니다.");
 					break;
 				}
 
@@ -505,25 +505,25 @@ namespace ServerEngine
 
 		if (!InitNetwork())
 		{
-			CLog::GetInstancePtr()->LogError("初始化网络失败！！");
+			CLog::GetInstancePtr()->LogError("네트워크 초기화 실패！！");
 			return FALSE;
 		}
 
 		if (!CreateCompletePort())
 		{
-			CLog::GetInstancePtr()->LogError("创建完成端口或Epoll失败！！");
+			CLog::GetInstancePtr()->LogError("완성 된 포트 또는 Epoll 생성 실패！！");
 			return FALSE;
 		}
 
 		if (!CreateEventThread(0))
 		{
-			CLog::GetInstancePtr()->LogError("创建网络事件处理线程失败！！");
+			CLog::GetInstancePtr()->LogError("네트워크 이벤트 처리 스레드 작성 실패！！");
 			return FALSE;
 		}
 
 		if (!StartListen(nPortNum))
 		{
-			CLog::GetInstancePtr()->LogError("开启监听失败！！");
+			CLog::GetInstancePtr()->LogError("청취 실패 켜기！！");
 			return FALSE;
 		}
 
@@ -536,12 +536,12 @@ namespace ServerEngine
 
 	BOOL CNetManager::InitNetwork()
 	{
-		return InitNetwork();
+		return ServerEngine::InitNetwork();
 	}
 
 	BOOL CNetManager::UninitNetwork()
 	{
-		return UninitNetwork();
+		return ServerEngine::UninitNetwork();
 	}
 
 	BOOL CNetManager::Close()
@@ -577,7 +577,7 @@ namespace ServerEngine
 		if (hSocket == INVALID_SOCKET)
 		{
 			CloseSocket(hSocket);
-			CLog::GetInstancePtr()->LogError("创建套接字失败!!");
+			CLog::GetInstancePtr()->LogError("소켓을 만들지 못했습니다!!");
 			return NULL;
 		}
 
@@ -594,7 +594,7 @@ namespace ServerEngine
 		CConnection* pConnection = AssociateCompletePort(hSocket, TRUE);
 		if (pConnection == NULL)
 		{
-			CLog::GetInstancePtr()->LogError("邦定套接字到完成端口失败!!");
+			CLog::GetInstancePtr()->LogError("소켓을 완료 포트에 바인딩 하지 못했습니다.!!");
 			return NULL;
 		}
 
@@ -618,7 +618,7 @@ namespace ServerEngine
 		if (hSocket == INVALID_SOCKET || hSocket == 0)
 		{
 			CloseSocket(hSocket);
-			CLog::GetInstancePtr()->LogError("创建套接字失败!!");
+			CLog::GetInstancePtr()->LogError("소켓을 만들지 못했습니다!!");
 			return NULL;
 		}
 
@@ -630,7 +630,7 @@ namespace ServerEngine
 		CConnection* pConnection = AssociateCompletePort(hSocket, TRUE);
 		if (pConnection == NULL)
 		{
-			CLog::GetInstancePtr()->LogError("邦定套接字到完成端口失败!!");
+			CLog::GetInstancePtr()->LogError("소켓을 완료 포트에 바인딩 하지 못했습니다.!!");
 
 			return NULL;
 		}
@@ -647,7 +647,7 @@ namespace ServerEngine
 
 		if (!bRet)
 		{
-			CLog::GetInstancePtr()->LogError("ConnectTo_Async 连接目标服务器失败,IP:%s--Port:%d!!", strIpAddr.c_str(), sPort);
+			CLog::GetInstancePtr()->LogError("ConnectTo_Async 대상 서버에 연결하지 못했습니다,IP:%s--Port:%d!!", strIpAddr.c_str(), sPort);
 			pConnection->Close();
 		}
 
@@ -655,7 +655,7 @@ namespace ServerEngine
 		BOOL bRet = ConnectSocket(hSocket, strIpAddr.c_str(), sPort);
 		if (!bRet)
 		{
-			CLog::GetInstancePtr()->LogError("ConnectTo_Async 连接目标服务器失败,IP:%s--Port:%d!!", strIpAddr.c_str(), sPort);
+			CLog::GetInstancePtr()->LogError("ConnectTo_Async 대상 서버에 연결하지 못했습니다,IP:%s--Port:%d!!", strIpAddr.c_str(), sPort);
 			CommonSocket::CloseSocket(hSocket);
 			return NULL;
 		}
@@ -663,7 +663,7 @@ namespace ServerEngine
 		CConnection* pConnection = AssociateCompletePort(hSocket, TRUE);
 		if (pConnection == NULL)
 		{
-			CLog::GetInstancePtr()->LogError("邦定套接字到完成端口失败!!");
+			CLog::GetInstancePtr()->LogError("소켓을 완료 포트에 본딩하지 못했습니다.!!");
 
 			return NULL;
 		}
@@ -688,7 +688,7 @@ namespace ServerEngine
 
 		if (!pConn->IsConnectionOK())
 		{
-			CLog::GetInstancePtr()->LogError("CNetManager::SendMessageByConnID FAILED, 连接己断开");
+			CLog::GetInstancePtr()->LogError("CNetManager::SendMessageByConnID FAILED, 연결이 끊어졌습니다");
 			return FALSE;
 		}
 
@@ -727,7 +727,7 @@ namespace ServerEngine
 		}
 		if (!pConn->IsConnectionOK())
 		{
-			CLog::GetInstancePtr()->LogError("CNetManager::SendMsgBufByConnID FAILED, 连接己断开");
+			CLog::GetInstancePtr()->LogError("CNetManager::SendMsgBufByConnID FAILED, 연결이 끊어졌습니다");
 			return FALSE;
 		}
 

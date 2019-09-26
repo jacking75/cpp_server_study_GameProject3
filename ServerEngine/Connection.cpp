@@ -82,7 +82,7 @@ namespace ServerEngine
 			int nError = GetSocketLastError();
 			if (nError != ERROR_IO_PENDING)
 			{
-				CLog::GetInstancePtr()->LogError(const_cast<char*>("关闭连接，因为接收数据发生错误:%s!"), GetLastErrorStr(nError).c_str());
+				CLog::GetInstancePtr()->LogError(const_cast<char*>("데이터 수신 오류로 인해 연결을 닫습니다:%s!"), GetLastErrorStr(nError).c_str());
 
 				return FALSE;
 			}
@@ -497,7 +497,7 @@ namespace ServerEngine
 		{
 			if (dwSendBytes < DataBuf.len)
 			{
-				CLog::GetInstancePtr()->LogError("发送线程:直接发送功数据send:%d--Len:%d!", dwSendBytes, DataBuf.len);
+				CLog::GetInstancePtr()->LogError("보내기 스레드: 전원 데이터를 직접 보내기send:%d--Len:%d!", dwSendBytes, DataBuf.len);
 			}
 		}
 		else if (nRet == -1) //发送出错
@@ -506,7 +506,7 @@ namespace ServerEngine
 			if (errCode != ERROR_IO_PENDING)
 			{
 				Close();
-				CLog::GetInstancePtr()->LogError("发送线程:发送失败, 连接关闭原因:%s!", GetLastErrorStr(errCode).c_str());
+				CLog::GetInstancePtr()->LogError("송신 스레드: 송신 실패, 연결 종료 이유:%s!", GetLastErrorStr(errCode).c_str());
 			}
 		}
 

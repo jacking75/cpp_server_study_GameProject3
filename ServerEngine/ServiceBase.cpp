@@ -63,7 +63,7 @@ namespace ServerEngine
 
 		if (!CNetManager::GetInstancePtr()->Start(nPortNum, nMaxConn, this))
 		{
-			CLog::GetInstancePtr()->LogError("启动网络层失败!");
+			CLog::GetInstancePtr()->LogError("네트워크 계층을 시작하지 못했습니다!");
 			return FALSE;
 		}
 
@@ -76,7 +76,7 @@ namespace ServerEngine
 
 	BOOL ServiceBase::StopNetwork()
 	{
-		CLog::GetInstancePtr()->LogError("==========服务器开始关闭=======================");
+		CLog::GetInstancePtr()->LogError("==========서버가 종료되기 시작합니다=======================");
 
 		CNetManager::GetInstancePtr()->Close();
 
