@@ -35,7 +35,7 @@ namespace ServerEngine
 	}
 
 
-	BOOL ServiceBase::OnDataHandle(IDataBuffer* pDataBuffer, CConnection* pConnection)
+	bool ServiceBase::OnDataHandle(IDataBuffer* pDataBuffer, CConnection* pConnection)
 	{
 		PacketHeader* pHeader = (PacketHeader*)pDataBuffer->GetBuffer();
 
@@ -45,7 +45,7 @@ namespace ServerEngine
 		return TRUE;
 	}
 
-	BOOL ServiceBase::StartNetwork(UINT16 nPortNum, UINT32 nMaxConn, IPacketDispatcher* pDispather, std::string strListenIp)
+	bool ServiceBase::StartNetwork(UINT16 nPortNum, UINT32 nMaxConn, IPacketDispatcher* pDispather, std::string strListenIp)
 	{
 		if (pDispather == NULL)
 		{
@@ -74,7 +74,7 @@ namespace ServerEngine
 		return TRUE;
 	}
 
-	BOOL ServiceBase::StopNetwork()
+	bool ServiceBase::StopNetwork()
 	{
 		CLog::GetInstancePtr()->LogError("==========서버가 종료되기 시작합니다=======================");
 
@@ -86,7 +86,7 @@ namespace ServerEngine
 	}
 
 	template<typename T>
-	BOOL ServiceBase::SendMsgStruct(UINT32 dwConnID, UINT32 dwMsgID, UINT64 u64TargetID, UINT32 dwUserData, T& Data)
+	bool ServiceBase::SendMsgStruct(UINT32 dwConnID, UINT32 dwMsgID, UINT64 u64TargetID, UINT32 dwUserData, T& Data)
 	{
 		if (dwConnID <= 0)
 		{
@@ -114,7 +114,7 @@ namespace ServerEngine
 	//	return CNetManager::GetInstancePtr()->SendMessageByConnID(dwConnID, dwMsgID, u64TargetID, dwUserData, szBuff, pdata.GetCachedSize());
 	//}
 
-	BOOL ServiceBase::SendMsgRawData(UINT32 dwConnID, UINT32 dwMsgID, UINT64 u64TargetID, UINT32 dwUserData, const char* pdata, UINT32 dwLen)
+	bool ServiceBase::SendMsgRawData(UINT32 dwConnID, UINT32 dwMsgID, UINT64 u64TargetID, UINT32 dwUserData, const char* pdata, UINT32 dwLen)
 	{
 		if (dwConnID <= 0)
 		{
@@ -125,7 +125,7 @@ namespace ServerEngine
 		return CNetManager::GetInstancePtr()->SendMessageByConnID(dwConnID, dwMsgID, u64TargetID, dwUserData, pdata, dwLen);
 	}
 
-	BOOL ServiceBase::SendMsgBuffer(UINT32 dwConnID, IDataBuffer* pDataBuffer)
+	bool ServiceBase::SendMsgBuffer(UINT32 dwConnID, IDataBuffer* pDataBuffer)
 	{
 		if (dwConnID <= 0)
 		{
@@ -147,7 +147,7 @@ namespace ServerEngine
 		return CNetManager::GetInstancePtr()->ConnectTo_Async(strIpAddr, sPort);
 	}
 
-	BOOL ServiceBase::OnCloseConnect(CConnection* pConnection)
+	bool ServiceBase::OnCloseConnect(CConnection* pConnection)
 	{
 		ERROR_RETURN_FALSE(pConnection->GetConnectionID() != 0);
 
@@ -157,7 +157,7 @@ namespace ServerEngine
 		return TRUE;
 	}
 
-	BOOL ServiceBase::OnNewConnect(CConnection* pConnection)
+	bool ServiceBase::OnNewConnect(CConnection* pConnection)
 	{
 		ERROR_RETURN_FALSE(pConnection->GetConnectionID() != 0);
 		m_QueueLock.Lock();
@@ -172,7 +172,7 @@ namespace ServerEngine
 		return CConnectionMgr::GetInstancePtr()->GetConnectionByConnID(dwConnID);
 	}
 
-	BOOL ServiceBase::Update()
+	bool ServiceBase::Update()
 	{
 		if (m_dwLastTick == 0)
 		{

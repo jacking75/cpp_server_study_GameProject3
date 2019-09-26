@@ -19,30 +19,30 @@ namespace ServerEngine
 	public:
 		static ServiceBase* GetInstancePtr();
 
-		BOOL            StartNetwork(UINT16 nPortNum, UINT32 nMaxConn, IPacketDispatcher* pDispather, std::string strListenIp = "");
+		bool            StartNetwork(UINT16 nPortNum, UINT32 nMaxConn, IPacketDispatcher* pDispather, std::string strListenIp = "");
 
-		BOOL            StopNetwork();
+		bool            StopNetwork();
 
-		BOOL			OnDataHandle(IDataBuffer* pDataBuffer, CConnection* pConnection);
+		bool			OnDataHandle(IDataBuffer* pDataBuffer, CConnection* pConnection);
 
-		BOOL			OnCloseConnect(CConnection* pConnection);
+		bool			OnCloseConnect(CConnection* pConnection);
 
-		BOOL			OnNewConnect(CConnection* pConnection);
+		bool			OnNewConnect(CConnection* pConnection);
 
 		CConnection* ConnectTo(std::string strIpAddr, UINT16 sPort);
 
 		template<typename T>
-		BOOL			SendMsgStruct(UINT32 dwConnID, UINT32 dwMsgID, UINT64 u64TargetID, UINT32 dwUserData, T& Data);
+		bool			SendMsgStruct(UINT32 dwConnID, UINT32 dwMsgID, UINT64 u64TargetID, UINT32 dwUserData, T& Data);
 
 		//BOOL			SendMsgProtoBuf(UINT32 dwConnID, UINT32 dwMsgID, UINT64 u64TargetID, UINT32 dwUserData, const google::protobuf::Message& pdata);
 
-		BOOL			SendMsgRawData(UINT32 dwConnID, UINT32 dwMsgID, UINT64 u64TargetID, UINT32 dwUserData, const char* pdata, UINT32 dwLen);
+		bool			SendMsgRawData(UINT32 dwConnID, UINT32 dwMsgID, UINT64 u64TargetID, UINT32 dwUserData, const char* pdata, UINT32 dwLen);
 
-		BOOL			SendMsgBuffer(UINT32 dwConnID, IDataBuffer* pDataBuffer);
+		bool			SendMsgBuffer(UINT32 dwConnID, IDataBuffer* pDataBuffer);
 
 		CConnection* GetConnectionByID(UINT32 dwConnID);
 
-		BOOL			Update();
+		bool			Update();
 
 	protected:
 		IPacketDispatcher* m_pPacketDispatcher;

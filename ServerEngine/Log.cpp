@@ -4,8 +4,7 @@
 #include "CommonFunc.h"
 #include "Log.h"
 
-namespace ServerEngine
-{
+
 	CLog::CLog(void)
 	{
 		m_LogLevel = 0;
@@ -25,7 +24,7 @@ namespace ServerEngine
 
 	BOOL CLog::StartLog(std::string strPrefix, std::string strLogDir)
 	{
-		if (!CreateDir(strLogDir))
+		if (!ServerEngine::CreateDir(strLogDir))
 		{
 			return FALSE;
 		}
@@ -35,7 +34,7 @@ namespace ServerEngine
 #endif
 		m_pLogFile = NULL;
 
-		tm CurTime = GetCurrTmTime();
+		tm CurTime = ServerEngine::GetCurrTmTime();
 
 		CHAR szFileName[512];
 
@@ -81,10 +80,10 @@ namespace ServerEngine
 			return;
 		}
 
-		tm CurTime = GetCurrTmTime();
+		tm CurTime = ServerEngine::GetCurrTmTime();
 
 		CHAR szLog[512];
-		snprintf(szLog, 512, "[%s][%02d-%02d-%02d %02d:%02d:%02d][%04x] ", m_strPrefix.c_str(), CurTime.tm_year % 100, CurTime.tm_mon + 1, CurTime.tm_mday, CurTime.tm_hour, CurTime.tm_min, CurTime.tm_sec, 0xffff & GetCurThreadID());
+		snprintf(szLog, 512, "[%s][%02d-%02d-%02d %02d:%02d:%02d][%04x] ", m_strPrefix.c_str(), CurTime.tm_year % 100, CurTime.tm_mon + 1, CurTime.tm_mday, CurTime.tm_hour, CurTime.tm_min, CurTime.tm_sec, 0xffff & ServerEngine::GetCurThreadID());
 
 		va_list argList;
 		va_start(argList, lpszFormat);
@@ -115,8 +114,8 @@ namespace ServerEngine
 		}
 
 		CHAR szLog[512];
-		tm CurTime = GetCurrTmTime();
-		snprintf(szLog, 512, "[%s][%02d-%02d-%02d %02d:%02d:%02d][%04x] ", m_strPrefix.c_str(), CurTime.tm_year % 100, CurTime.tm_mon + 1, CurTime.tm_mday, CurTime.tm_hour, CurTime.tm_min, CurTime.tm_sec, 0xffff & GetCurThreadID());
+		tm CurTime = ServerEngine::GetCurrTmTime();
+		snprintf(szLog, 512, "[%s][%02d-%02d-%02d %02d:%02d:%02d][%04x] ", m_strPrefix.c_str(), CurTime.tm_year % 100, CurTime.tm_mon + 1, CurTime.tm_mday, CurTime.tm_hour, CurTime.tm_min, CurTime.tm_sec, 0xffff & ServerEngine::GetCurThreadID());
 
 		va_list argList;
 		va_start(argList, lpszFormat);
@@ -148,8 +147,8 @@ namespace ServerEngine
 
 		CHAR szLog[512];
 
-		tm CurTime = GetCurrTmTime();
-		snprintf(szLog, 512, "[%s][%02d-%02d-%02d %02d:%02d:%02d][%04x] ", m_strPrefix.c_str(), CurTime.tm_year % 100, CurTime.tm_mon + 1, CurTime.tm_mday, CurTime.tm_hour, CurTime.tm_min, CurTime.tm_sec, 0xffff & GetCurThreadID());
+		tm CurTime = ServerEngine::GetCurrTmTime();
+		snprintf(szLog, 512, "[%s][%02d-%02d-%02d %02d:%02d:%02d][%04x] ", m_strPrefix.c_str(), CurTime.tm_year % 100, CurTime.tm_mon + 1, CurTime.tm_mday, CurTime.tm_hour, CurTime.tm_min, CurTime.tm_sec, 0xffff & ServerEngine::GetCurThreadID());
 
 		va_list argList;
 		va_start(argList, lpszFormat);
@@ -202,4 +201,3 @@ namespace ServerEngine
 			m_LogCount = 0;
 		}
 	}
-}

@@ -2,6 +2,8 @@
 
 #include <vector>
 
+#include "CheckMacroDefine.h"
+
 namespace ServerEngine
 {
 	template<typename TKey, typename TValue>

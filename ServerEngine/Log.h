@@ -3,8 +3,7 @@
 #include <string>
 #include "CritSec.h"
 
-namespace ServerEngine
-{
+
 	enum LogLevel
 	{
 		Log_All,
@@ -51,6 +50,8 @@ namespace ServerEngine
 
 		std::string         m_strPrefix;
 	};
+
+
 
 #define LOG_ERROR  CLog::GetInstancePtr()->LogError("Error : File:%s, Func: %s Line:%d", __FILE__ , __FUNCTION__, __LINE__);
 
@@ -103,6 +104,4 @@ namespace ServerEngine
 {\
 	CLog::GetInstancePtr()->LogError("Error : File:%s, Func: %s Line:%d", __FILE__ , __FUNCTION__, __LINE__);\
     continue; \
-}
-
 }

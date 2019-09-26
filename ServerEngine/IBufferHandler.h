@@ -41,24 +41,24 @@ namespace ServerEngine
 
 	struct IDataHandler
 	{
-		virtual BOOL OnDataHandle(IDataBuffer* pDataBuffer, CConnection* pConnection) = 0;
-		virtual BOOL OnCloseConnect(CConnection* pConnection) = 0;
-		virtual BOOL OnNewConnect(CConnection* pConnection) = 0;
+		virtual bool OnDataHandle(IDataBuffer* pDataBuffer, CConnection* pConnection) = 0;
+		virtual bool OnCloseConnect(CConnection* pConnection) = 0;
+		virtual bool OnNewConnect(CConnection* pConnection) = 0;
 	};
 
 	struct IPacketDispatcher
 	{
-		virtual BOOL DispatchPacket(NetPacket* pNetPacket) = 0;
-		virtual BOOL OnSecondTimer() = 0;
-		virtual BOOL OnCloseConnect(CConnection* pConnection) = 0;
-		virtual BOOL OnNewConnect(CConnection* pConnection) = 0;
+		virtual bool DispatchPacket(NetPacket* pNetPacket) = 0;
+		virtual bool OnSecondTimer() = 0;
+		virtual bool OnCloseConnect(CConnection* pConnection) = 0;
+		virtual bool OnNewConnect(CConnection* pConnection) = 0;
 	};
 
 	struct  IThreadHandler
 	{
-		virtual BOOL DispatchPacket(NetPacket* pNetPacket) = 0;
-		virtual BOOL OnThreadBegin() = 0;
-		virtual BOOL OnThreadEnd() = 0;
+		virtual bool DispatchPacket(NetPacket* pNetPacket) = 0;
+		virtual bool OnThreadBegin() = 0;
+		virtual bool OnThreadEnd() = 0;
 	};
 
 
