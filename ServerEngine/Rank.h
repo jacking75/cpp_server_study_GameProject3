@@ -27,7 +27,7 @@ namespace ServerEngine
 	class TRanker
 	{
 	public:
-		BOOL InitRanker(INT32 dwShow, INT32 dwTotal)
+		bool InitRanker(INT32 dwShow, INT32 dwTotal)
 		{
 			m_dwShowNum = dwShow;
 			m_dwRankNum = dwTotal;
@@ -35,7 +35,7 @@ namespace ServerEngine
 			return TRUE;
 		}
 
-		BOOL SearchInsert2(UINT64 RankID, UINT64 RankValue, INT32& nOrgIndex, INT32& nTargetIndex)
+		bool SearchInsert2(UINT64 RankID, UINT64 RankValue, INT32& nOrgIndex, INT32& nTargetIndex)
 		{
 			nOrgIndex = -1;
 			nTargetIndex = -1;
@@ -67,7 +67,7 @@ namespace ServerEngine
 		}
 
 
-		BOOL SearchInsert(UINT64 RankID, UINT64 RankValue, INT32& nOrgIndex, INT32& nTargetIndex)
+		bool SearchInsert(UINT64 RankID, UINT64 RankValue, INT32& nOrgIndex, INT32& nTargetIndex)
 		{
 			nOrgIndex = -1;
 			nTargetIndex = -1;

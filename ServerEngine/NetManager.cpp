@@ -24,7 +24,7 @@ namespace ServerEngine
 	{
 	}
 
-	BOOL CNetManager::CreateEventThread(UINT32 nNum)
+	bool CNetManager::CreateEventThread(UINT32 nNum)
 	{
 		if (nNum == 0)
 		{
@@ -49,7 +49,7 @@ namespace ServerEngine
 		return TRUE;
 	}
 
-	BOOL CNetManager::WorkThread_Listen()
+	bool CNetManager::WorkThread_Listen()
 	{
 		sockaddr_in Con_Addr;
 		socklen_t nLen = sizeof(Con_Addr);
@@ -88,7 +88,7 @@ namespace ServerEngine
 		return TRUE;
 	}
 
-	BOOL CNetManager::StartListen(UINT16 nPortNum)
+	bool CNetManager::StartListen(UINT16 nPortNum)
 	{
 		sockaddr_in SvrAddr;
 		SvrAddr.sin_family = AF_INET;
@@ -130,7 +130,7 @@ namespace ServerEngine
 
 #ifdef _MSC_BUILD
 
-	BOOL CNetManager::WorkThread_ProcessEvent(UINT32 nParam)
+	bool CNetManager::WorkThread_ProcessEvent(UINT32 nParam)
 	{
 		ERROR_RETURN_FALSE(m_hCompletePort != INVALID_HANDLE_VALUE);
 
@@ -138,7 +138,7 @@ namespace ServerEngine
 		ULONG_PTR CompleteKey = 0;
 		LPOVERLAPPED lpOverlapped = NULL;
 		DWORD dwWaitTime = 1000;
-		BOOL  bRetValue = FALSE;
+		bool  bRetValue = FALSE;
 
 		while (!m_bCloseEvent)
 		{
@@ -289,7 +289,7 @@ namespace ServerEngine
 	}
 
 
-	BOOL CNetManager::CreateCompletePort()
+	bool CNetManager::CreateCompletePort()
 	{
 		m_hCompletePort = CreateIoCompletionPort(INVALID_HANDLE_VALUE, 0, 0, -1);
 		ERROR_RETURN_FALSE(m_hCompletePort != NULL);
@@ -297,7 +297,7 @@ namespace ServerEngine
 		return TRUE;
 	}
 
-	CConnection* CNetManager::AssociateCompletePort(SOCKET hSocket, BOOL bConnect)
+	CConnection* CNetManager::AssociateCompletePort(SOCKET hSocket, bool bConnect)
 	{
 		CConnection* pConnection = CConnectionMgr::GetInstancePtr()->CreateConnection();
 		ERROR_RETURN_NULL(pConnection != NULL);
@@ -311,7 +311,7 @@ namespace ServerEngine
 		return pConnection;
 	}
 
-	BOOL CNetManager::DestroyCompletePort()
+	bool CNetManager::DestroyCompletePort()
 	{
 		CloseHandle(m_hCompletePort);
 
@@ -319,14 +319,14 @@ namespace ServerEngine
 	}
 
 
-	BOOL CNetManager::EventDelete(CConnection* pConnection)
+	bool CNetManager::EventDelete(CConnection* pConnection)
 	{
 		return TRUE;
 	}
 
 #else
 
-	BOOL CNetManager::CreateCompletePort()
+	bool CNetManager::CreateCompletePort()
 	{
 		m_hCompletePort = epoll_create(10000);
 
@@ -335,7 +335,7 @@ namespace ServerEngine
 		return TRUE;
 	}
 
-	CConnection* CNetManager::AssociateCompletePort(SOCKET hSocket, BOOL bConnect)
+	CConnection* CNetManager::AssociateCompletePort(SOCKET hSocket, bool bConnect)
 	{
 		CConnection* pConnection = CConnectionMgr::GetInstancePtr()->CreateConnection();
 
@@ -371,14 +371,14 @@ namespace ServerEngine
 		return pConnection;
 	}
 
-	BOOL CNetManager::DestroyCompletePort()
+	bool CNetManager::DestroyCompletePort()
 	{
 		close(m_hCompletePort);
 
 		return TRUE;
 	}
 
-	BOOL CNetManager::WorkThread_ProcessEvent(UINT32 nParam)
+	bool CNetManager::WorkThread_ProcessEvent(UINT32 nParam)
 	{
 		struct epoll_event EpollEvent[20];
 		int nFd = 0;
@@ -479,7 +479,7 @@ namespace ServerEngine
 	}
 
 
-	BOOL CNetManager::EventDelete(CConnection* pConnection)
+	bool CNetManager::EventDelete(CConnection* pConnection)
 	{
 		struct epoll_event delEpv = { 0, { 0 } };
 		delEpv.data.ptr = pConnection;
@@ -495,7 +495,7 @@ namespace ServerEngine
 #endif
 
 
-	BOOL CNetManager::Start(UINT16 nPortNum, UINT32 nMaxConn, IDataHandler* pBufferHandler)
+	bool CNetManager::Start(UINT16 nPortNum, UINT32 nMaxConn, IDataHandler* pBufferHandler)
 	{
 		ERROR_RETURN_FALSE(pBufferHandler != NULL);
 
@@ -534,17 +534,17 @@ namespace ServerEngine
 		return TRUE;
 	}
 
-	BOOL CNetManager::InitNetwork()
+	bool CNetManager::InitNetwork()
 	{
 		return ServerEngine::InitNetwork();
 	}
 
-	BOOL CNetManager::UninitNetwork()
+	bool CNetManager::UninitNetwork()
 	{
 		return ServerEngine::UninitNetwork();
 	}
 
-	BOOL CNetManager::Close()
+	bool CNetManager::Close()
 	{
 		StopListen();
 
@@ -561,7 +561,7 @@ namespace ServerEngine
 		return TRUE;
 	}
 
-	BOOL CNetManager::StopListen()
+	bool CNetManager::StopListen()
 	{
 		CloseSocket(m_hListenSocket);
 
@@ -643,7 +643,7 @@ namespace ServerEngine
 
 		pConnection->m_dwIpAddr = IpAddrStrToInt((CHAR*)strIpAddr.c_str());
 
-		BOOL bRet = ConnectSocketEx(hSocket, strIpAddr.c_str(), sPort, (LPOVERLAPPED)&pConnection->m_IoOverlapRecv);
+		bool bRet = ConnectSocketEx(hSocket, strIpAddr.c_str(), sPort, (LPOVERLAPPED)&pConnection->m_IoOverlapRecv);
 
 		if (!bRet)
 		{
@@ -652,7 +652,7 @@ namespace ServerEngine
 		}
 
 #else
-		BOOL bRet = ConnectSocket(hSocket, strIpAddr.c_str(), sPort);
+		bool bRet = ConnectSocket(hSocket, strIpAddr.c_str(), sPort);
 		if (!bRet)
 		{
 			CLog::GetInstancePtr()->LogError("ConnectTo_Async 대상 서버에 연결하지 못했습니다,IP:%s--Port:%d!!", strIpAddr.c_str(), sPort);
@@ -672,7 +672,7 @@ namespace ServerEngine
 		return pConnection;
 	}
 
-	BOOL CNetManager::SendMessageByConnID(UINT32 dwConnID, UINT32 dwMsgID, UINT64 u64TargetID, UINT32 dwUserData, const char* pData, UINT32 dwLen)
+	bool CNetManager::SendMessageByConnID(UINT32 dwConnID, UINT32 dwMsgID, UINT64 u64TargetID, UINT32 dwUserData, const char* pData, UINT32 dwLen)
 	{
 		if (dwConnID <= 0)
 		{
@@ -716,7 +716,7 @@ namespace ServerEngine
 		return FALSE;
 	}
 
-	BOOL CNetManager::SendMsgBufByConnID(UINT32 dwConnID, IDataBuffer* pBuffer)
+	bool CNetManager::SendMsgBufByConnID(UINT32 dwConnID, IDataBuffer* pBuffer)
 	{
 		ERROR_RETURN_FALSE(dwConnID != 0);
 		CConnection* pConn = CConnectionMgr::GetInstancePtr()->GetConnectionByConnID(dwConnID);
@@ -741,7 +741,7 @@ namespace ServerEngine
 		return FALSE;
 	}
 
-	BOOL CNetManager::CloseEventThread()	
+	bool CNetManager::CloseEventThread()	
 	{
 		//TODO 수정하기
 		/*m_bCloseEvent = TRUE;
@@ -778,7 +778,7 @@ namespace ServerEngine
 	}*/
 
 
-	BOOL CNetManager::PostSendOperation(CConnection* pConnection, BOOL bCheck)
+	bool CNetManager::PostSendOperation(CConnection* pConnection, bool bCheck)
 	{
 		if (pConnection == NULL)
 		{

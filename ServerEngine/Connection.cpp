@@ -61,7 +61,7 @@ namespace ServerEngine
 
 #ifdef _MSC_BUILD
 
-	BOOL CConnection::DoReceive()
+	bool CConnection::DoReceive()
 	{
 		WSABUF  DataBuf;
 
@@ -95,7 +95,7 @@ namespace ServerEngine
 
 #else
 
-	BOOL CConnection::DoReceive()
+	bool CConnection::DoReceive()
 	{
 		while (TRUE)
 		{
@@ -161,7 +161,7 @@ namespace ServerEngine
 		return;
 	}
 
-	VOID CConnection::SetConnectionData(UINT64 dwData)
+	void CConnection::SetConnectionData(UINT64 dwData)
 	{
 		ASSERT(m_dwConnID != 0);
 
@@ -171,7 +171,7 @@ namespace ServerEngine
 	}
 
 
-	BOOL CConnection::ExtractBuffer()
+	bool CConnection::ExtractBuffer()
 	{
 		//在这方法里返回FALSE。
 		//会在外面导致这个连接被关闭。
@@ -263,7 +263,7 @@ namespace ServerEngine
 		return TRUE;
 	}
 
-	BOOL CConnection::Close()
+	bool CConnection::Close()
 	{
 		ShutDownSend(m_hSocket);
 
@@ -287,7 +287,7 @@ namespace ServerEngine
 		return TRUE;
 	}
 
-	BOOL CConnection::HandleRecvEvent(UINT32 dwBytes)
+	bool CConnection::HandleRecvEvent(UINT32 dwBytes)
 	{
 #ifdef _MSC_BUILD
 		m_dwDataLen += dwBytes;
@@ -316,14 +316,14 @@ namespace ServerEngine
 		return TRUE;
 	}
 
-	BOOL CConnection::SetSocket(SOCKET hSocket)
+	bool CConnection::SetSocket(SOCKET hSocket)
 	{
 		m_hSocket = hSocket;
 
 		return TRUE;
 	}
 
-	BOOL CConnection::SetDataHandler(IDataHandler* pHandler)
+	bool CConnection::SetDataHandler(IDataHandler* pHandler)
 	{
 		//ERROR_RETURN_FALSE(pHandler != NULL);
 
@@ -337,7 +337,7 @@ namespace ServerEngine
 		return m_hSocket;
 	}
 
-	BOOL CConnection::IsConnectionOK()
+	bool CConnection::IsConnectionOK()
 	{
 		if ((m_hSocket == INVALID_SOCKET) || (m_hSocket == 0))
 		{
@@ -347,7 +347,7 @@ namespace ServerEngine
 		return m_bConnected;
 	}
 
-	BOOL CConnection::SetConnectionOK(BOOL bOk)
+	bool CConnection::SetConnectionOK(bool bOk)
 	{
 		m_bConnected = bOk;
 
@@ -357,7 +357,7 @@ namespace ServerEngine
 	}
 
 
-	BOOL CConnection::Reset()
+	bool CConnection::Reset()
 	{
 		m_hSocket = INVALID_SOCKET;
 
@@ -392,12 +392,12 @@ namespace ServerEngine
 	}
 
 
-	BOOL CConnection::SendBuffer(IDataBuffer* pBuff)
+	bool CConnection::SendBuffer(IDataBuffer* pBuff)
 	{
 		return m_SendBuffList.push(pBuff);
 	}
 
-	BOOL CConnection::CheckHeader(CHAR* m_pPacket)
+	bool CConnection::CheckHeader(CHAR* m_pPacket)
 	{
 		/*
 		1.首先验证包的验证吗
@@ -424,7 +424,7 @@ namespace ServerEngine
 	}
 
 #ifdef _MSC_BUILD
-	BOOL CConnection::DoSend()
+	bool CConnection::DoSend()
 	{
 		IDataBuffer* pFirstBuff = NULL;
 		IDataBuffer* pSendingBuffer = NULL;
@@ -514,7 +514,7 @@ namespace ServerEngine
 	}
 
 #else
-	BOOL CConnection::DoSend()
+	bool CConnection::DoSend()
 	{
 		//返回值为正数， 分为完全发送，和部分发送，部分发送，用另一个缓冲区装着继续发送
 		//返回值为负数   错误码：
@@ -653,7 +653,7 @@ namespace ServerEngine
 	}
 
 
-	BOOL CConnectionMgr::DeleteConnection(CConnection* pConnection)
+	bool CConnectionMgr::DeleteConnection(CConnection* pConnection)
 	{
 		ERROR_RETURN_FALSE(pConnection != NULL);
 
@@ -691,7 +691,7 @@ namespace ServerEngine
 		return TRUE;
 	}
 
-	BOOL CConnectionMgr::CloseAllConnection()
+	bool CConnectionMgr::CloseAllConnection()
 	{
 		CConnection* pConn = NULL;
 		for (size_t i = 0; i < m_vtConnList.size(); i++)
@@ -703,7 +703,7 @@ namespace ServerEngine
 		return TRUE;
 	}
 
-	BOOL CConnectionMgr::DestroyAllConnection()
+	bool CConnectionMgr::DestroyAllConnection()
 	{
 		CConnection* pConn = NULL;
 		for (size_t i = 0; i < m_vtConnList.size(); i++)
@@ -721,7 +721,7 @@ namespace ServerEngine
 		return TRUE;
 	}
 
-	BOOL CConnectionMgr::CheckConntionAvalible()
+	bool CConnectionMgr::CheckConntionAvalible()
 	{
 		return TRUE;
 		UINT64 curTick = GetTickCount();
@@ -743,7 +743,7 @@ namespace ServerEngine
 		return TRUE;
 	}
 
-	BOOL CConnectionMgr::InitConnectionList(UINT32 nMaxCons)
+	bool CConnectionMgr::InitConnectionList(UINT32 nMaxCons)
 	{
 		ERROR_RETURN_FALSE(m_pFreeConnRoot == NULL);
 		ERROR_RETURN_FALSE(m_pFreeConnTail == NULL);

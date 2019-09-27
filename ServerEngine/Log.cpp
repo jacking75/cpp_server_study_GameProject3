@@ -22,7 +22,7 @@
 		return &Log;
 	}
 
-	BOOL CLog::StartLog(std::string strPrefix, std::string strLogDir)
+	bool CLog::StartLog(std::string strPrefix, std::string strLogDir)
 	{
 		if (!ServerEngine::CreateDir(strLogDir))
 		{
@@ -52,7 +52,7 @@
 		return TRUE;
 	}
 
-	BOOL CLog::CloseLog()
+	bool CLog::CloseLog()
 	{
 		if (m_pLogFile == NULL)
 		{

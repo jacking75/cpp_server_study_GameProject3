@@ -21,7 +21,7 @@ namespace ServerEngine
 		ClearChildNode();
 	}
 	//--------------------------------------------------------------------------------------------------------
-	BOOL DFANode::AddNode(const KeyType* key, INT32 len)
+	bool DFANode::AddNode(const KeyType* key, INT32 len)
 	{
 		if (key == NULL || len < 0)
 		{
@@ -69,7 +69,7 @@ namespace ServerEngine
 
 	}
 	//--------------------------------------------------------------------------------------------------------
-	BOOL DFANode::HasKeyWord(const KeyType* pdata, int len, BOOL bReturn/* = true*/)
+	bool DFANode::HasKeyWord(const KeyType* pdata, int len, bool bReturn/* = true*/)
 	{
 		if (bReturn)
 		{
@@ -147,7 +147,7 @@ namespace ServerEngine
 		return FALSE;
 	}
 	//--------------------------------------------------------------------------------------------------------
-	BOOL DFANode::LoadFile(const std::string& filename)
+	bool DFANode::LoadFile(const std::string& filename)
 	{
 		ClearChildNode();
 
@@ -194,7 +194,7 @@ namespace ServerEngine
 		return TRUE;
 	}
 	//--------------------------------------------------------------------------------------------------------
-	BOOL DFANode::IsFileterWord(const std::string& word)
+	bool DFANode::IsFileterWord(const std::string& word)
 	{
 		std::string wpData(word);
 
@@ -204,7 +204,7 @@ namespace ServerEngine
 	}
 
 	//--------------------------------------------------------------------------------------------------------
-	BOOL DFANode::FilterKeyWords(std::string& word, const std::string& dest /*= "***"*/)
+	bool DFANode::FilterKeyWords(std::string& word, const std::string& dest /*= "***"*/)
 	{
 		if (word.empty())
 		{
@@ -218,7 +218,7 @@ namespace ServerEngine
 
 		int start = 0, strlen = 0;
 		int lastPos = -1;
-		BOOL keyflag = FALSE;
+		bool keyflag = FALSE;
 
 		while (HasKeyWord(wpData.c_str(), (int)wpData.size()))
 		{
@@ -264,7 +264,7 @@ namespace ServerEngine
 		m_childNodeMap.clear();
 	}
 	//--------------------------------------------------------------------------------------------------------
-	BOOL DFANode::HasEnding()
+	bool DFANode::HasEnding()
 	{
 		return m_childNodeMap.empty() ? TRUE : m_childNodeMap.find('#') != m_childNodeMap.end();
 	}

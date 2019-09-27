@@ -1,7 +1,7 @@
 ﻿#pragma once
 
 #define BEGIN_PROCESS_MESSAGE(ClassName) \
-BOOL ClassName##::DispatchPacket(NetPacket *pNetPacket) \
+bool ClassName##::DispatchPacket(NetPacket *pNetPacket) \
 { \
 	PacketHeader *pPacketHeader = (PacketHeader *)pNetPacket->m_pDataBuffer->GetBuffer();\
 	ERROR_RETURN_TRUE(pPacketHeader != NULL);\

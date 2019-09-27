@@ -18,15 +18,15 @@ namespace ServerEngine
 	public:
 		virtual INT32	GetRef() = 0;
 
-		virtual BOOL	AddRef() = 0;
+		virtual bool	AddRef() = 0;
 
-		virtual BOOL	Release() = 0;
+		virtual bool	Release() = 0;
 
 		virtual CHAR* GetData() = 0;
 
 		virtual UINT32	GetTotalLenth() = 0;
 
-		virtual VOID	SetTotalLenth(UINT32 nPos) = 0;
+		virtual void	SetTotalLenth(UINT32 nPos) = 0;
 
 		virtual UINT32  GetBodyLenth() = 0;
 

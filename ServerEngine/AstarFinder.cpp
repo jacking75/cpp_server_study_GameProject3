@@ -37,7 +37,7 @@ namespace ServerEngine
 	////////////////////////////////////////////////////////////////////////////////
 
 
-	BOOL AstarFinder::InitAstarMap(BYTE* pMap, INT32 w, INT32 h)
+	bool AstarFinder::InitAstarMap(BYTE* pMap, INT32 w, INT32 h)
 	{
 		m_nColCnt = w;	// 장애물 맵의 넓이
 		m_nRowCnt = h;	// 장애물 맵의 높이
@@ -61,7 +61,7 @@ namespace ServerEngine
 
 	////////////////////////////////////////////////////////////////////////////////
 
-	BOOL AstarFinder::NewPath(int sx, int sy, int dx, int dy) //(dx,dy)대상 노드，(sx,sy)소스 노드，입력 기능
+	bool AstarFinder::NewPath(int sx, int sy, int dx, int dy) //(dx,dy)대상 노드，(sx,sy)소스 노드，입력 기능
 	{
 		if (IsTileAviable(dx, dy) && IsTileAviable(sx, sy) && (GetTileNum(sx, sy) != GetTileNum(dx, dy)))
 		{
@@ -74,7 +74,7 @@ namespace ServerEngine
 
 	////////////////////////////////////////////////////////////////////////////////
 
-	BOOL AstarFinder::IsReached(void) // check it's return value before getting
+	bool AstarFinder::IsReached(void) // check it's return value before getting
 	{
 		if (m_pCurPath->Parent == NULL)
 		{
@@ -84,7 +84,7 @@ namespace ServerEngine
 		return TRUE;
 	}
 
-	BOOL AstarFinder::PathNextNode(void)
+	bool AstarFinder::PathNextNode(void)
 	{
 		if (m_pCurPath->Parent != NULL)
 		{

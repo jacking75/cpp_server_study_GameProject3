@@ -38,13 +38,13 @@ namespace ServerEngine
 		void Destroy();
 
 		///判断是否被占有用
-		BOOL islock()const;
+		bool islock()const;
 
 		inline void useit();
 
-		inline BOOL isDestroy() const;
+		inline bool isDestroy() const;
 
-		BOOL isRelease() const;
+		bool isRelease() const;
 
 		time_t getLastMotifyTime();
 
@@ -53,7 +53,7 @@ namespace ServerEngine
 		UINT32 GetCheckCode();
 
 		///是否在使用
-		inline BOOL isUse() const;
+		inline bool isUse() const;
 
 		inline void reset();
 	private:
@@ -66,8 +66,8 @@ namespace ServerEngine
 	struct _SMBlock
 	{
 		UINT32			m_dwIndex;      //数据当前编号
-		BOOL			m_bUse;         //是否在使用true是正在使用，false是没有使用
-		BOOL			m_bNewBlock;	//是否是刚刚新创建的区块
+		bool			m_bUse;         //是否在使用true是正在使用，false是没有使用
+		bool			m_bNewBlock;	//是否是刚刚新创建的区块
 		time_t			m_beforeTime;   //DS服务器更新完成后回写的信息时间。
 		time_t          m_afterTime;
 		_SMBlock()
@@ -91,7 +91,7 @@ namespace ServerEngine
 	class SharedMemoryBase
 	{
 	public:
-		SharedMemoryBase(const UINT32& nModuleID, UINT32 rawblockSize, UINT32 nCountPerPage, BOOL noCreate = false);
+		SharedMemoryBase(const UINT32& nModuleID, UINT32 rawblockSize, UINT32 nCountPerPage, bool noCreate = false);
 
 		SharedMemoryBase(UINT32 rawblockSize, char* pdata, INT32 len);
 
@@ -108,7 +108,7 @@ namespace ServerEngine
 		UINT32			m_nSpace;		///每个元素的宽度
 		UINT32			m_rawblockSize;
 		UINT32			m_nModuleID;
-		BOOL			m_bEmpty;
+		bool			m_bEmpty;
 
 		///所有数据头的集合
 		typedef  std::map<INT32, _SMBlock*>    mapSMBlock;
@@ -124,7 +124,7 @@ namespace ServerEngine
 	private:
 
 		///创建一个新页
-		BOOL NewPage();
+		bool NewPage();
 
 		/**
 		* @brief		初始化数据区域
@@ -141,7 +141,7 @@ namespace ServerEngine
 		void InitToMap();
 
 		/**是否是首创共享内存*/
-		BOOL IsFirstCreated();
+		bool IsFirstCreated();
 
 		/**从共享内存里恢复其他页*/
 		void ImportOtherPage();
@@ -171,10 +171,10 @@ namespace ServerEngine
 		/*从空闲内存中分配一个块,如果没有了返回空
 		@param isNewBlock 为true时会在保存期调用saveobject 的Create虚函数
 		*/
-		virtual ShareObject* NewObject(BOOL isNewBlock = false);
+		virtual ShareObject* NewObject(bool isNewBlock = false);
 
 		/**释放一块已经不再使用的内存*/
-		virtual BOOL DestoryObject(ShareObject* pobject);
+		virtual bool DestoryObject(ShareObject* pobject);
 
 		mapUsedSMBlock& GetUsedDataList();
 	};
@@ -183,7 +183,7 @@ namespace ServerEngine
 	class SharedMemory : public SharedMemoryBase
 	{
 	public:
-		SharedMemory(const UINT32& nModuleID, UINT32 nCountPerPage, BOOL noCreate = false)
+		SharedMemory(const UINT32& nModuleID, UINT32 nCountPerPage, bool noCreate = false)
 			: SharedMemoryBase(nModuleID, sizeof(T), nCountPerPage, noCreate)
 		{
 
@@ -194,7 +194,7 @@ namespace ServerEngine
 			return static_cast<T*>(SharedMemoryBase::GetObjectByRawindex(index));
 		}
 
-		T* NewObject(BOOL isNewBlock = false)
+		T* NewObject(bool isNewBlock = false)
 		{
 			T* pTmp = static_cast<T*>(SharedMemoryBase::NewObject(isNewBlock));
 			if (pTmp == NULL)
@@ -211,7 +211,7 @@ namespace ServerEngine
 			return SharedMemoryBase::GetSMBbyRawIndex(index);
 		}
 
-		BOOL DestoryObject(T* pobject)
+		bool DestoryObject(T* pobject)
 		{
 			return SharedMemoryBase::DestoryObject(pobject);
 		}
@@ -234,7 +234,7 @@ namespace ServerEngine
 		}
 
 		/**数据库修改*/
-		//BOOL SaveModifyToDB(IDBInterface* pdb)
+		//bool SaveModifyToDB(IDBInterface* pdb)
 		//{
 		//	///共享内存不存在直接返回
 		//	if (m_MemoryPool == NULL)
@@ -255,7 +255,7 @@ namespace ServerEngine
 		//	}
 
 		//	INT32 newtimes = 0, writetimes = 0, deletetimes = 0, releasetime = 0;
-		//	BOOL hasOprate = false; //是否有操作
+		//	bool hasOprate = false; //是否有操作
 		//	///获取所有修改过的数据,getRawMemoryBlockSize会重新计算所有共享块，
 		//	UINT32 temblockSize = m_MemoryPool->GetRawMemoryBlockSize();
 		//	for (UINT32 r = 0; r < temblockSize; r++)
@@ -313,7 +313,7 @@ namespace ServerEngine
 		//		lastMotifyTime = pdata->getLastMotifyTime();
 		//		beforeTime = pBlock->m_beforeTime;
 		//		afterTime = pBlock->m_afterTime;
-		//		BOOL needsave = false;
+		//		bool needsave = false;
 		//		///保存完毕的时间大于保存前的时间,那么上一次保存成功的
 		//		if (afterTime >= beforeTime)
 		//		{

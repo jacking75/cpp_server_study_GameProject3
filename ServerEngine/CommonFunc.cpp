@@ -48,7 +48,7 @@ namespace ServerEngine
 	}
 
 
-	BOOL SetCurrentWorkDir(std::string strPath)
+	bool SetCurrentWorkDir(std::string strPath)
 	{
 		if (strPath.empty())
 		{
@@ -140,7 +140,7 @@ namespace ServerEngine
 #endif
 	}
 
-	BOOL CreateDir(std::string& strDir)
+	bool CreateDir(std::string& strDir)
 	{
 		int nRet = 0;
 #ifdef _MSC_BUILD
@@ -162,7 +162,7 @@ namespace ServerEngine
 		return FALSE;
 	}
 
-	BOOL GetDirFiles(const char* pszDir, char* pszFileType, std::vector<std::string>& vtFileList, BOOL bRecursion)
+	bool GetDirFiles(const char* pszDir, char* pszFileType, std::vector<std::string>& vtFileList, bool bRecursion)
 	{
 		if (pszDir == NULL || pszFileType == NULL)
 		{
@@ -246,7 +246,7 @@ namespace ServerEngine
 		return TRUE;
 	}
 
-	BOOL IsSameDay(UINT64 uTime)
+	bool IsSameDay(UINT64 uTime)
 	{
 #ifdef _MSC_BUILD
 		return ((uTime - _timezone) / 86400) == ((GetCurrTime() - _timezone) / 86400);
@@ -279,7 +279,7 @@ namespace ServerEngine
 	}
 
 
-	VOID Sleep(UINT32 dwMilliseconds)
+	void Sleep(UINT32 dwMilliseconds)
 	{
 #ifdef _MSC_BUILD
 		::Sleep(dwMilliseconds);
@@ -323,7 +323,7 @@ namespace ServerEngine
 
 		static INT32 nRandIndex[100] = { 0 };
 		static INT32 vtGlobalRankValue[10000];
-		static BOOL  bInit = false;
+		static bool  bInit = false;
 
 		if (bInit == false)
 		{
@@ -415,7 +415,7 @@ namespace ServerEngine
 		return pdata;
 	}
 
-	BOOL ReleaseShareMemory(CHAR* pMem)
+	bool ReleaseShareMemory(CHAR* pMem)
 	{
 #ifdef _MSC_BUILD
 		return UnmapViewOfFile(pMem);
@@ -424,7 +424,7 @@ namespace ServerEngine
 #endif
 	}
 
-	BOOL CloseShareMemory(HANDLE hShm)
+	bool CloseShareMemory(HANDLE hShm)
 	{
 #ifdef _MSC_BUILD
 		return  CloseHandle(hShm);
@@ -433,7 +433,7 @@ namespace ServerEngine
 #endif
 	}
 
-	BOOL DbgTrace(wchar_t* format, ...)
+	bool DbgTrace(wchar_t* format, ...)
 	{
 #if (defined _MSC_BUILD) && (defined _DEBUG)
 		wchar_t szLog[1024] = { 0 };
@@ -447,7 +447,7 @@ namespace ServerEngine
 		return TRUE;
 	}
 
-	BOOL KillProcess(UINT64 dwPid)
+	bool KillProcess(UINT64 dwPid)
 	{
 #ifdef _MSC_BUILD
 		HANDLE hPrc;

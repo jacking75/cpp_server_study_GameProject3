@@ -35,7 +35,7 @@ namespace ServerEngine
 			return m_dwRefCount;
 		}
 
-		BOOL AddRef()
+		bool AddRef()
 		{
 			m_pManager->m_CritSec.Lock();
 			m_dwRefCount++;
@@ -43,7 +43,7 @@ namespace ServerEngine
 			return TRUE;
 		}
 
-		BOOL Release()
+		bool Release()
 		{
 			ASSERT(m_pManager != NULL);
 			m_pManager->m_CritSec.Lock();
@@ -110,7 +110,7 @@ namespace ServerEngine
 			return m_nDataLen - HEADER_LEN;
 		}
 
-		VOID SetTotalLenth(UINT32 nPos)
+		void SetTotalLenth(UINT32 nPos)
 		{
 			m_nDataLen = nPos;
 		}
@@ -257,7 +257,7 @@ namespace ServerEngine
 				return;
 			}
 
-			BOOL bNext = TRUE;
+			bool bNext = TRUE;
 			while (pBufferNode)
 			{
 				if (bNext)

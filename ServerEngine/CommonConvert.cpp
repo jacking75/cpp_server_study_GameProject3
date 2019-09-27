@@ -127,7 +127,7 @@ namespace ServerEngine
 		return std::string(szValue);
 	}
 
-	BOOL ServerEngine::StringToPos(char* pStr, FLOAT& x, FLOAT& y, FLOAT& z)
+	bool ServerEngine::StringToPos(char* pStr, FLOAT& x, FLOAT& y, FLOAT& z)
 	{
 		if (pStr == NULL)
 		{
@@ -166,7 +166,7 @@ namespace ServerEngine
 		return TRUE;
 	}
 
-	std::string ServerEngine::FloatToString(FLOAT fValue, INT32 nPrecision, BOOL bRound)
+	std::string ServerEngine::FloatToString(FLOAT fValue, INT32 nPrecision, bool bRound)
 	{
 		CHAR szValue[64] = { 0 };
 
@@ -195,7 +195,7 @@ namespace ServerEngine
 		return std::string(szValue);
 	}
 
-	BOOL ServerEngine::SpliteString(std::string strSrc, std::string strDelim, std::vector<std::string>& vtStr)
+	bool ServerEngine::SpliteString(std::string strSrc, std::string strDelim, std::vector<std::string>& vtStr)
 	{
 		vtStr.clear();
 		if (strDelim.empty())
@@ -224,7 +224,7 @@ namespace ServerEngine
 		return TRUE;
 	}
 
-	BOOL ServerEngine::ReplaceString(std::string& str, const std::string& pattern, const std::string& newpat)
+	bool ServerEngine::ReplaceString(std::string& str, const std::string& pattern, const std::string& newpat)
 	{
 		const size_t nsize = newpat.size();
 		const size_t psize = pattern.size();
@@ -237,7 +237,7 @@ namespace ServerEngine
 		return TRUE;
 	}
 
-	BOOL ServerEngine::StringToVector(const char* pStrValue, INT32 IntVector[], INT32 nSize, char cDelim)
+	bool ServerEngine::StringToVector(const char* pStrValue, INT32 IntVector[], INT32 nSize, char cDelim)
 	{
 		if (pStrValue == NULL)
 		{
@@ -278,7 +278,7 @@ namespace ServerEngine
 		return TRUE;
 	}
 
-	BOOL ServerEngine::SpliteString(std::string strSrc, char cDelim, std::vector<std::string>& vtStr)
+	bool ServerEngine::SpliteString(std::string strSrc, char cDelim, std::vector<std::string>& vtStr)
 	{
 		vtStr.clear();
 
@@ -372,12 +372,12 @@ namespace ServerEngine
 #endif
 	}
 
-	BOOL ServerEngine::IsTextUTF8(const char* str, UINT32 length)
+	bool ServerEngine::IsTextUTF8(const char* str, UINT32 length)
 	{
 		UINT32 i;
 		UINT32 nBytes = 0;//UFT8可用1-6个字节编码,ASCII用一个字节
 		UINT8 chr;
-		BOOL bAllAscii = TRUE; //如果全部都是ASCII, 说明不是UTF-8
+		bool bAllAscii = TRUE; //如果全部都是ASCII, 说明不是UTF-8
 		for (i = 0; i < length; i++)
 		{
 			chr = *(str + i);
@@ -466,7 +466,7 @@ namespace ServerEngine
 		return nCount;
 	}
 
-	BOOL ServerEngine::StringTrim(std::string& strValue)
+	bool ServerEngine::StringTrim(std::string& strValue)
 	{
 		if (!strValue.empty())
 		{

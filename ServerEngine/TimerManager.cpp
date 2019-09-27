@@ -24,7 +24,7 @@ namespace ServerEngine
 		return &_TimerManager;
 	}
 
-	BOOL TimerManager::DelTimer(UINT32 dwSec, UINT32 dwData)
+	bool TimerManager::DelTimer(UINT32 dwSec, UINT32 dwData)
 	{
 		if (m_pHead == NULL)
 		{
@@ -75,7 +75,7 @@ namespace ServerEngine
 		return FALSE;
 	}
 
-	VOID TimerManager::UpdateTimer()
+	void TimerManager::UpdateTimer()
 	{
 		m_dwCurTime = GetCurrTime();
 		TimeEvent* pCurEvent = m_pHead;
@@ -111,7 +111,7 @@ namespace ServerEngine
 		}
 	}
 
-	VOID TimerManager::OnTimerEvent(TimeEvent* pEvent)
+	void TimerManager::OnTimerEvent(TimeEvent* pEvent)
 	{
 		if (pEvent == NULL)
 		{
@@ -123,13 +123,13 @@ namespace ServerEngine
 		return;
 	}
 
-	BOOL TimerManager::InitTimer()
+	bool TimerManager::InitTimer()
 	{
 		m_dwInitTime = GetCurrTime();
 		return TRUE;
 	}
 
-	BOOL TimerManager::Clear()
+	bool TimerManager::Clear()
 	{
 		while (m_pHead != NULL)
 		{

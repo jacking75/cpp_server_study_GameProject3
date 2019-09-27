@@ -29,24 +29,24 @@ namespace ServerEngine
 
 		DFANode* AddNode(KeyType key);
 
-		BOOL AddNode(const KeyType* key, INT32 len);
+		bool AddNode(const KeyType* key, INT32 len);
 
 		DFANode* GetNode(KeyType key) const;
 
-		BOOL HasKeyWord(const KeyType* pdata, INT32 len, BOOL bReturn = TRUE);
+		bool HasKeyWord(const KeyType* pdata, INT32 len, bool bReturn = TRUE);
 
-		BOOL LoadFile(const std::string& filename);
+		bool LoadFile(const std::string& filename);
 
-		BOOL IsFileterWord(const std::string& word);
+		bool IsFileterWord(const std::string& word);
 
-		BOOL FilterKeyWords(std::string& word, const std::string& dest = "*");
+		bool FilterKeyWords(std::string& word, const std::string& dest = "*");
 
 	private:
 		void GetKeyPos(INT32& nStart, INT32& nLen);
 
 		void ClearChildNode();
 
-		BOOL HasEnding();
+		bool HasEnding();
 
 		INT32 GetChildCount() const;
 	protected:

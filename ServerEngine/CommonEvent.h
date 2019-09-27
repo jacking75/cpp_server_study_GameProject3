@@ -22,7 +22,7 @@ public:
 		CloseHandle(m_hEvent);
 	};
 
-	BOOL InitEvent(BOOL bManualReset, BOOL bInitialState)
+	bool InitEvent(bool bManualReset, bool bInitialState)
 	{
 		if((m_hEvent = CreateEvent(NULL, bManualReset, bInitialState, NULL)) == NULL)
 		{
@@ -83,7 +83,7 @@ class CCommonEvent
 
 	pthread_cond_t  cond;
 
-	BOOL bManualReset, bInitialState;
+	bool bManualReset, bInitialState;
 public:
 	CCommonEvent()
 	{
@@ -97,7 +97,7 @@ public:
 		pthread_cond_destroy(&cond);
 	};
 
-	BOOL InitEvent(BOOL bManualReset, BOOL bInitialState)
+	bool InitEvent(bool bManualReset, bool bInitialState)
 	{
 		pthread_mutex_init (&mutex, NULL);
 

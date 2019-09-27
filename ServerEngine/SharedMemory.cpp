@@ -17,7 +17,7 @@ namespace ServerEngine
 		m_Status = SMS_LOCK;
 	}
 
-	BOOL ShareObject::islock() const
+	bool ShareObject::islock() const
 	{
 		return m_Status == SMS_LOCK;
 	}
@@ -43,12 +43,12 @@ namespace ServerEngine
 		m_Status = SMS_DELETE;
 	}
 
-	BOOL ShareObject::isDestroy() const
+	bool ShareObject::isDestroy() const
 	{
 		return (m_Status == SMS_DELETE);
 	}
 
-	BOOL ShareObject::isRelease() const
+	bool ShareObject::isRelease() const
 	{
 		return (m_Status == SMS_RELEASE);
 	}
@@ -68,7 +68,7 @@ namespace ServerEngine
 		return m_CheckCode;
 	}
 
-	BOOL ShareObject::isUse() const
+	bool ShareObject::isUse() const
 	{
 		return m_Status != SMS_NONE;
 	}
@@ -86,7 +86,7 @@ namespace ServerEngine
 	********************************************************************/
 
 
-	BOOL SharedMemoryBase::NewPage()
+	bool SharedMemoryBase::NewPage()
 	{
 		unsigned int size = m_nCountperPage * (m_nSpace);
 
@@ -177,7 +177,7 @@ namespace ServerEngine
 		}
 	}
 
-	BOOL SharedMemoryBase::IsFirstCreated()
+	bool SharedMemoryBase::IsFirstCreated()
 	{
 		return m_bEmpty;
 	}
@@ -210,7 +210,7 @@ namespace ServerEngine
 	*@param count  T的个数
 	*@param noCreate 不允许创建
 	*/
-	SharedMemoryBase::SharedMemoryBase(const UINT32& nModuleID, UINT32 rawblockSize, UINT32 nCountperPage, BOOL noCreate/*=false*/)
+	SharedMemoryBase::SharedMemoryBase(const UINT32& nModuleID, UINT32 rawblockSize, UINT32 nCountperPage, bool noCreate/*=false*/)
 		: m_rawblockSize(rawblockSize), m_nCountperPage(nCountperPage), m_nSpace(rawblockSize + sizeof(_SMBlock)), m_nModuleID(nModuleID)
 
 	{
@@ -350,7 +350,7 @@ namespace ServerEngine
 		}
 	}
 
-	ShareObject* SharedMemoryBase::NewObject(BOOL isNewBlock/*=false*/)
+	ShareObject* SharedMemoryBase::NewObject(bool isNewBlock/*=false*/)
 	{
 		///如果未分配内存没有了,则开始处理脏数据
 		if (m_mapFreeSMBlock.size() == 0)
@@ -405,7 +405,7 @@ namespace ServerEngine
 		return NULL;
 	}
 
-	BOOL SharedMemoryBase::DestoryObject(ShareObject* pobject)
+	bool SharedMemoryBase::DestoryObject(ShareObject* pobject)
 	{
 		if (pobject == NULL)
 		{

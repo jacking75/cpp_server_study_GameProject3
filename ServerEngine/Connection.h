@@ -46,44 +46,44 @@ namespace ServerEngine
 		CConnection();
 		virtual ~CConnection();
 	public:
-		BOOL	HandleRecvEvent(UINT32 dwBytes);
+		bool	HandleRecvEvent(UINT32 dwBytes);
 
 		UINT32  GetConnectionID();
 
 		UINT64  GetConnectionData();
 
-		VOID    SetConnectionID(UINT32 dwConnID);
+		void    SetConnectionID(UINT32 dwConnID);
 
-		VOID	SetConnectionData(UINT64 dwData);
+		void	SetConnectionData(UINT64 dwData);
 
-		BOOL	Close();
+		bool	Close();
 
-		BOOL	SetSocket(SOCKET hSocket);
+		bool	SetSocket(SOCKET hSocket);
 
 		SOCKET  GetSocket();
 
-		BOOL	SetDataHandler(IDataHandler* pHandler);
+		bool	SetDataHandler(IDataHandler* pHandler);
 
-		BOOL	ExtractBuffer();
+		bool	ExtractBuffer();
 
-		BOOL	DoReceive();
+		bool	DoReceive();
 
-		BOOL	IsConnectionOK();
+		bool	IsConnectionOK();
 
-		BOOL	SetConnectionOK(BOOL bOk);
+		bool	SetConnectionOK(bool bOk);
 
-		BOOL    Reset();
+		bool    Reset();
 
-		BOOL    SendBuffer(IDataBuffer* pBuff);
+		bool    SendBuffer(IDataBuffer* pBuff);
 
-		BOOL    DoSend();
+		bool    DoSend();
 
-		BOOL	CheckHeader(CHAR* m_pPacket);
+		bool	CheckHeader(CHAR* m_pPacket);
 
 	public:
 		SOCKET						m_hSocket;
 
-		BOOL						m_bConnected;
+		bool						m_bConnected;
 
 		NetIoOperatorData			m_IoOverlapRecv;
 
@@ -114,7 +114,7 @@ namespace ServerEngine
 
 
 
-		BOOL				        m_IsSending;
+		bool				        m_IsSending;
 
 		//LINUX下专用， 用于发了一半的包
 		IDataBuffer* m_pSendingBuffer;
@@ -133,20 +133,20 @@ namespace ServerEngine
 		static CConnectionMgr* GetInstancePtr();
 
 	public:
-		BOOL            InitConnectionList(UINT32 nMaxCons);
+		bool            InitConnectionList(UINT32 nMaxCons);
 
 		CConnection* CreateConnection();
 
-		BOOL		    DeleteConnection(CConnection* pConnection);
+		bool		    DeleteConnection(CConnection* pConnection);
 
 		CConnection* GetConnectionByConnID(UINT32 dwConnID);
 
 		///////////////////////////////////////////
-		BOOL		    CloseAllConnection();
+		bool		    CloseAllConnection();
 
-		BOOL		    DestroyAllConnection();
+		bool		    DestroyAllConnection();
 
-		BOOL			CheckConntionAvalible();
+		bool			CheckConntionAvalible();
 
 	public:
 

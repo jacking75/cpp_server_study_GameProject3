@@ -13,19 +13,19 @@ namespace ServerEngine
 
 		~CCommonWorkThread();
 
-		BOOL			Start();
+		bool			Start();
 
-		BOOL			Stop();
+		bool			Stop();
 
 		void			Run();
 
-		BOOL			AddMessage(NetPacket* pNetPacket);
+		bool			AddMessage(NetPacket* pNetPacket);
 
-		BOOL			SetThreadHandler(IThreadHandler* pThreadHandler);
+		bool			SetThreadHandler(IThreadHandler* pThreadHandler);
 
-		BOOL			OnThreadBegin();
+		bool			OnThreadBegin();
 
-		BOOL			OnThreadEnd();
+		bool			OnThreadEnd();
 
 	protected:
 #ifdef _MSC_BUILD
@@ -33,7 +33,7 @@ namespace ServerEngine
 #else
 		pthread_t					m_hThread;
 #endif
-		BOOL					m_bRun;
+		bool					m_bRun;
 
 		IThreadHandler* m_pThreadHandler;
 

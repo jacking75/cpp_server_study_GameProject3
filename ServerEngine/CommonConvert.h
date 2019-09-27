@@ -34,10 +34,10 @@ namespace ServerEngine
 
 	std::string IntToString(INT64 nValue);
 
-	BOOL  StringToPos(char* pStr, FLOAT& x, FLOAT& y, FLOAT& z);
+	bool  StringToPos(char* pStr, FLOAT& x, FLOAT& y, FLOAT& z);
 
 	//浮点到字符串， nPrecision 保留的最大小数的位数， bRound 是否四舍五入
-	std::string FloatToString(FLOAT fValue, INT32 nPrecision = -1, BOOL bRound = FALSE);
+	std::string FloatToString(FLOAT fValue, INT32 nPrecision = -1, bool bRound = FALSE);
 
 	std::wstring Utf8_To_Unicode(std::string strValue);
 
@@ -51,21 +51,21 @@ namespace ServerEngine
 
 	std::string Ansi_To_Uft8(std::string wstrValue);
 
-	BOOL IsTextUTF8(const char* str, UINT32 length);
+	bool IsTextUTF8(const char* str, UINT32 length);
 
-	BOOL SpliteString(std::string strSrc,  std::string strDelim, std::vector<std::string>& vtStr);
+	bool SpliteString(std::string strSrc,  std::string strDelim, std::vector<std::string>& vtStr);
 
-	BOOL SpliteString(std::string strSrc, char cDelim, std::vector<std::string>& vtStr);
+	bool SpliteString(std::string strSrc, char cDelim, std::vector<std::string>& vtStr);
 
-	BOOL ReplaceString(std::string& str, const std::string& pattern, const std::string& newpat);
+	bool ReplaceString(std::string& str, const std::string& pattern, const std::string& newpat);
 
-	BOOL StringToVector(const char * pStrValue, INT32 IntVector[], INT32 nSize, char cDelim = ',');
+	bool StringToVector(const char * pStrValue, INT32 IntVector[], INT32 nSize, char cDelim = ',');
 
 	UINT32 VersionToInt(std::string& strVersion);
 
 	INT32  CountSymbol(char* pStr, char cSymbol);
 
-	BOOL StringTrim(std::string& strValue);
+	bool StringTrim(std::string& strValue);
 
 }
 

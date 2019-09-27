@@ -55,7 +55,7 @@ namespace ServerEngine
 		}
 
 
-		BOOL Notify()
+		bool Notify()
 		{
 			return SetEvent(m_hEvent);
 		}
@@ -146,7 +146,7 @@ public:
 		}
 	} 
 
-	BOOL Notify()
+	bool Notify()
 	{
 		pthread_cond_broadcast(&cond);
 

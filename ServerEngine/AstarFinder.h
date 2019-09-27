@@ -34,10 +34,10 @@ namespace ServerEngine
 		AstarFinder(void);
 		~AstarFinder();
 
-		BOOL	InitAstarMap(BYTE* pMap, INT32 w, INT32 h);
-		BOOL	NewPath(int sx, int sy, int dx, int dy);
-		BOOL	IsReached(void);
-		BOOL	PathNextNode(void);
+		bool	InitAstarMap(BYTE* pMap, INT32 w, INT32 h);
+		bool	NewPath(int sx, int sy, int dx, int dy);
+		bool	IsReached(void);
+		bool	PathNextNode(void);
 		INT32	NodeGetX();
 		INT32	NodeGetY();
 		INT32	GetTileNum(int x, int y);

@@ -43,7 +43,7 @@ namespace ServerEngine
 		}
 	}
 
-	BOOL CCommonWorkThread::Start()
+	bool CCommonWorkThread::Start()
 	{
 		m_bRun = TRUE;
 
@@ -58,7 +58,7 @@ namespace ServerEngine
 		return FALSE;
 	}
 
-	BOOL CCommonWorkThread::Stop()
+	bool CCommonWorkThread::Stop()
 	{
 		m_bRun = FALSE;
 
@@ -69,20 +69,20 @@ namespace ServerEngine
 	}
 
 
-	BOOL CCommonWorkThread::AddMessage(NetPacket* pNetPacket)
+	bool CCommonWorkThread::AddMessage(NetPacket* pNetPacket)
 	{
 		m_PacketQueue.push(pNetPacket);
 		return TRUE;
 	}
 
-	BOOL CCommonWorkThread::SetThreadHandler(IThreadHandler* pCommandHandler)
+	bool CCommonWorkThread::SetThreadHandler(IThreadHandler* pCommandHandler)
 	{
 		m_pThreadHandler = pCommandHandler;
 
 		return TRUE;
 	}
 
-	BOOL CCommonWorkThread::OnThreadBegin()
+	bool CCommonWorkThread::OnThreadBegin()
 	{
 		if (m_pThreadHandler == NULL)
 		{
@@ -94,7 +94,7 @@ namespace ServerEngine
 		return TRUE;
 	}
 
-	BOOL CCommonWorkThread::OnThreadEnd()
+	bool CCommonWorkThread::OnThreadEnd()
 	{
 		if (m_pThreadHandler == NULL)
 		{

@@ -8,8 +8,8 @@ namespace ServerEngine
 	{
 	public:
 		virtual ~CTimerSlotBase() {}
-		virtual BOOL operator()(UINT32 pData) { return TRUE; }
-		virtual VOID* GetThisAddr() { return 0; }
+		virtual bool operator()(UINT32 pData) { return TRUE; }
+		virtual void* GetThisAddr() { return 0; }
 	};
 
 
@@ -17,16 +17,16 @@ namespace ServerEngine
 	template<typename T>
 	class CTimerSlot : public CTimerSlotBase
 	{
-		typedef BOOL(T::* FuncType)(UINT32);
+		typedef bool(T::* FuncType)(UINT32);
 	public:
-		CTimerSlot(BOOL(T::* FuncType)(UINT32), T* pObj)
+		CTimerSlot(bool(T::* FuncType)(UINT32), T* pObj)
 			: m_pFuncPtr(FuncType), m_pThis(pObj)
 		{
 
 		}
 		virtual ~CTimerSlot() {}
 
-		virtual BOOL operator() (UINT32 pData)
+		virtual bool operator() (UINT32 pData)
 		{
 			if (m_pThis != NULL && m_pFuncPtr != NULL)
 			{
@@ -39,9 +39,9 @@ namespace ServerEngine
 			}
 		}
 
-		virtual VOID* GetThisAddr()
+		virtual void* GetThisAddr()
 		{
-			return reinterpret_cast<VOID*>(m_pThis);
+			return reinterpret_cast<void*>(m_pThis);
 		}
 
 	private:
@@ -104,7 +104,7 @@ namespace ServerEngine
 	public:
 
 		template<typename T>
-		BOOL AddFixTimer(UINT32 dwSec, UINT32 dwData, BOOL(T::* FuncPtr)(UINT32), T* pObj)
+		bool AddFixTimer(UINT32 dwSec, UINT32 dwData, bool(T::* FuncPtr)(UINT32), T* pObj)
 		{
 			TimeEvent* pNewEvent = NULL;
 			if (m_pFree == NULL)
@@ -144,7 +144,7 @@ namespace ServerEngine
 		}
 
 		template<typename T>
-		BOOL AddDiffTimer(UINT32 dwSec, UINT32 dwData, BOOL(T::* FuncPtr)(UINT32), T* pObj)
+		bool AddDiffTimer(UINT32 dwSec, UINT32 dwData, bool(T::* FuncPtr)(UINT32), T* pObj)
 		{
 			TimeEvent* pNewEvent = NULL;
 			if (m_pFree == NULL)
@@ -183,15 +183,15 @@ namespace ServerEngine
 			return TRUE;
 		}
 
-		BOOL DelTimer(UINT32 dwSec, UINT32 dwData);
+		bool DelTimer(UINT32 dwSec, UINT32 dwData);
 
-		VOID UpdateTimer();
+		void UpdateTimer();
 
-		VOID OnTimerEvent(TimeEvent* pEvent);
+		void OnTimerEvent(TimeEvent* pEvent);
 
-		BOOL InitTimer();
+		bool InitTimer();
 
-		BOOL Clear();
+		bool Clear();
 
 		TimeEvent* m_pHead;
 

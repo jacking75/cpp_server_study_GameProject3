@@ -34,41 +34,41 @@ namespace ServerEngine
 			return &NetManager;
 		}
 	public:
-		BOOL	Start(UINT16 nPortNum, UINT32 nMaxConn, IDataHandler* pBufferHandler);
+		bool	Start(UINT16 nPortNum, UINT32 nMaxConn, IDataHandler* pBufferHandler);
 
-		BOOL	Close();
+		bool	Close();
 
-		BOOL	SendMessageByConnID(UINT32 dwConnID, UINT32 dwMsgID, UINT64 u64TargetID, UINT32 dwUserData, const char* pData, UINT32 dwLen);
+		bool	SendMessageByConnID(UINT32 dwConnID, UINT32 dwMsgID, UINT64 u64TargetID, UINT32 dwUserData, const char* pData, UINT32 dwLen);
 
-		BOOL    SendMsgBufByConnID(UINT32 dwConnID, IDataBuffer* pBuffer);
+		bool    SendMsgBufByConnID(UINT32 dwConnID, IDataBuffer* pBuffer);
 	public:
-		BOOL	InitNetwork();
+		bool	InitNetwork();
 
-		BOOL	UninitNetwork();
+		bool	UninitNetwork();
 
-		BOOL	StartListen(UINT16 nPortNum);
+		bool	StartListen(UINT16 nPortNum);
 
-		BOOL	StopListen();
+		bool	StopListen();
 
 		//以下是完成端口部分
 	public:
-		BOOL	CreateCompletePort();
+		bool	CreateCompletePort();
 
-		BOOL	DestroyCompletePort();
+		bool	DestroyCompletePort();
 
-		BOOL	CreateEventThread(UINT32 nNum);
+		bool	CreateEventThread(UINT32 nNum);
 
-		BOOL    CloseEventThread();
+		bool    CloseEventThread();
 
-		BOOL	WorkThread_ProcessEvent(UINT32 nParam);
+		bool	WorkThread_ProcessEvent(UINT32 nParam);
 
-		BOOL	WorkThread_Listen();
+		bool	WorkThread_Listen();
 
-		BOOL	EventDelete(CConnection* pConnection);
+		bool	EventDelete(CConnection* pConnection);
 
-		BOOL	PostSendOperation(CConnection* pConnection, BOOL bCheck = TRUE);
+		bool	PostSendOperation(CConnection* pConnection, bool bCheck = TRUE);
 
-		CConnection* AssociateCompletePort(SOCKET hSocket, BOOL bConnect);
+		CConnection* AssociateCompletePort(SOCKET hSocket, bool bConnect);
 
 		CConnection* ConnectTo_Sync(std::string strIpAddr, UINT16 sPort);
 
@@ -79,7 +79,7 @@ namespace ServerEngine
 
 		HANDLE				m_hCompletePort;
 
-		BOOL				m_bCloseEvent;		//是否关闭事件处理线程
+		bool				m_bCloseEvent;		//是否关闭事件处理线程
 
 		IDataHandler* m_pBufferHandler;
 
@@ -98,7 +98,7 @@ namespace ServerEngine
 			return;
 		}
 
-		BOOL  ClearSignal()
+		bool  ClearSignal()
 		{
 			m_NewAct.sa_handler = CNetManager::SignalHandler;
 
@@ -111,7 +111,7 @@ namespace ServerEngine
 			return TRUE;
 		}
 
-		BOOL RestoreSignal()
+		bool RestoreSignal()
 		{
 			sigaction(SIGPIPE, &m_OldAct, NULL); //恢复成原始状态
 

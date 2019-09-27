@@ -13,35 +13,35 @@ namespace ServerEngine
 #define SOCKET_ERROR 		(-1)
 
 //设置套接字为可重用状态
-BOOL		SetSocketReuseable(SOCKET hSocket);
+bool		SetSocketReuseable(SOCKET hSocket);
 
 //设置套接字为非阻塞状态
-BOOL		SetSocketUnblock(SOCKET hSocket);
+bool		SetSocketUnblock(SOCKET hSocket);
 
 //设置套接字为阻塞状态
-BOOL		SetSocketBlock(SOCKET hSocket);
+bool		SetSocketBlock(SOCKET hSocket);
 
-BOOL		SetSocketNoDelay(SOCKET hSocket);
+bool		SetSocketNoDelay(SOCKET hSocket);
 
-BOOL		SetSocketKeepAlive( SOCKET hSocket, int nKeepInterval, int nKeepCount, int nKeepIdle );
+bool		SetSocketKeepAlive( SOCKET hSocket, int nKeepInterval, int nKeepCount, int nKeepIdle );
 
 //初始化网络
-BOOL		InitNetwork();
+bool		InitNetwork();
 
 //反初始化网络
-BOOL		UninitNetwork();
+bool		UninitNetwork();
 
 SOCKET		CreateSocket( int af = AF_INET, int type = SOCK_STREAM, int protocol = 0);
 
-BOOL		BindSocket( SOCKET hSocket, const struct sockaddr* pAddr, int nNamelen);
+bool		BindSocket( SOCKET hSocket, const struct sockaddr* pAddr, int nNamelen);
 
-BOOL		ListenSocket( SOCKET hSocket, int nBacklog);
+bool		ListenSocket( SOCKET hSocket, int nBacklog);
 
-BOOL		ConnectSocket(SOCKET hSocket, const char* pAddr, short sPort);
+bool		ConnectSocket(SOCKET hSocket, const char* pAddr, short sPort);
 
 INT32		GetSocketLastError();
 
-BOOL		IsSocketValid(SOCKET hSocket);
+bool		IsSocketValid(SOCKET hSocket);
 
 //关闭套接字发送
 void		ShutDownSend(SOCKET hSocket);
@@ -63,12 +63,12 @@ UINT32		IpAddrStrToInt(const CHAR* pszIpAddr);
 
 std::string IpAddrIntToStr(UINT32 dwIpAddr);
 
-BOOL		SetSocketBuffSize(SOCKET hSocket, INT32 nRecvSize, INT32 nSendSize);
+bool		SetSocketBuffSize(SOCKET hSocket, INT32 nRecvSize, INT32 nSendSize);
 
 #ifdef _MSC_BUILD
-BOOL		ConnectSocketEx(SOCKET hSocket, const char* pAddr, short sPort, LPOVERLAPPED lpOverlapped);
+bool		ConnectSocketEx(SOCKET hSocket, const char* pAddr, short sPort, LPOVERLAPPED lpOverlapped);
 
-BOOL		AcceptSocketEx(SOCKET hListenSocket, LPOVERLAPPED lpOverlapped);
+bool		AcceptSocketEx(SOCKET hListenSocket, LPOVERLAPPED lpOverlapped);
 #endif
 }
 

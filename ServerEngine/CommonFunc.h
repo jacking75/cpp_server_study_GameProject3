@@ -19,15 +19,15 @@ UINT32			GetProcessorNum();
 
 std::string		GetCurrentWorkDir();
 
-BOOL			SetCurrentWorkDir(std::string strPath);
+bool			SetCurrentWorkDir(std::string strPath);
 
 std::string		GetCurrentExeDir();
 
-BOOL			CreateDir(std::string& strDir);
+bool			CreateDir(std::string& strDir);
 
-BOOL			GetDirFiles(const char* pszDir, char* pszFileType, std::vector<std::string>& vtFileList, BOOL bRecursion);
+bool			GetDirFiles(const char* pszDir, char* pszFileType, std::vector<std::string>& vtFileList, bool bRecursion);
 
-BOOL			IsSameDay(UINT64 uTime);
+bool			IsSameDay(UINT64 uTime);
 
 UINT64			GetCurrTime(); //获取当前的秒数
 
@@ -45,7 +45,7 @@ UINT32			GetCurThreadID();
 
 UINT32			GetCurProcessID();
 
-VOID			Sleep(UINT32 dwMilliseconds);
+void			Sleep(UINT32 dwMilliseconds);
 
 UINT32			GetFreePhysMemory();
  
@@ -63,13 +63,13 @@ HANDLE			OpenShareMemory(UINT32 dwModuleID, INT32 nPage);
 
 CHAR* 			GetShareMemory(HANDLE hShm);
 
-BOOL 			ReleaseShareMemory(CHAR* pMem);
+bool 			ReleaseShareMemory(CHAR* pMem);
 
-BOOL			CloseShareMemory(HANDLE hShm);
+bool			CloseShareMemory(HANDLE hShm);
 
-BOOL			DbgTrace(char* format, ...);
+bool			DbgTrace(char* format, ...);
 
-BOOL			KillProcess(UINT64 dwPid);
+bool			KillProcess(UINT64 dwPid);
 
 INT32			Min(INT32 nValue1, INT32 nValue2);
 }

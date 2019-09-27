@@ -5,7 +5,7 @@
 #include "Platform.h"
 #include "CommonSocket.h"
 
-BOOL  ServerEngine::SetSocketReuseable(SOCKET hSocket)
+bool  ServerEngine::SetSocketReuseable(SOCKET hSocket)
 {
 	char nReuse = 1;
 
@@ -19,7 +19,7 @@ BOOL  ServerEngine::SetSocketReuseable(SOCKET hSocket)
 
 
 
-BOOL    ServerEngine::SetSocketUnblock(SOCKET hSocket)
+bool    ServerEngine::SetSocketUnblock(SOCKET hSocket)
 {
 #ifdef _MSC_BUILD
 	u_long iMode = 1;
@@ -32,7 +32,7 @@ BOOL    ServerEngine::SetSocketUnblock(SOCKET hSocket)
 	return TRUE;
 }
 
-BOOL    ServerEngine::SetSocketBlock(SOCKET hSocket)
+bool    ServerEngine::SetSocketBlock(SOCKET hSocket)
 {
 #ifdef _MSC_BUILD
 	u_long iMode = 0;
@@ -45,7 +45,7 @@ BOOL    ServerEngine::SetSocketBlock(SOCKET hSocket)
 	return TRUE;
 }
 
-BOOL    ServerEngine::SetSocketBuffSize(SOCKET hSocket, INT32 nRecvSize, INT32 nSendSize)
+bool    ServerEngine::SetSocketBuffSize(SOCKET hSocket, INT32 nRecvSize, INT32 nSendSize)
 {
 	if (nRecvSize > 0)
 	{
@@ -66,7 +66,7 @@ BOOL    ServerEngine::SetSocketBuffSize(SOCKET hSocket, INT32 nRecvSize, INT32 n
 	return TRUE;
 }
 
-BOOL    ServerEngine::SetSocketNoDelay(SOCKET hSocket)
+bool    ServerEngine::SetSocketNoDelay(SOCKET hSocket)
 {
 	int bOn = 1;
 
@@ -79,7 +79,7 @@ BOOL    ServerEngine::SetSocketNoDelay(SOCKET hSocket)
 }
 
 
-BOOL   ServerEngine::InitNetwork()
+bool   ServerEngine::InitNetwork()
 {
 #if _MSC_BUILD
 	WSADATA wsaData;
@@ -91,7 +91,7 @@ BOOL   ServerEngine::InitNetwork()
 	return TRUE;
 }
 
-BOOL   ServerEngine::UninitNetwork()
+bool   ServerEngine::UninitNetwork()
 {
 #if _MSC_BUILD
 	return (0 == WSACleanup());
@@ -153,7 +153,7 @@ SOCKET	ServerEngine::CreateSocket( int af, int type, int protocol)
 }
 
 
-BOOL	ServerEngine::BindSocket( SOCKET hSocket, const struct sockaddr* pAddr, int nNamelen)
+bool	ServerEngine::BindSocket( SOCKET hSocket, const struct sockaddr* pAddr, int nNamelen)
 {
 	if(0 != bind(hSocket, pAddr, nNamelen))
 	{
@@ -163,7 +163,7 @@ BOOL	ServerEngine::BindSocket( SOCKET hSocket, const struct sockaddr* pAddr, int
 	return TRUE;
 }
 
-BOOL	ServerEngine::ListenSocket( SOCKET hSocket, int nBacklog)
+bool	ServerEngine::ListenSocket( SOCKET hSocket, int nBacklog)
 {
 	if(0 != listen(hSocket, nBacklog))
 	{
@@ -174,7 +174,7 @@ BOOL	ServerEngine::ListenSocket( SOCKET hSocket, int nBacklog)
 }
 
 
-BOOL	ServerEngine::ConnectSocket(SOCKET hSocket, const char* pAddr, short sPort)
+bool	ServerEngine::ConnectSocket(SOCKET hSocket, const char* pAddr, short sPort)
 {
 	if(pAddr == NULL)
 	{
@@ -211,7 +211,7 @@ INT32   ServerEngine::GetSocketLastError()
 }
 
 
-BOOL ServerEngine::IsSocketValid(SOCKET hSocket)
+bool ServerEngine::IsSocketValid(SOCKET hSocket)
 {
 	if((hSocket == 0) || (hSocket == INVALID_SOCKET))
 	{
@@ -259,7 +259,7 @@ UINT32  ServerEngine::IpAddrStrToInt(const CHAR* pszIpAddr)
 
 #ifdef _MSC_BUILD
 
-BOOL	ServerEngine::AcceptSocketEx(SOCKET hListenSocket, LPOVERLAPPED lpOverlapped)
+bool	ServerEngine::AcceptSocketEx(SOCKET hListenSocket, LPOVERLAPPED lpOverlapped)
 {
 	LPFN_ACCEPTEX lpfnAcceptEx = NULL;
 
@@ -286,7 +286,7 @@ BOOL	ServerEngine::AcceptSocketEx(SOCKET hListenSocket, LPOVERLAPPED lpOverlappe
 	return TRUE;
 }
 
-BOOL	ServerEngine::ConnectSocketEx(SOCKET hSocket, const char* pAddr, short sPort, LPOVERLAPPED lpOverlapped)
+bool	ServerEngine::ConnectSocketEx(SOCKET hSocket, const char* pAddr, short sPort, LPOVERLAPPED lpOverlapped)
 {
 	LPFN_CONNECTEX lpfnConnectEx = NULL;
 
@@ -337,9 +337,9 @@ std::string ServerEngine::IpAddrIntToStr( UINT32 dwIpAddr )
 	return std::string(szIpBuffer);
 }
 
-BOOL ServerEngine::SetSocketKeepAlive( SOCKET hSocket, int nKeepInterval, int nKeepCount, int nKeepIdle )
+bool ServerEngine::SetSocketKeepAlive( SOCKET hSocket, int nKeepInterval, int nKeepCount, int nKeepIdle )
 {
-	BOOL bKeepAlive = TRUE;
+	bool bKeepAlive = TRUE;
 	setsockopt(hSocket, SOL_SOCKET, SO_KEEPALIVE, (char*)&bKeepAlive, sizeof(bKeepAlive));
 #ifdef _MSC_BUILD
 	tcp_keepalive  alive_in = { 0 }, alive_out = { 0 };

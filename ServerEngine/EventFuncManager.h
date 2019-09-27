@@ -12,10 +12,10 @@ namespace ServerEngine
 	{
 	public:
 		virtual ~CFunctionSlotBase() {}
-		virtual BOOL operator()(void* pdata) { return TRUE; }
+		virtual bool operator()(void* pdata) { return TRUE; }
 		virtual UINT32 GetParam() { return 0; }
-		virtual VOID* GetThisAddr() { return 0; }
-		virtual VOID EmptyThisAddr() {}
+		virtual void* GetThisAddr() { return 0; }
+		virtual void EmptyThisAddr() {}
 	};
 
 
@@ -23,16 +23,16 @@ namespace ServerEngine
 	template<typename T, typename T2>
 	class CFunctionSlot : public CFunctionSlotBase
 	{
-		typedef BOOL(T::* FuncType)(T2*);
+		typedef bool(T::* FuncType)(T2*);
 	public:
-		CFunctionSlot(BOOL(T::* FuncType)(T2*), T* pObj, UINT32 dwParam = 0)
+		CFunctionSlot(bool(T::* FuncType)(T2*), T* pObj, UINT32 dwParam = 0)
 			: m_pFuncPtr(FuncType), m_pThis(pObj), m_dwParam(dwParam)
 		{
 
 		}
 		virtual ~CFunctionSlot() {}
 
-		virtual BOOL operator() (void* pData)
+		virtual bool operator() (void* pData)
 		{
 			if (m_pThis != NULL && m_pFuncPtr != NULL)
 			{
@@ -50,9 +50,9 @@ namespace ServerEngine
 			return m_dwParam;
 		}
 
-		virtual VOID* GetThisAddr()
+		virtual void* GetThisAddr()
 		{
-			return reinterpret_cast<VOID*>(m_pThis);
+			return reinterpret_cast<void*>(m_pThis);
 		}
 
 		virtual void EmptyThisAddr()
@@ -86,7 +86,7 @@ namespace ServerEngine
 		}
 
 		template<typename T, typename T2>
-		bool RegisterMessageHandle(int nMsgID, BOOL(T::* FuncPtr)(T2*), T* pObj, int nParam = 0)
+		bool RegisterMessageHandle(int nMsgID, bool(T::* FuncPtr)(T2*), T* pObj, int nParam = 0)
 		{
 			CFunctionSlotBase* pSlot = new CFunctionSlot<T, T2>(FuncPtr, pObj, nParam);
 			if (pSlot == NULL)

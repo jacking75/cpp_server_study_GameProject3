@@ -23,9 +23,9 @@
 	public:
 		static CLog* GetInstancePtr();
 
-		BOOL StartLog(std::string strPrefix, std::string strLogDir = "log");
+		bool StartLog(std::string strPrefix, std::string strLogDir = "log");
 
-		BOOL CloseLog();
+		bool CloseLog();
 
 		void LogWarnning(char* lpszFormat, ...);
 
@@ -40,7 +40,7 @@
 		void Flush();
 
 	protected:
-		CCritSec			m_CritSec;
+		ServerEngine::CCritSec			m_CritSec;
 
 		INT32				m_LogCount;
 
