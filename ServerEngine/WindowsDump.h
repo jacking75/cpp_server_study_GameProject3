@@ -22,7 +22,7 @@ namespace ServerEngine
 		MINIDUMP_EXCEPTION_INFORMATION dumpInfo;
 		dumpInfo.ExceptionPointers = pException;
 		dumpInfo.ThreadId = GetCurrentThreadId();
-		dumpInfo.ClientPointers = TRUE;
+		dumpInfo.ClientPointers = true;
 
 		// Dump 파일 내용 쓰기 
 		MiniDumpWriteDump(GetCurrentProcess(), GetCurrentProcessId(), hDumpFile, MiniDumpNormal, &dumpInfo, NULL, NULL);

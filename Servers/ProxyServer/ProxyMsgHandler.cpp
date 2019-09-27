@@ -32,12 +32,12 @@ CProxyMsgHandler::~CProxyMsgHandler()
 
 bool CProxyMsgHandler::Init(UINT32 dwReserved)
 {
-	return TRUE;
+	return true;
 }
 
 bool CProxyMsgHandler::Uninit()
 {
-	return TRUE;
+	return true;
 }
 
 bool CProxyMsgHandler::DispatchPacket(ServerEngine::NetPacket* pNetPacket)
@@ -100,19 +100,19 @@ bool CProxyMsgHandler::DispatchPacket(ServerEngine::NetPacket* pNetPacket)
 		}
 	}
 
-	return TRUE;
+	return true;
 }
 
 bool CProxyMsgHandler::OnNewConnect(ServerEngine::CConnection* pConn)
 {
-	return TRUE;
+	return true;
 }
 
 bool CProxyMsgHandler::OnCloseConnect(ServerEngine::CConnection* pConn)
 {
 	if(pConn->GetConnectionData() == 0)
 	{
-		return TRUE;
+		return true;
 	}
 
 	/*RoleDisconnectReq Req;
@@ -125,34 +125,34 @@ bool CProxyMsgHandler::OnCloseConnect(ServerEngine::CConnection* pConn)
 	UINT32 dwConnID = GetGameSvrConnID(pPlayer->GetGameSvrID());
 	ERROR_RETURN_TRUE(dwConnID != 0);
 	ServiceBase::GetInstancePtr()->SendMsgProtoBuf(dwConnID, MSG_DISCONNECT_NTY, pPlayer->GetCharID(), pPlayer->GetCopyGuid(),  Req);*/
-	return TRUE;
+	return true;
 }
 
 bool CProxyMsgHandler::RelayToGameServer( CProxyPlayer* pClientObj, ServerEngine::IDataBuffer* pBuffer )
 {
 	ERROR_RETURN_FALSE(pClientObj != NULL);
 
-	return TRUE;
+	return true;
 }
 
 bool CProxyMsgHandler::RelayToLogicServer(ServerEngine::IDataBuffer* pBuffer )
 {
 	if(!ServerEngine::ServiceBase::GetInstancePtr()->SendMsgBuffer(CGameService::GetInstancePtr()->GetLogicConnID(), pBuffer))
 	{
-		return FALSE;
+		return false;
 	}
 
-	return TRUE;
+	return true;
 }
 
 bool CProxyMsgHandler::RelayToConnect(UINT32 dwConnID, ServerEngine::IDataBuffer* pBuffer)
 {
 	if(!ServerEngine::ServiceBase::GetInstancePtr()->SendMsgBuffer(dwConnID, pBuffer))
 	{
-		return FALSE;
+		return false;
 	}
 
-	return TRUE;
+	return true;
 }
 
 UINT32 CProxyMsgHandler::GetGameSvrConnID(UINT32 dwSvrID)
@@ -170,18 +170,18 @@ bool CProxyMsgHandler::IsServerConnID(UINT32 dwConnID)
 {
 	if(dwConnID == CGameService::GetInstancePtr()->GetLogicConnID())
 	{
-		return TRUE;
+		return true;
 	}
 
 	for(std::map<UINT32, UINT32>::iterator itor = m_mapSvrIDtoConnID.begin(); itor != m_mapSvrIDtoConnID.end(); itor++)
 	{
 		if(itor->second == dwConnID)
 		{
-			return TRUE;
+			return true;
 		}
 	}
 
-	return FALSE;
+	return false;
 }
 
 bool CProxyMsgHandler::OnMsgGameSvrRegister(ServerEngine::NetPacket* pPacket)
@@ -195,7 +195,7 @@ bool CProxyMsgHandler::OnMsgGameSvrRegister(ServerEngine::NetPacket* pPacket)
 	Ack.set_retcode(MRC_SUCCESSED);
 	ServiceBase::GetInstancePtr()->SendMsgProtoBuf(pPacket->m_dwConnID, MSG_GASVR_REGTO_PROXY_ACK, 0, 0, Ack);*/
 
-	return TRUE;
+	return true;
 }
 
 bool CProxyMsgHandler::OnMsgEnterSceneReq(ServerEngine::NetPacket* pNetPacket)
@@ -215,7 +215,7 @@ bool CProxyMsgHandler::OnMsgEnterSceneReq(ServerEngine::NetPacket* pNetPacket)
 	pPacketHeader->u64TargetID = pNetPacket->m_dwConnID;
 	RelayToConnect(dwConnID, pNetPacket->m_pDataBuffer);
 	RelayToLogicServer(pNetPacket->m_pDataBuffer);*/
-	return TRUE;
+	return true;
 }
 
 bool CProxyMsgHandler::OnMsgBroadMessageNty(ServerEngine::NetPacket* pPacket)
@@ -229,7 +229,7 @@ bool CProxyMsgHandler::OnMsgBroadMessageNty(ServerEngine::NetPacket* pPacket)
 		ServiceBase::GetInstancePtr()->SendMsgRawData(Nty.connid(i), Nty.msgid(), 0, 0, Nty.msgdata().c_str(), (UINT32)Nty.msgdata().size());
 	}*/
 
-	return TRUE;
+	return true;
 }
 
 bool CProxyMsgHandler::OnMsgRoleLoginAck(ServerEngine::NetPacket* pPacket)
@@ -249,7 +249,7 @@ bool CProxyMsgHandler::OnMsgRoleLoginAck(ServerEngine::NetPacket* pPacket)
 
 	pPlayer->SetConnID(pPacketHeader->dwUserData);*/
 
-	return TRUE;
+	return true;
 }
 
 bool CProxyMsgHandler::OnMsgRoleLogoutReq(ServerEngine::NetPacket* pPacket)
@@ -262,7 +262,7 @@ bool CProxyMsgHandler::OnMsgRoleLogoutReq(ServerEngine::NetPacket* pPacket)
 	CConnection* pConnection = ServiceBase::GetInstancePtr()->GetConnectionByID(pPacketHeader->dwUserData);
 	ERROR_RETURN_TRUE(pConnection != NULL);
 	pConnection->SetConnectionData(0);*/
-	return TRUE;
+	return true;
 }
 
 bool CProxyMsgHandler::OnMsgKickoutNty(ServerEngine::NetPacket* pPacket)
@@ -277,5 +277,5 @@ bool CProxyMsgHandler::OnMsgKickoutNty(ServerEngine::NetPacket* pPacket)
 		pConn->SetConnectionData(0);
 	}*/
 
-	return TRUE;
+	return true;
 }

@@ -72,9 +72,9 @@ namespace ServerEngine
 			int rc = pthread_mutex_lock(&mutex);
 			if (rc)
 			{
-				return FALSE;
+				return false;
 			}
-			return TRUE;
+			return true;
 		};
 
 		bool TryLock()
@@ -83,10 +83,10 @@ namespace ServerEngine
 			int rc = pthread_mutex_trylock(&mutex);
 			if (rc)
 			{
-				return FALSE;
+				return false;
 			}
 
-			return TRUE;
+			return true;
 		}
 
 		bool Unlock()
@@ -94,10 +94,10 @@ namespace ServerEngine
 			int rc = pthread_mutex_unlock(&mutex);
 			if (rc)
 			{
-				return FALSE;
+				return false;
 			}
 
-			return TRUE;
+			return true;
 		};
 	};
 #endif  //#ifdef WINDOWS

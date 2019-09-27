@@ -60,7 +60,7 @@ namespace ServerEngine
 #else
 		chdir(strPath.c_str());
 #endif
-		return TRUE;
+		return true;
 	}
 
 	UINT64 GetCurrTime()
@@ -151,22 +151,22 @@ namespace ServerEngine
 
 		if (nRet == 0)
 		{
-			return TRUE;
+			return true;
 		}
 
 		if (errno == EEXIST)
 		{
-			return TRUE;
+			return true;
 		}
 
-		return FALSE;
+		return false;
 	}
 
 	bool GetDirFiles(const char* pszDir, char* pszFileType, std::vector<std::string>& vtFileList, bool bRecursion)
 	{
 		if (pszDir == NULL || pszFileType == NULL)
 		{
-			return FALSE;
+			return false;
 		}
 
 		char   szTem[1024] = { 0 };
@@ -185,7 +185,7 @@ namespace ServerEngine
 		long long hFile = _findfirst(szDir, &tFileInfo);
 		if (hFile == -1)
 		{
-			return FALSE;
+			return false;
 		}
 
 		do
@@ -220,7 +220,7 @@ namespace ServerEngine
 		struct stat statbuf;
 		if ((pDirInfo = opendir(pszDir)) == NULL)
 		{
-			return FALSE;
+			return false;
 		}
 
 		while ((tFileInfo = readdir(pDirInfo)) != NULL)
@@ -243,7 +243,7 @@ namespace ServerEngine
 
 		closedir(pDirInfo);
 #endif
-		return TRUE;
+		return true;
 	}
 
 	bool IsSameDay(UINT64 uTime)
@@ -444,7 +444,7 @@ namespace ServerEngine
 		OutputDebugString(szLog);
 #endif
 
-		return TRUE;
+		return true;
 	}
 
 	bool KillProcess(UINT64 dwPid)
@@ -453,19 +453,19 @@ namespace ServerEngine
 		HANDLE hPrc;
 		if (0 == dwPid)
 		{
-			return FALSE;
+			return false;
 		}
 
 		hPrc = OpenProcess(PROCESS_ALL_ACCESS, FALSE, (DWORD)dwPid);
 		if (hPrc == NULL)
 		{
-			return TRUE;
+			return true;
 		}
 
 		if (!TerminateProcess(hPrc, 0))
 		{
 			CloseHandle(hPrc);
-			return FALSE;
+			return false;
 		}
 		else
 		{
@@ -475,7 +475,7 @@ namespace ServerEngine
 #else
 		kill(dwPid, SIGKILL);
 #endif
-		return TRUE;
+		return true;
 	}
 
 	INT32 Min(INT32 nValue1, INT32 nValue2)

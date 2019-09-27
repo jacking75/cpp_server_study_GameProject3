@@ -99,29 +99,29 @@ public:
 	{
 		if (0 != pthread_mutex_lock (&mutex))
 		{
-			return FALSE;
+			return false;
 		}
 
-		return TRUE;
+		return true;
 	};
 
 	bool TryLock()
 	{
 		if (0 != pthread_mutex_trylock (&mutex))
 		{
-			return FALSE;
+			return false;
 		}
 
-		return TRUE;			
+		return true;			
 	}
 	bool Unlock() 
 	{
 		if (0 != pthread_mutex_unlock (&mutex))
 		{
-			return FALSE;
+			return false;
 		}
 
-		return TRUE;
+		return true;
 	};
 
 	void Wait(UINT32 dwTime = INFINITE)
@@ -150,7 +150,7 @@ public:
 	{
 		pthread_cond_broadcast(&cond);
 
-		return TRUE;
+		return true;
 	}
 
 

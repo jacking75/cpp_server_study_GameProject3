@@ -56,7 +56,7 @@ namespace ServerEngine
 		memcpy(m_pTileMap, pMap, BufSize);
 #endif
 
-		return TRUE;
+		return true;
 	}
 
 	////////////////////////////////////////////////////////////////////////////////
@@ -78,10 +78,10 @@ namespace ServerEngine
 	{
 		if (m_pCurPath->Parent == NULL)
 		{
-			return FALSE;
+			return false;
 		}
 
-		return TRUE;
+		return true;
 	}
 
 	bool AstarFinder::PathNextNode(void)
@@ -89,11 +89,11 @@ namespace ServerEngine
 		if (m_pCurPath->Parent != NULL)
 		{
 			m_pCurPath = m_pCurPath->Parent;
-			return TRUE;
+			return true;
 		}
 		else
 		{
-			return FALSE;
+			return false;
 		}
 	}
 

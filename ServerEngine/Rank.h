@@ -32,7 +32,7 @@ namespace ServerEngine
 			m_dwShowNum = dwShow;
 			m_dwRankNum = dwTotal;
 			m_vtRankList.assign(m_dwRankNum, TRankItem());
-			return TRUE;
+			return true;
 		}
 
 		bool SearchInsert2(UINT64 RankID, UINT64 RankValue, INT32& nOrgIndex, INT32& nTargetIndex)
@@ -42,7 +42,7 @@ namespace ServerEngine
 			INT32 nCount = (INT32)m_vtRankList.size();
 			if (nCount == 0)
 			{
-				return FALSE;
+				return false;
 			}
 
 			for (int i = 0; i < m_vtRankList.size(); i++)
@@ -63,7 +63,7 @@ namespace ServerEngine
 				}
 			}
 
-			return TRUE;
+			return true;
 		}
 
 
@@ -74,7 +74,7 @@ namespace ServerEngine
 			INT32 nCount = (INT32)m_vtRankList.size();
 			if (nCount == 0)
 			{
-				return FALSE;
+				return false;
 			}
 
 			if (RankValue > m_vtRankList[0].RankValue)
@@ -118,7 +118,7 @@ namespace ServerEngine
 				}
 			}
 
-			return TRUE;
+			return true;
 		}
 
 		void Clear()

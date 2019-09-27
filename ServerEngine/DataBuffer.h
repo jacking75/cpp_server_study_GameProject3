@@ -40,7 +40,7 @@ namespace ServerEngine
 			m_pManager->m_CritSec.Lock();
 			m_dwRefCount++;
 			m_pManager->m_CritSec.Unlock();
-			return TRUE;
+			return true;
 		}
 
 		bool Release()
@@ -92,7 +92,7 @@ namespace ServerEngine
 
 			m_pManager->m_CritSec.Unlock();
 
-			return TRUE;
+			return true;
 		}
 
 		CHAR* GetData()
@@ -257,7 +257,7 @@ namespace ServerEngine
 				return;
 			}
 
-			bool bNext = TRUE;
+			bool bNext = true;
 			while (pBufferNode)
 			{
 				if (bNext)
@@ -270,7 +270,7 @@ namespace ServerEngine
 					}
 					else
 					{
-						bNext = FALSE;
+						bNext = false;
 						pBufferNode = pBufferNode->m_pPrev;
 					}
 				}

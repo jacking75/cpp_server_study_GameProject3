@@ -112,7 +112,7 @@ namespace ServerEngine
 		TNodeTypePtr pNode = AllocNode();
 		if (pNode == NULL)
 		{
-			ASSERT(FALSE);
+			ASSERT(false);
 			return NULL;
 		}
 
@@ -129,7 +129,7 @@ namespace ServerEngine
 			if (!InsertInner(m_pRoot, pNode))
 			{
 				FreeNode(pNode);
-				ASSERT(FALSE);
+				ASSERT(false);
 				return NULL;
 			}
 		}
@@ -408,7 +408,7 @@ namespace ServerEngine
 		TNodeTypePtr pNode = AllocNode();
 		if (pNode == NULL)
 		{
-			ASSERT(FALSE);
+			ASSERT(false);
 			return false;
 		}
 
@@ -433,7 +433,7 @@ namespace ServerEngine
 	{
 		if (pParentNode == NULL)
 		{
-			ASSERT(FALSE);
+			ASSERT(false);
 			return false;
 		}
 
@@ -443,7 +443,7 @@ namespace ServerEngine
 			{
 				if (!InsertInner(pParentNode->m_pLeft, pInsertNode))
 				{
-					ASSERT(FALSE);
+					ASSERT(false);
 					return false;
 				}
 			}
@@ -472,7 +472,7 @@ namespace ServerEngine
 			{
 				if (!InsertInner(pParentNode->m_pRight, pInsertNode))
 				{
-					ASSERT(FALSE);
+					ASSERT(false);
 					return false;
 				}
 			}

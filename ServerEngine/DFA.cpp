@@ -25,7 +25,7 @@ namespace ServerEngine
 	{
 		if (key == NULL || len < 0)
 		{
-			return FALSE;
+			return false;
 		}
 
 		int i = 0;
@@ -36,7 +36,7 @@ namespace ServerEngine
 			++i;
 		}
 
-		return TRUE;
+		return true;
 	}
 	//--------------------------------------------------------------------------------------------------------
 	DFANode* DFANode::AddNode(KeyType key)
@@ -87,7 +87,7 @@ namespace ServerEngine
 			{
 				if (bReturn == false)
 				{
-					return FALSE;
+					return false;
 				}
 
 				++currentPos;
@@ -105,7 +105,7 @@ namespace ServerEngine
 
 				if (pnode->GetChildCount() <= 1)
 				{
-					return TRUE;
+					return true;
 				}
 			}
 
@@ -124,18 +124,18 @@ namespace ServerEngine
 					m_start = currentPos;
 				}
 
-				return TRUE;
+				return true;
 			}
 			else
 			{
 				if (bReturn == false)
 				{
-					return FALSE;
+					return false;
 				}
 				else if (s_maxlen != 0)
 				{
 					s_length = s_maxlen;
-					return TRUE;
+					return true;
 				}
 
 				++currentPos;
@@ -144,7 +144,7 @@ namespace ServerEngine
 			}
 		}
 
-		return FALSE;
+		return false;
 	}
 	//--------------------------------------------------------------------------------------------------------
 	bool DFANode::LoadFile(const std::string& filename)
@@ -155,7 +155,7 @@ namespace ServerEngine
 
 		if (pFile == NULL)
 		{
-			return FALSE;
+			return false;
 		}
 
 		char line[1024] = { 0 };
@@ -191,7 +191,7 @@ namespace ServerEngine
 
 		fclose(pFile);
 
-		return TRUE;
+		return true;
 	}
 	//--------------------------------------------------------------------------------------------------------
 	bool DFANode::IsFileterWord(const std::string& word)
@@ -208,7 +208,7 @@ namespace ServerEngine
 	{
 		if (word.empty())
 		{
-			return FALSE;
+			return false;
 		}
 
 		std::string wpData = word;
@@ -218,7 +218,7 @@ namespace ServerEngine
 
 		int start = 0, strlen = 0;
 		int lastPos = -1;
-		bool keyflag = FALSE;
+		bool keyflag = false;
 
 		while (HasKeyWord(wpData.c_str(), (int)wpData.size()))
 		{
@@ -234,7 +234,7 @@ namespace ServerEngine
 				lastPos = start + (int)dest.size();
 			}
 
-			keyflag = TRUE;
+			keyflag = true;
 		}
 
 		if (keyflag)
@@ -242,7 +242,7 @@ namespace ServerEngine
 			word = wpData;
 		}
 
-		return TRUE;
+		return true;
 	}
 	//--------------------------------------------------------------------------------------------------------
 	void DFANode::GetKeyPos(INT32& nStart, INT32& nLen)
@@ -266,7 +266,7 @@ namespace ServerEngine
 	//--------------------------------------------------------------------------------------------------------
 	bool DFANode::HasEnding()
 	{
-		return m_childNodeMap.empty() ? TRUE : m_childNodeMap.find('#') != m_childNodeMap.end();
+		return m_childNodeMap.empty() ? true : m_childNodeMap.find('#') != m_childNodeMap.end();
 	}
 
 	INT32 DFANode::GetChildCount() const

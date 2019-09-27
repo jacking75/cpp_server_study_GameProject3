@@ -131,7 +131,7 @@ namespace ServerEngine
 	{
 		if (pStr == NULL)
 		{
-			return FALSE;
+			return false;
 		}
 
 		char szTempBuf[256] = { 0 };
@@ -140,7 +140,7 @@ namespace ServerEngine
 		char* pPos = strchr(szTempBuf, ',');
 		if (pPos == NULL)
 		{
-			return FALSE;
+			return false;
 		}
 		*pPos = 0;
 		x = ServerEngine::StringToFloat(szTempBuf + 1);
@@ -149,7 +149,7 @@ namespace ServerEngine
 		pPos = strchr(pPos + 1, ',');
 		if (pPos == NULL)
 		{
-			return FALSE;
+			return false;
 		}
 		*pPos = 0;
 		y = ServerEngine::StringToFloat(pOldPos);
@@ -158,12 +158,12 @@ namespace ServerEngine
 		pPos = strchr(pPos + 1, ')');
 		if (pPos == NULL)
 		{
-			return FALSE;
+			return false;
 		}
 		*pPos = 0;
 		z = ServerEngine::StringToFloat(pOldPos);
 
-		return TRUE;
+		return true;
 	}
 
 	std::string ServerEngine::FloatToString(FLOAT fValue, INT32 nPrecision, bool bRound)
@@ -201,7 +201,7 @@ namespace ServerEngine
 		if (strDelim.empty())
 		{
 			vtStr.push_back(strSrc);
-			return TRUE;
+			return true;
 		}
 
 		std::string::iterator subStart, subEnd;
@@ -221,7 +221,7 @@ namespace ServerEngine
 			subStart = subEnd + strDelim.size();
 		}
 
-		return TRUE;
+		return true;
 	}
 
 	bool ServerEngine::ReplaceString(std::string& str, const std::string& pattern, const std::string& newpat)
@@ -234,14 +234,14 @@ namespace ServerEngine
 			str.replace(pos, psize, newpat);
 		}
 
-		return TRUE;
+		return true;
 	}
 
 	bool ServerEngine::StringToVector(const char* pStrValue, INT32 IntVector[], INT32 nSize, char cDelim)
 	{
 		if (pStrValue == NULL)
 		{
-			return FALSE;
+			return false;
 		}
 
 		char szBuf[1024] = { 0 };
@@ -263,7 +263,7 @@ namespace ServerEngine
 			IntVector[nIndex++] = StringToInt(pBeginPos);
 			if (nIndex >= nSize)
 			{
-				return TRUE;
+				return true;
 			}
 
 			pBeginPos = pEndPos + 1;
@@ -275,7 +275,7 @@ namespace ServerEngine
 			IntVector[nIndex++] = StringToInt(pBeginPos);
 		}
 
-		return TRUE;
+		return true;
 	}
 
 	bool ServerEngine::SpliteString(std::string strSrc, char cDelim, std::vector<std::string>& vtStr)
@@ -298,7 +298,7 @@ namespace ServerEngine
 			vtStr.emplace_back(strSrc.substr(posStart));
 		}
 
-		return TRUE;
+		return true;
 	}
 
 	std::wstring ServerEngine::Utf8_To_Unicode(std::string strSrc)
@@ -377,13 +377,13 @@ namespace ServerEngine
 		UINT32 i;
 		UINT32 nBytes = 0;//UFT8可用1-6个字节编码,ASCII用一个字节
 		UINT8 chr;
-		bool bAllAscii = TRUE; //如果全部都是ASCII, 说明不是UTF-8
+		bool bAllAscii = true; //如果全部都是ASCII, 说明不是UTF-8
 		for (i = 0; i < length; i++)
 		{
 			chr = *(str + i);
 			if ((chr & 0x80) != 0) // 判断是否ASCII编码,如果不是,说明有可能是UTF-8,ASCII用7位编码,但用一个字节存,最高位标记为0,o0xxxxxxx
 			{
-				bAllAscii = FALSE;
+				bAllAscii = false;
 			}
 			if (nBytes == 0) //如果不是ASCII码,应该是多字节符,计算字节数
 			{
@@ -411,7 +411,7 @@ namespace ServerEngine
 					}
 					else
 					{
-						return FALSE;
+						return false;
 					}
 					nBytes--;
 				}
@@ -420,20 +420,20 @@ namespace ServerEngine
 			{
 				if ((chr & 0xC0) != 0x80)
 				{
-					return FALSE;
+					return false;
 				}
 				nBytes--;
 			}
 		}
 		if (nBytes > 0) //违返规则
 		{
-			return FALSE;
+			return false;
 		}
 		if (bAllAscii) //如果全部都是ASCII, 说明不是UTF-8
 		{
-			return FALSE;
+			return false;
 		}
-		return TRUE;
+		return true;
 	}
 
 	UINT32 ServerEngine::VersionToInt(std::string& strVersion)
@@ -473,6 +473,6 @@ namespace ServerEngine
 			strValue.erase(0, strValue.find_first_not_of((" \n\r\t")));
 			strValue.erase(strValue.find_last_not_of((" \n\r\t")) + 1);
 		}
-		return TRUE;
+		return true;
 	}
 }

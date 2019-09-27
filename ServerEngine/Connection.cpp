@@ -31,7 +31,7 @@ namespace ServerEngine
 
 		m_dwDataLen = 0;
 
-		m_bConnected = FALSE;
+		m_bConnected = false;
 
 		m_u64ConnData = 0;
 
@@ -43,7 +43,7 @@ namespace ServerEngine
 
 		m_nCheckNo = 0;
 
-		m_IsSending = FALSE;
+		m_IsSending = false;
 
 		m_pSendingBuffer = NULL;
 
@@ -84,20 +84,20 @@ namespace ServerEngine
 			{
 				CLog::GetInstancePtr()->LogError(const_cast<char*>("데이터 수신 오류로 인해 연결을 닫습니다:%s!"), GetLastErrorStr(nError).c_str());
 
-				return FALSE;
+				return false;
 			}
 		}
 
 		//对于WSARecv来说， 只要返回0,就表示没有错误发生。
 
-		return TRUE;
+		return true;
 	}
 
 #else
 
 	bool CConnection::DoReceive()
 	{
-		while (TRUE)
+		while (true)
 		{
 			int nBytes = recv(m_hSocket, m_pRecvBuf + m_dwDataLen, RECV_BUF_SIZE - m_dwDataLen, 0);
 			if (nBytes < 0)
@@ -105,19 +105,19 @@ namespace ServerEngine
 				int nErr = GetSocketLastError();
 				if (nErr == EAGAIN)
 				{
-					return TRUE;
+					return true;
 				}
 				else
 				{
 					CLog::GetInstancePtr()->LogError(const_cast<char*>("读失败， 可能连接己断开 原因:%s!!"), CommonSocket::GetLastErrorStr(nErr).c_str());
 
-					return FALSE;
+					return false;
 				}
 			}
 			else if (nBytes == 0)
 			{
 				//对方断开连接
-				return FALSE;
+				return false;
 			}
 			else
 			{
@@ -125,17 +125,17 @@ namespace ServerEngine
 
 				if (m_dwDataLen < RECV_BUF_SIZE)
 				{
-					return TRUE;
+					return true;
 				}
 
 				if (!ExtractBuffer())
 				{
-					return FALSE;
+					return false;
 				}
 			}
 		}
 
-		return TRUE;
+		return true;
 	}
 
 #endif
@@ -177,10 +177,10 @@ namespace ServerEngine
 		//会在外面导致这个连接被关闭。
 		if (m_dwDataLen == 0)
 		{
-			return TRUE;
+			return true;
 		}
 
-		while (TRUE)
+		while (true)
 		{
 			if (m_pCurRecvBuffer != NULL)
 			{
@@ -210,10 +210,10 @@ namespace ServerEngine
 
 			PacketHeader* pHeader = (PacketHeader*)m_pBufPos;
 			//////////////////////////////////////////////////////////////////////////
-			//在这里对包头进行检查, 如果不合法就要返回FALSE;
+			//在这里对包头进行检查, 如果不合法就要返回false;
 			if (!CheckHeader(m_pBufPos))
 			{
-				return FALSE;
+				return false;
 			}
 
 			//ERROR_RETURN_FALSE(pHeader->dwSize != 0);
@@ -260,7 +260,7 @@ namespace ServerEngine
 
 		m_pBufPos = m_pRecvBuf;
 
-		return TRUE;
+		return true;
 	}
 
 	bool CConnection::Close()
@@ -275,16 +275,16 @@ namespace ServerEngine
 
 		m_dwDataLen = 0;
 
-		m_IsSending = FALSE;
+		m_IsSending = false;
 
 		if (m_pDataHandler != NULL)
 		{
 			m_pDataHandler->OnCloseConnect(this);
 		}
 
-		m_bConnected = FALSE;
+		m_bConnected = false;
 
-		return TRUE;
+		return true;
 	}
 
 	bool CConnection::HandleRecvEvent(UINT32 dwBytes)
@@ -294,33 +294,33 @@ namespace ServerEngine
 
 		if (!ExtractBuffer())
 		{
-			return FALSE;
+			return false;
 		}
 
 		if (!DoReceive())
 		{
-			return FALSE;
+			return false;
 		}
 #else
 		if (!DoReceive())
 		{
-			return FALSE;
+			return false;
 		}
 
 		if (!ExtractBuffer())
 		{
-			return FALSE;
+			return false;
 		}
 #endif
 		m_LastRecvTick = GetTickCount();
-		return TRUE;
+		return true;
 	}
 
 	bool CConnection::SetSocket(SOCKET hSocket)
 	{
 		m_hSocket = hSocket;
 
-		return TRUE;
+		return true;
 	}
 
 	bool CConnection::SetDataHandler(IDataHandler* pHandler)
@@ -329,7 +329,7 @@ namespace ServerEngine
 
 		m_pDataHandler = pHandler;
 
-		return TRUE;
+		return true;
 	}
 
 	SOCKET CConnection::GetSocket()
@@ -341,7 +341,7 @@ namespace ServerEngine
 	{
 		if ((m_hSocket == INVALID_SOCKET) || (m_hSocket == 0))
 		{
-			return FALSE;
+			return false;
 		}
 
 		return m_bConnected;
@@ -353,7 +353,7 @@ namespace ServerEngine
 
 		m_LastRecvTick = GetTickCount();
 
-		return TRUE;
+		return true;
 	}
 
 
@@ -361,7 +361,7 @@ namespace ServerEngine
 	{
 		m_hSocket = INVALID_SOCKET;
 
-		m_bConnected = FALSE;
+		m_bConnected = false;
 
 		m_u64ConnData = 0;
 
@@ -380,7 +380,7 @@ namespace ServerEngine
 
 		m_nCheckNo = 0;
 
-		m_IsSending = FALSE;
+		m_IsSending = false;
 
 		IDataBuffer* pBuff = NULL;
 		while (m_SendBuffList.pop(pBuff))
@@ -388,7 +388,7 @@ namespace ServerEngine
 			pBuff->Release();
 		}
 
-		return TRUE;
+		return true;
 	}
 
 
@@ -407,20 +407,20 @@ namespace ServerEngine
 		PacketHeader* pHeader = (PacketHeader*)m_pBufPos;
 		if (pHeader->CheckCode != 0x88)
 		{
-			return FALSE;
+			return false;
 		}
 
 		if (pHeader->dwSize > 1024 * 1024)
 		{
-			return FALSE;
+			return false;
 		}
 
 		if (pHeader->dwMsgID > 4999999)
 		{
-			return FALSE;
+			return false;
 		}
 				
-		return TRUE;
+		return true;
 	}
 
 #ifdef _MSC_BUILD
@@ -479,8 +479,8 @@ namespace ServerEngine
 
 		if (pSendingBuffer == NULL)
 		{
-			m_IsSending = FALSE;
-			return TRUE;
+			m_IsSending = false;
+			return true;
 		}
 
 		WSABUF  DataBuf;
@@ -510,7 +510,7 @@ namespace ServerEngine
 			}
 		}
 
-		return TRUE;
+		return true;
 	}
 
 #else
@@ -563,7 +563,7 @@ namespace ServerEngine
 		{
 			if (pBuffer == NULL)
 			{
-				return TRUE;
+				return true;
 			}
 
 			INT32 nRet = send(m_hSocket, pBuffer->GetBuffer(), pBuffer->GetTotalLenth(), 0);
@@ -625,7 +625,7 @@ namespace ServerEngine
 		m_CritSecConnList.Unlock();
 		ERROR_RETURN_NULL(pTemp->GetConnectionID() != 0);
 		ERROR_RETURN_NULL(pTemp->GetSocket() == INVALID_SOCKET);
-		ERROR_RETURN_NULL(pTemp->IsConnectionOK() == FALSE);
+		ERROR_RETURN_NULL(pTemp->IsConnectionOK() == false);
 		return pTemp;
 	}
 
@@ -688,7 +688,7 @@ namespace ServerEngine
 
 		pConnection->SetConnectionID(dwConnID);
 
-		return TRUE;
+		return true;
 	}
 
 	bool CConnectionMgr::CloseAllConnection()
@@ -700,7 +700,7 @@ namespace ServerEngine
 			pConn->Close();
 		}
 
-		return TRUE;
+		return true;
 	}
 
 	bool CConnectionMgr::DestroyAllConnection()
@@ -718,12 +718,12 @@ namespace ServerEngine
 
 		m_vtConnList.clear();
 
-		return TRUE;
+		return true;
 	}
 
 	bool CConnectionMgr::CheckConntionAvalible()
 	{
-		return TRUE;
+		return true;
 		UINT64 curTick = GetTickCount();
 
 		for (std::vector<CConnection*>::size_type i = 0; i < m_vtConnList.size(); i++)
@@ -740,7 +740,7 @@ namespace ServerEngine
 			}
 		}
 
-		return TRUE;
+		return true;
 	}
 
 	bool CConnectionMgr::InitConnectionList(UINT32 nMaxCons)
@@ -771,7 +771,7 @@ namespace ServerEngine
 			}
 		}
 
-		return TRUE;
+		return true;
 	}
 
 

@@ -42,7 +42,7 @@ namespace ServerEngine
 		m_QueueLock.Lock();
 		m_pRecvDataQueue->emplace_back(NetPacket(pConnection->GetConnectionID(), pDataBuffer, pHeader->dwMsgID));
 		m_QueueLock.Unlock();
-		return TRUE;
+		return true;
 	}
 
 	bool ServiceBase::StartNetwork(UINT16 nPortNum, UINT32 nMaxConn, IPacketDispatcher* pDispather, std::string strListenIp)
@@ -50,13 +50,13 @@ namespace ServerEngine
 		if (pDispather == NULL)
 		{
 			ASSERT_FAIELD;
-			return FALSE;
+			return false;
 		}
 
 		if ((nPortNum <= 0) || (nMaxConn <= 0))
 		{
 			ASSERT_FAIELD;
-			return FALSE;
+			return false;
 		}
 
 		m_pPacketDispatcher = pDispather;
@@ -64,14 +64,14 @@ namespace ServerEngine
 		if (!CNetManager::GetInstancePtr()->Start(nPortNum, nMaxConn, this))
 		{
 			CLog::GetInstancePtr()->LogError("네트워크 계층을 시작하지 못했습니다!");
-			return FALSE;
+			return false;
 		}
 
 		m_dwLastTick = 0;
 		m_dwRecvNum = 0;
 		m_dwFps = 0;
 		m_dwSendNum = 0;
-		return TRUE;
+		return true;
 	}
 
 	bool ServiceBase::StopNetwork()
@@ -82,7 +82,7 @@ namespace ServerEngine
 
 		CLog::GetInstancePtr()->CloseLog();
 
-		return TRUE;
+		return true;
 	}
 
 	template<typename T>
@@ -90,7 +90,7 @@ namespace ServerEngine
 	{
 		if (dwConnID <= 0)
 		{
-			return FALSE;
+			return false;
 		}
 
 		m_dwSendNum++;
@@ -102,7 +102,7 @@ namespace ServerEngine
 	//{
 	//	if (dwConnID <= 0)
 	//	{
-	//		return FALSE;
+	//		return false;
 	//	}
 	//
 	//	char szBuff[102400] = {0};
@@ -118,7 +118,7 @@ namespace ServerEngine
 	{
 		if (dwConnID <= 0)
 		{
-			return FALSE;
+			return false;
 		}
 
 		m_dwSendNum++;
@@ -129,7 +129,7 @@ namespace ServerEngine
 	{
 		if (dwConnID <= 0)
 		{
-			return FALSE;
+			return false;
 		}
 
 		m_dwSendNum++;
@@ -154,7 +154,7 @@ namespace ServerEngine
 		m_QueueLock.Lock();
 		m_pRecvDataQueue->emplace_back(NetPacket(pConnection->GetConnectionID(), (IDataBuffer*)pConnection, CLOSE_CONNECTION));
 		m_QueueLock.Unlock();
-		return TRUE;
+		return true;
 	}
 
 	bool ServiceBase::OnNewConnect(CConnection* pConnection)
@@ -163,7 +163,7 @@ namespace ServerEngine
 		m_QueueLock.Lock();
 		m_pRecvDataQueue->emplace_back(NetPacket(pConnection->GetConnectionID(), (IDataBuffer*)pConnection, NEW_CONNECTION));
 		m_QueueLock.Unlock();
-		return TRUE;
+		return true;
 	}
 
 
@@ -230,6 +230,6 @@ namespace ServerEngine
 
 		CLog::GetInstancePtr()->Flush();
 
-		return TRUE;
+		return true;
 	}
 }

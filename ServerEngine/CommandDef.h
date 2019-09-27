@@ -11,18 +11,18 @@ bool ClassName##::DispatchPacket(NetPacket *pNetPacket) \
 #define PROCESS_MESSAGE_ITEM(dwMsgID, Func) \
 		case dwMsgID:{\
 		CLog::GetInstancePtr()->LogInfo("---Receive Message:[%s]----", #dwMsgID);\
-		if(Func(pNetPacket)){return TRUE;}}break;
+		if(Func(pNetPacket)){return true;}}break;
 
 #define PROCESS_MESSAGE_ITEMEX(dwMsgID, Func) \
 		case dwMsgID:{\
-		if(Func(pNetPacket)){return TRUE;}}break;
+		if(Func(pNetPacket)){return true;}}break;
 
 #define END_PROCESS_MESSAGE \
 		default: \
-			{ return FALSE;} \
+			{ return false;} \
 			break;\
 	}\
-	return TRUE;\
+	return true;\
 }
 
 

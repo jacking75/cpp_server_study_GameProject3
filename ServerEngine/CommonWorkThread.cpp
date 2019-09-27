@@ -13,7 +13,7 @@ namespace ServerEngine
 {
 	CCommonWorkThread::CCommonWorkThread()
 	{
-		m_bRun = FALSE;
+		m_bRun = false;
 
 		m_dwLastTick = GetTickCount();
 	}
@@ -45,65 +45,65 @@ namespace ServerEngine
 
 	bool CCommonWorkThread::Start()
 	{
-		m_bRun = TRUE;
+		m_bRun = true;
 
 		//TODO 수정하기
 		/*m_hThread = CommonThreadFunc::CreateThreadWrapFunc(_CommonWorkThread, this);
 
 		if (m_hThread != NULL)
 		{
-			return TRUE;
+			return true;
 		}*/
 
-		return FALSE;
+		return false;
 	}
 
 	bool CCommonWorkThread::Stop()
 	{
-		m_bRun = FALSE;
+		m_bRun = false;
 
 		//TODO 수정하기
 		//CommonThreadFunc::WaitThreadExitWrapFunc(m_hThread);
 
-		return TRUE;
+		return true;
 	}
 
 
 	bool CCommonWorkThread::AddMessage(NetPacket* pNetPacket)
 	{
 		m_PacketQueue.push(pNetPacket);
-		return TRUE;
+		return true;
 	}
 
 	bool CCommonWorkThread::SetThreadHandler(IThreadHandler* pCommandHandler)
 	{
 		m_pThreadHandler = pCommandHandler;
 
-		return TRUE;
+		return true;
 	}
 
 	bool CCommonWorkThread::OnThreadBegin()
 	{
 		if (m_pThreadHandler == NULL)
 		{
-			return FALSE;
+			return false;
 		}
 
 		m_pThreadHandler->OnThreadBegin();
 
-		return TRUE;
+		return true;
 	}
 
 	bool CCommonWorkThread::OnThreadEnd()
 	{
 		if (m_pThreadHandler == NULL)
 		{
-			return FALSE;
+			return false;
 		}
 
 		m_pThreadHandler->OnThreadEnd();
 
-		return TRUE;
+		return true;
 	}
 
 

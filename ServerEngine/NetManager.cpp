@@ -16,7 +16,7 @@ namespace ServerEngine
 		//m_hListenThread = (THANDLE)NULL;
 		m_hListenSocket = NULL;
 		m_hCompletePort = NULL;
-		m_bCloseEvent = TRUE;
+		m_bCloseEvent = true;
 		m_pBufferHandler = NULL;
 	}
 
@@ -33,7 +33,7 @@ namespace ServerEngine
 
 		ERROR_RETURN_FALSE(nNum > 0);
 
-		m_bCloseEvent = FALSE;
+		m_bCloseEvent = false;
 
 		//目前linux使用单线程
 #ifndef _MSC_BUILD
@@ -46,14 +46,14 @@ namespace ServerEngine
 			m_vtEventThread.push_back(hThread);
 		}*/
 
-		return TRUE;
+		return true;
 	}
 
 	bool CNetManager::WorkThread_Listen()
 	{
 		sockaddr_in Con_Addr;
 		socklen_t nLen = sizeof(Con_Addr);
-		while (TRUE)
+		while (true)
 		{
 			memset(&Con_Addr, 0, sizeof(Con_Addr));
 			SOCKET hClientSocket = accept(m_hListenSocket, (sockaddr*)&Con_Addr, &nLen);
@@ -62,12 +62,12 @@ namespace ServerEngine
 				break;
 			}
 			SetSocketUnblock(hClientSocket);
-			CConnection* pConnection = AssociateCompletePort(hClientSocket, FALSE);
+			CConnection* pConnection = AssociateCompletePort(hClientSocket, false);
 			if (pConnection != NULL)
 			{
 				pConnection->m_dwIpAddr = Con_Addr.sin_addr.s_addr;
 
-				pConnection->SetConnectionOK(TRUE);
+				pConnection->SetConnectionOK(true);
 
 				m_pBufferHandler->OnNewConnect(pConnection);
 
@@ -85,7 +85,7 @@ namespace ServerEngine
 			}
 		}
 
-		return TRUE;
+		return true;
 	}
 
 	bool CNetManager::StartListen(UINT16 nPortNum)
@@ -100,7 +100,7 @@ namespace ServerEngine
 		if (m_hListenSocket == INVALID_SOCKET)
 		{
 			CLog::GetInstancePtr()->LogError("청취 소켓 장애를 생성하는 이유:%s!", GetLastErrorStr(GetSocketLastError()).c_str());
-			return FALSE;
+			return false;
 		}
 
 		SetSocketReuseable(m_hListenSocket);
@@ -108,23 +108,23 @@ namespace ServerEngine
 		if (!BindSocket(m_hListenSocket, (sockaddr*)&SvrAddr, sizeof(SvrAddr)))
 		{
 			CLog::GetInstancePtr()->LogError("소켓 바인딩 장애 이유:%s!", GetLastErrorStr(GetSocketLastError()).c_str());
-			return FALSE;
+			return false;
 		}
 
 		if (!ListenSocket(m_hListenSocket, 20))
 		{
 			CLog::GetInstancePtr()->LogError("스레드 소켓 청취 실패:%s!", GetLastErrorStr(GetSocketLastError()).c_str());
-			return FALSE;
+			return false;
 		}
 
 		//TODO 수정하기
 		/*if ((m_hListenThread = CommonThreadFunc::CreateThreadWrapFunc(_NetListenThread, (void*)NULL)) == NULL)
 		{
 			CLog::GetInstancePtr()->LogError("创建监听线程失败:%s!", GetLastErrorStr(GetSocketLastError()).c_str());
-			return FALSE;
+			return false;
 		}*/
 
-		return TRUE;
+		return true;
 	}
 
 
@@ -138,7 +138,7 @@ namespace ServerEngine
 		ULONG_PTR CompleteKey = 0;
 		LPOVERLAPPED lpOverlapped = NULL;
 		DWORD dwWaitTime = 1000;
-		bool  bRetValue = FALSE;
+		bool  bRetValue = false;
 
 		while (!m_bCloseEvent)
 		{
@@ -150,7 +150,7 @@ namespace ServerEngine
 					if (ERROR_ABANDONED_WAIT_0 == GetSocketLastError())
 					{
 						CLog::GetInstancePtr()->LogError("완성 포트는 외부에서 닫힙니다!");
-						return FALSE;
+						return false;
 					}
 
 					if (GetSocketLastError() == WAIT_TIMEOUT)
@@ -267,7 +267,7 @@ namespace ServerEngine
 
 				if (bRetValue)
 				{
-					pConnection->SetConnectionOK(TRUE);
+					pConnection->SetConnectionOK(true);
 					m_pBufferHandler->OnNewConnect(pConnection);
 
 					if (!pConnection->DoReceive())
@@ -277,7 +277,7 @@ namespace ServerEngine
 				}
 				else
 				{
-					pConnection->SetConnectionOK(FALSE);
+					pConnection->SetConnectionOK(false);
 					pConnection->Close();
 				}
 			}
@@ -285,7 +285,7 @@ namespace ServerEngine
 			}
 		}
 
-		return TRUE;
+		return true;
 	}
 
 
@@ -294,7 +294,7 @@ namespace ServerEngine
 		m_hCompletePort = CreateIoCompletionPort(INVALID_HANDLE_VALUE, 0, 0, -1);
 		ERROR_RETURN_FALSE(m_hCompletePort != NULL);
 
-		return TRUE;
+		return true;
 	}
 
 	CConnection* CNetManager::AssociateCompletePort(SOCKET hSocket, bool bConnect)
@@ -315,13 +315,13 @@ namespace ServerEngine
 	{
 		CloseHandle(m_hCompletePort);
 
-		return TRUE;
+		return true;
 	}
 
 
 	bool CNetManager::EventDelete(CConnection* pConnection)
 	{
-		return TRUE;
+		return true;
 	}
 
 #else
@@ -332,7 +332,7 @@ namespace ServerEngine
 
 		ERROR_RETURN_FALSE(m_hCompletePort != -1);
 
-		return TRUE;
+		return true;
 	}
 
 	CConnection* CNetManager::AssociateCompletePort(SOCKET hSocket, bool bConnect)
@@ -375,7 +375,7 @@ namespace ServerEngine
 	{
 		close(m_hCompletePort);
 
-		return TRUE;
+		return true;
 	}
 
 	bool CNetManager::WorkThread_ProcessEvent(UINT32 nParam)
@@ -433,7 +433,7 @@ namespace ServerEngine
 				{
 					if (!pConnection->IsConnectionOK())
 					{
-						pConnection->SetConnectionOK(TRUE);
+						pConnection->SetConnectionOK(true);
 						m_pBufferHandler->OnNewConnect(pConnection);
 					}
 
@@ -450,7 +450,7 @@ namespace ServerEngine
 				{
 					if (!pConnection->IsConnectionOK())
 					{
-						pConnection->SetConnectionOK(TRUE);
+						pConnection->SetConnectionOK(true);
 						m_pBufferHandler->OnNewConnect(pConnection);
 					}
 
@@ -475,7 +475,7 @@ namespace ServerEngine
 			}
 		}
 
-		return TRUE;
+		return true;
 	}
 
 
@@ -486,10 +486,10 @@ namespace ServerEngine
 		if (-1 == epoll_ctl(m_hCompletePort, EPOLL_CTL_DEL, pConnection->GetSocket(), &delEpv))
 		{
 			CLog::GetInstancePtr()->LogError("---epoll_ctl----epoll_ctl------失败------!");
-			return FALSE;
+			return false;
 		}
 
-		return TRUE;
+		return true;
 	}
 
 #endif
@@ -506,32 +506,32 @@ namespace ServerEngine
 		if (!InitNetwork())
 		{
 			CLog::GetInstancePtr()->LogError("네트워크 초기화 실패！！");
-			return FALSE;
+			return false;
 		}
 
 		if (!CreateCompletePort())
 		{
 			CLog::GetInstancePtr()->LogError("완성 된 포트 또는 Epoll 생성 실패！！");
-			return FALSE;
+			return false;
 		}
 
 		if (!CreateEventThread(0))
 		{
 			CLog::GetInstancePtr()->LogError("네트워크 이벤트 처리 스레드 작성 실패！！");
-			return FALSE;
+			return false;
 		}
 
 		if (!StartListen(nPortNum))
 		{
 			CLog::GetInstancePtr()->LogError("청취 실패 켜기！！");
-			return FALSE;
+			return false;
 		}
 
 #ifndef _MSC_BUILD
 		ClearSignal();
 #endif
 
-		return TRUE;
+		return true;
 	}
 
 	bool CNetManager::InitNetwork()
@@ -558,7 +558,7 @@ namespace ServerEngine
 
 		CConnectionMgr::GetInstancePtr()->DestroyAllConnection();
 
-		return TRUE;
+		return true;
 	}
 
 	bool CNetManager::StopListen()
@@ -568,7 +568,7 @@ namespace ServerEngine
 		//TODO 수정하기
 		//CommonThreadFunc::WaitThreadExit(m_hListenThread);
 
-		return TRUE;
+		return true;
 	}
 
 	CConnection* CNetManager::ConnectTo_Sync(std::string strIpAddr, UINT16 sPort)
@@ -591,7 +591,7 @@ namespace ServerEngine
 			return NULL;
 		}
 
-		CConnection* pConnection = AssociateCompletePort(hSocket, TRUE);
+		CConnection* pConnection = AssociateCompletePort(hSocket, true);
 		if (pConnection == NULL)
 		{
 			CLog::GetInstancePtr()->LogError("소켓을 완료 포트에 바인딩 하지 못했습니다.!!");
@@ -600,7 +600,7 @@ namespace ServerEngine
 
 		SetSocketUnblock(hSocket);
 
-		pConnection->SetConnectionOK(TRUE);
+		pConnection->SetConnectionOK(true);
 
 		m_pBufferHandler->OnNewConnect(pConnection);
 
@@ -627,7 +627,7 @@ namespace ServerEngine
 		SetSocketNoDelay(hSocket);
 
 #ifdef _MSC_BUILD
-		CConnection* pConnection = AssociateCompletePort(hSocket, TRUE);
+		CConnection* pConnection = AssociateCompletePort(hSocket, true);
 		if (pConnection == NULL)
 		{
 			CLog::GetInstancePtr()->LogError("소켓을 완료 포트에 바인딩 하지 못했습니다.!!");
@@ -660,7 +660,7 @@ namespace ServerEngine
 			return NULL;
 		}
 
-		CConnection* pConnection = AssociateCompletePort(hSocket, TRUE);
+		CConnection* pConnection = AssociateCompletePort(hSocket, true);
 		if (pConnection == NULL)
 		{
 			CLog::GetInstancePtr()->LogError("소켓을 완료 포트에 본딩하지 못했습니다.!!");
@@ -676,20 +676,20 @@ namespace ServerEngine
 	{
 		if (dwConnID <= 0)
 		{
-			return FALSE;
+			return false;
 		}
 
 		CConnection* pConn = CConnectionMgr::GetInstancePtr()->GetConnectionByConnID(dwConnID);
 		if (pConn == NULL)
 		{
 			//表示连接己经失败断开了，这个连接ID不可用了。
-			return FALSE;
+			return false;
 		}
 
 		if (!pConn->IsConnectionOK())
 		{
 			CLog::GetInstancePtr()->LogError("CNetManager::SendMessageByConnID FAILED, 연결이 끊어졌습니다");
-			return FALSE;
+			return false;
 		}
 
 		IDataBuffer* pDataBuffer = CBufferAllocator::GetInstancePtr()->AllocDataBuff(dwLen + sizeof(PacketHeader));
@@ -710,10 +710,10 @@ namespace ServerEngine
 		if (pConn->SendBuffer(pDataBuffer))
 		{
 			PostSendOperation(pConn);
-			return TRUE;
+			return true;
 		}
 
-		return FALSE;
+		return false;
 	}
 
 	bool CNetManager::SendMsgBufByConnID(UINT32 dwConnID, IDataBuffer* pBuffer)
@@ -723,35 +723,35 @@ namespace ServerEngine
 		if (pConn == NULL)
 		{
 			//表示连接己经失败断开了，这个连接ID不可用了。
-			return FALSE;
+			return false;
 		}
 		if (!pConn->IsConnectionOK())
 		{
 			CLog::GetInstancePtr()->LogError("CNetManager::SendMsgBufByConnID FAILED, 연결이 끊어졌습니다");
-			return FALSE;
+			return false;
 		}
 
 		pBuffer->AddRef();
 		if (pConn->SendBuffer(pBuffer))
 		{
 			PostSendOperation(pConn);
-			return TRUE;
+			return true;
 		}
 
-		return FALSE;
+		return false;
 	}
 
 	bool CNetManager::CloseEventThread()	
 	{
 		//TODO 수정하기
-		/*m_bCloseEvent = TRUE;
+		/*m_bCloseEvent = true;
 
 		for (std::vector<THANDLE>::iterator itor = m_vtEventThread.begin(); itor != m_vtEventThread.end(); ++itor)
 		{
 			CommonThreadFunc::WaitThreadExit(*itor);
 		}*/
 
-		return TRUE;
+		return true;
 	}
 
 	//TODO 수정하기
@@ -783,13 +783,13 @@ namespace ServerEngine
 		if (pConnection == NULL)
 		{
 			ASSERT_FAIELD;
-			return FALSE;
+			return false;
 		}
 
 		if (!pConnection->m_IsSending || !bCheck)
 		{
 #ifdef _MSC_BUILD
-			pConnection->m_IsSending = TRUE;
+			pConnection->m_IsSending = true;
 			pConnection->m_IoOverLapPost.Reset();
 			pConnection->m_IoOverLapPost.dwCmdType = NET_MSG_POST;
 			pConnection->m_IoOverLapPost.dwConnID = pConnection->GetConnectionID();
@@ -801,6 +801,6 @@ namespace ServerEngine
 			epoll_ctl(m_hCompletePort, EPOLL_CTL_MOD, pConnection->GetSocket(), &EpollEvent);
 #endif
 		}
-		return TRUE;
+		return true;
 	}
 }

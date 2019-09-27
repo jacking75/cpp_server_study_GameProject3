@@ -108,14 +108,14 @@ namespace ServerEngine
 
 			sigaction(SIGPIPE, &m_NewAct, &m_OldAct);
 
-			return TRUE;
+			return true;
 		}
 
 		bool RestoreSignal()
 		{
 			sigaction(SIGPIPE, &m_OldAct, NULL); //恢复成原始状态
 
-			return TRUE;
+			return true;
 		}
 
 		struct sigaction m_NewAct, m_OldAct;

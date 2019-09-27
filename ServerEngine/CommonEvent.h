@@ -26,10 +26,10 @@ public:
 	{
 		if((m_hEvent = CreateEvent(NULL, bManualReset, bInitialState, NULL)) == NULL)
 		{
-			return FALSE;
+			return false;
 		}
 
-		return TRUE;
+		return true;
 	}
 
 	void SetEvent()
@@ -107,7 +107,7 @@ public:
 
 		bInitialState = bInitialState;
 
-		return TRUE;
+		return true;
 	}
 
 	void SetEvent()

@@ -28,7 +28,7 @@ namespace ServerEngine
 	{
 		if (m_pHead == NULL)
 		{
-			return TRUE;
+			return true;
 		}
 
 		TimeEvent* pDelEvent = m_pHead;
@@ -72,7 +72,7 @@ namespace ServerEngine
 
 		pDelEvent->Reset();
 
-		return FALSE;
+		return false;
 	}
 
 	void TimerManager::UpdateTimer()
@@ -126,7 +126,7 @@ namespace ServerEngine
 	bool TimerManager::InitTimer()
 	{
 		m_dwInitTime = GetCurrTime();
-		return TRUE;
+		return true;
 	}
 
 	bool TimerManager::Clear()
@@ -138,6 +138,6 @@ namespace ServerEngine
 			delete pCurEvent;
 		}
 
-		return TRUE;
+		return true;
 	}
 }

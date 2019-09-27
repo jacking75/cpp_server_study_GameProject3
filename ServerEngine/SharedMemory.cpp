@@ -96,14 +96,14 @@ namespace ServerEngine
 		if (newpage.m_shm == NULL)
 		{
 			ASSERT_FAIELD;
-			return FALSE;
+			return false;
 		}
 
 		newpage.m_pdata = (CHAR*)GetShareMemory(newpage.m_shm);
 		if (newpage.m_pdata == NULL)
 		{
 			ASSERT_FAIELD;
-			return FALSE;
+			return false;
 		}
 
 		newpage.m_pBlock = (_SMBlock*)(newpage.m_pdata + m_rawblockSize * m_nCountperPage);
@@ -111,7 +111,7 @@ namespace ServerEngine
 		m_nCount += m_nCountperPage;
 		InitPage(newpage);
 		m_ShareMemoryPageMapping.push_back(newpage);
-		return TRUE;
+		return true;
 	}
 
 
@@ -228,7 +228,7 @@ namespace ServerEngine
 				firstpage.m_pBlock = (_SMBlock*)(firstpage.m_pdata + m_rawblockSize * m_nCountperPage);
 				m_ShareMemoryPageMapping.push_back(firstpage);
 				ImportOtherPage();
-				m_bEmpty = FALSE;
+				m_bEmpty = false;
 			}
 			else
 			{
@@ -262,7 +262,7 @@ namespace ServerEngine
 				m_ShareMemoryPageMapping.push_back(firstpage);
 			}
 
-			m_bEmpty = TRUE;
+			m_bEmpty = true;
 		}
 	}
 
@@ -339,7 +339,7 @@ namespace ServerEngine
 			{
 				pobject->reset();
 				_SMBlock* pblock = it->second;
-				pblock->m_bUse = FALSE;
+				pblock->m_bUse = false;
 				m_mapFreeSMBlock.insert(std::make_pair(pblock->m_dwIndex, pblock));
 				it = m_mapUsedSMBlock.erase(it);
 			}
@@ -384,7 +384,7 @@ namespace ServerEngine
 			{
 				m_mapUsedSMBlock.insert(std::make_pair(pobject, pBlock));
 				m_mapFreeSMBlock.erase(it);
-				pBlock->m_bUse = TRUE;
+				pBlock->m_bUse = true;
 				pBlock->m_bNewBlock = isNewBlock;
 
 				pobject->useit();
@@ -409,19 +409,19 @@ namespace ServerEngine
 	{
 		if (pobject == NULL)
 		{
-			return FALSE;
+			return false;
 		}
 		pobject->reset();
 		mapUsedSMBlock::iterator it = m_mapUsedSMBlock.find(pobject);
 		if (it == m_mapUsedSMBlock.end())
 		{
-			return FALSE;
+			return false;
 		}
 		_SMBlock* pblock = it->second;
-		pblock->m_bUse = FALSE;
+		pblock->m_bUse = false;
 		m_mapUsedSMBlock.erase(it);
 		m_mapFreeSMBlock.insert(std::make_pair(pblock->m_dwIndex, pblock));
-		return TRUE;
+		return true;
 
 	}
 

@@ -26,7 +26,7 @@
 	{
 		if (!ServerEngine::CreateDir(strLogDir))
 		{
-			return FALSE;
+			return false;
 		}
 		m_strPrefix = strPrefix;
 #ifdef _MSC_BUILD
@@ -44,19 +44,19 @@
 
 		if (m_pLogFile == NULL)
 		{
-			return FALSE;
+			return false;
 		}
 
 		m_LogCount = 0;
 
-		return TRUE;
+		return true;
 	}
 
 	bool CLog::CloseLog()
 	{
 		if (m_pLogFile == NULL)
 		{
-			return FALSE;
+			return false;
 		}
 
 		fflush(m_pLogFile);
@@ -65,7 +65,7 @@
 
 		m_pLogFile = NULL;
 
-		return TRUE;
+		return true;
 	}
 
 	void CLog::LogWarnning(char* lpszFormat, ...)

@@ -8,7 +8,7 @@ namespace ServerEngine
 	{
 	public:
 		virtual ~CTimerSlotBase() {}
-		virtual bool operator()(UINT32 pData) { return TRUE; }
+		virtual bool operator()(UINT32 pData) { return true; }
 		virtual void* GetThisAddr() { return 0; }
 	};
 
@@ -140,7 +140,7 @@ namespace ServerEngine
 				m_pHead->m_pPrev = NULL;
 			}
 					
-			return TRUE;
+			return true;
 		}
 
 		template<typename T>
@@ -180,7 +180,7 @@ namespace ServerEngine
 				m_pHead->m_pPrev = NULL;
 			}
 
-			return TRUE;
+			return true;
 		}
 
 		bool DelTimer(UINT32 dwSec, UINT32 dwData);

@@ -12,7 +12,7 @@ namespace ServerEngine
 	{
 	public:
 		virtual ~CFunctionSlotBase() {}
-		virtual bool operator()(void* pdata) { return TRUE; }
+		virtual bool operator()(void* pdata) { return true; }
 		virtual UINT32 GetParam() { return 0; }
 		virtual void* GetThisAddr() { return 0; }
 		virtual void EmptyThisAddr() {}

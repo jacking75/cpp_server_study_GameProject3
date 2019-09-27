@@ -37,7 +37,7 @@ namespace ServerEngine
 	bool  StringToPos(char* pStr, FLOAT& x, FLOAT& y, FLOAT& z);
 
 	//浮点到字符串， nPrecision 保留的最大小数的位数， bRound 是否四舍五入
-	std::string FloatToString(FLOAT fValue, INT32 nPrecision = -1, bool bRound = FALSE);
+	std::string FloatToString(FLOAT fValue, INT32 nPrecision = -1, bool bRound = false);
 
 	std::wstring Utf8_To_Unicode(std::string strValue);
 

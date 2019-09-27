@@ -36,7 +36,7 @@ long   __stdcall  CrashCallBack(_EXCEPTION_POINTERS* pExInfo)
 		MINIDUMP_EXCEPTION_INFORMATION einfo;
 		einfo.ThreadId = ::GetCurrentThreadId();
 		einfo.ExceptionPointers = pExInfo;
-		einfo.ClientPointers = FALSE;
+		einfo.ClientPointers = false;
 		::MiniDumpWriteDump(::GetCurrentProcess(), ::GetCurrentProcessId(), hFile, MiniDumpNormal, &einfo, NULL, NULL);
 		::CloseHandle(hFile);
 	}
