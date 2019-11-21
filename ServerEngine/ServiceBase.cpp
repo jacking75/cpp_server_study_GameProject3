@@ -3,7 +3,7 @@
 #include "Log.h"
 #include "NetManager.h"
 #include "CommonSocket.h"
-#include "CommonEvent.h"
+//#include "CommonEvent.h"
 #include "DataBuffer.h"
 #include "Connection.h"
 #include "TimerManager.h"

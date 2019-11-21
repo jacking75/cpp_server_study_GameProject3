@@ -5,7 +5,7 @@
 
 #include "CheckMacroDefine.h"
 #include "CommonWorkThread.h"
-#include "CommonEvent.h"
+//#include "CommonEvent.h"
 #include "CommonFunc.h"
 #include "DataBuffer.h"
 #include "PacketHeader.h"

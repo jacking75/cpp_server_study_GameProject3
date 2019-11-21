@@ -23,7 +23,6 @@
     <ClInclude Include="CommandDef.h" />
     <ClInclude Include="CommandLine.h" />
     <ClInclude Include="CommonConvert.h" />
-    <ClInclude Include="CommonEvent.h" />
     <ClInclude Include="CommonFunc.h" />
     <ClInclude Include="CommonMsgQueue.h" />
     <ClInclude Include="CommonMsgQueueEx.h" />

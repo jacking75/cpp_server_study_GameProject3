@@ -1,18 +1,18 @@
 #pragma once
 
-#include <string>
-#include <map>
-
 #include "Platform.h"
 #include "CommonConvert.h"
 
+#include <string>
+#include <map>
+#include <cstdint>
 
 namespace ServerEngine
 {
 	class CCommandLine
 	{
 	public:
-		CCommandLine(INT32 argc, CHAR* argv[])
+		CCommandLine(int32_t argc, char* argv[])
 		{
 			for (int i = 0; i < argc; i++)
 			{
@@ -39,7 +39,7 @@ namespace ServerEngine
 		}
 
 
-		INT32 GetIntValue(const std::string& strKey) const
+		int32_t GetIntValue(const std::string& strKey) const
 		{
 			auto itor = m_ParameterMap.find(strKey);
 			if (itor != m_ParameterMap.end())
@@ -59,7 +59,7 @@ namespace ServerEngine
 			return "";
 		}
 
-		INT64 GetLongValue(const std::string& strKey) const
+		int64_t GetLongValue(const std::string& strKey) const
 		{
 			auto it = m_ParameterMap.find(strKey);
 			if (it != m_ParameterMap.end())
@@ -70,7 +70,7 @@ namespace ServerEngine
 			return 0;
 		}
 
-		FLOAT GetFloatValue(const std::string& strKey) const
+		float GetFloatValue(const std::string& strKey) const
 		{
 			auto it = m_ParameterMap.find(strKey);
 			if (it != m_ParameterMap.end())

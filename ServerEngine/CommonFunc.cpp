@@ -1,7 +1,8 @@
-﻿#include <io.h>
+﻿#include "CommonFunc.h"
+
+#include <io.h>
 #include <direct.h>
 #include <time.h>
-#include "CommonFunc.h"
 
 #ifdef _MSC_BUILD
 #define WIN32_LEAN_AND_MEAN

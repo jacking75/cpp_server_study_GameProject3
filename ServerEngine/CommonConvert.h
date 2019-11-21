@@ -1,43 +1,41 @@
 ﻿#pragma once
 
+#include "Platform.h"
+
 #include <string>
 #include <vector>
-
-#define WIN32_LEAN_AND_MEAN
-#include <Windows.h>
-
-#include "Platform.h"
+#include <cstdint>
 
 namespace ServerEngine
 {
-	INT32 StringToInt(char* pStr);
+	int32_t StringToInt(char* pStr);
 
-	INT32 StringToInt(const char* pStr);
+	int32_t StringToInt(const char* pStr);
 
-	INT64 StringToInt64(char* pStr);
+	int64_t StringToInt64(char* pStr);
 
-	INT64 StringToInt64(const char* pStr);
+	int64_t StringToInt64(const char* pStr);
 
-	FLOAT StringToFloat(char* pStr);
+	float StringToFloat(char* pStr);
 
-	FLOAT StringToFloat(const char* pStr);
+	float StringToFloat(const char* pStr);
 
 	DOUBLE StringToDouble(char* pStr);
 
-	std::string DoubleToString(DOUBLE dValue);
+	std::string DoubleToString(double dValue);
 
-	std::string IntToString(UINT32 nValue);
+	std::string IntToString(uint32_t nValue);
 
-	std::string IntToString(INT32 nValue);
+	std::string IntToString(int32_t nValue);
 
-	std::string IntToString(UINT64 nValue);
+	std::string IntToString(uint64_t nValue);
 
-	std::string IntToString(INT64 nValue);
+	std::string IntToString(int64_t nValue);
 
-	bool  StringToPos(char* pStr, FLOAT& x, FLOAT& y, FLOAT& z);
+	bool  StringToPos(char* pStr, float& x, float& y, float& z);
 
 	//浮点到字符串， nPrecision 保留的最大小数的位数， bRound 是否四舍五入
-	std::string FloatToString(FLOAT fValue, INT32 nPrecision = -1, bool bRound = false);
+	std::string FloatToString(float fValue, int32_t nPrecision = -1, bool bRound = false);
 
 	std::wstring Utf8_To_Unicode(std::string strValue);
 
@@ -51,7 +49,7 @@ namespace ServerEngine
 
 	std::string Ansi_To_Uft8(std::string wstrValue);
 
-	bool IsTextUTF8(const char* str, UINT32 length);
+	bool IsTextUTF8(const char* str, uint32_t length);
 
 	bool SpliteString(std::string strSrc,  std::string strDelim, std::vector<std::string>& vtStr);
 
@@ -59,11 +57,11 @@ namespace ServerEngine
 
 	bool ReplaceString(std::string& str, const std::string& pattern, const std::string& newpat);
 
-	bool StringToVector(const char * pStrValue, INT32 IntVector[], INT32 nSize, char cDelim = ',');
+	bool StringToVector(const char * pStrValue, int32_t IntVector[], int32_t nSize, char cDelim = ',');
 
-	UINT32 VersionToInt(std::string& strVersion);
+	uint32_t VersionToInt(std::string& strVersion);
 
-	INT32  CountSymbol(char* pStr, char cSymbol);
+	int32_t  CountSymbol(char* pStr, char cSymbol);
 
 	bool StringTrim(std::string& strValue);
 

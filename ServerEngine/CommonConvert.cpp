@@ -1,13 +1,18 @@
-﻿#include <algorithm>
+﻿#include "CommonConvert.h"
+
+#include <algorithm>
 #include <string>
 #include <vector>
 
-#include "CommonConvert.h"
+#ifdef _MSC_BUILD
+#define WIN32_LEAN_AND_MEAN
+#include <Windows.h>
+#endif
 
 
 namespace ServerEngine
 {
-	INT32 ServerEngine::StringToInt(char* pStr)
+	int32_t ServerEngine::StringToInt(char* pStr)
 	{
 		if (pStr == NULL)
 		{
@@ -17,7 +22,7 @@ namespace ServerEngine
 		return atoi(pStr);
 	}
 
-	INT64 ServerEngine::StringToInt64(char* pStr)
+	int64_t ServerEngine::StringToInt64(char* pStr)
 	{
 		if (pStr == NULL)
 		{
@@ -27,7 +32,7 @@ namespace ServerEngine
 		return atol(pStr);
 	}
 
-	INT64 ServerEngine::StringToInt64(const char* pStr)
+	int64_t ServerEngine::StringToInt64(const char* pStr)
 	{
 		if (pStr == NULL)
 		{
@@ -35,14 +40,14 @@ namespace ServerEngine
 		}
 
 
-#ifdef WIN32
+#ifdef _MSC_BUILD
 		return _atoi64(pStr);
 #else
 		return atoll(pStr);
 #endif
 	}
 
-	INT32 ServerEngine::StringToInt(const char* pStr)
+	int32_t ServerEngine::StringToInt(const char* pStr)
 	{
 		if (pStr == NULL)
 		{
@@ -52,17 +57,17 @@ namespace ServerEngine
 		return atoi(pStr);
 	}
 
-	FLOAT  ServerEngine::StringToFloat(char* pStr)
+	float  ServerEngine::StringToFloat(char* pStr)
 	{
 		if (pStr == NULL)
 		{
 			return 0;
 		}
 
-		return (FLOAT)atof(pStr);
+		return (float)atof(pStr);
 	}
 
-	DOUBLE ServerEngine::StringToDouble(char* pStr)
+	double ServerEngine::StringToDouble(char* pStr)
 	{
 		if (pStr == NULL)
 		{
@@ -72,62 +77,62 @@ namespace ServerEngine
 		return strtod(pStr, NULL);
 	}
 
-	std::string ServerEngine::DoubleToString(DOUBLE dValue)
+	std::string ServerEngine::DoubleToString(double dValue)
 	{
-		CHAR szValue[64] = { 0 };
+		char szValue[64] = { 0 };
 
 		snprintf(szValue, 64, "%f", dValue);
 
 		return std::string(szValue);
 	}
 
-	FLOAT  ServerEngine::StringToFloat(const char* pStr)
+	float ServerEngine::StringToFloat(const char* pStr)
 	{
 		if (pStr == NULL)
 		{
 			return 0;
 		}
 
-		return (FLOAT)atof(pStr);
+		return (float)atof(pStr);
 	}
 
-	std::string ServerEngine::IntToString(INT32 nValue)
+	std::string ServerEngine::IntToString(int32_t nValue)
 	{
-		CHAR szValue[64] = { 0 };
+		char szValue[64] = { 0 };
 
 		snprintf(szValue, 64, "%d", nValue);
 
 		return std::string(szValue);
 	}
 
-	std::string ServerEngine::IntToString(INT64 uValue)
+	std::string ServerEngine::IntToString(int64_t uValue)
 	{
-		CHAR szValue[64] = { 0 };
+		char szValue[64] = { 0 };
 
 		snprintf(szValue, 64, "%lld", uValue);
 
 		return std::string(szValue);
 	}
 
-	std::string ServerEngine::IntToString(UINT32 nValue)
+	std::string ServerEngine::IntToString(uint32_t nValue)
 	{
-		CHAR szValue[64] = { 0 };
+		char szValue[64] = { 0 };
 
 		snprintf(szValue, 64, "%d", nValue);
 
 		return std::string(szValue);
 	}
 
-	std::string ServerEngine::IntToString(UINT64 uValue)
+	std::string ServerEngine::IntToString(uint64_t uValue)
 	{
-		CHAR szValue[64] = { 0 };
+		char szValue[64] = { 0 };
 
 		snprintf(szValue, 64, "%lld", uValue);
 
 		return std::string(szValue);
 	}
 
-	bool ServerEngine::StringToPos(char* pStr, FLOAT& x, FLOAT& y, FLOAT& z)
+	bool ServerEngine::StringToPos(char* pStr, float& x, float& y, float& z)
 	{
 		if (pStr == NULL)
 		{
@@ -166,13 +171,13 @@ namespace ServerEngine
 		return true;
 	}
 
-	std::string ServerEngine::FloatToString(FLOAT fValue, INT32 nPrecision, bool bRound)
+	std::string ServerEngine::FloatToString(float fValue, int32_t nPrecision, bool bRound)
 	{
-		CHAR szValue[64] = { 0 };
+		char szValue[64] = { 0 };
 
 		if ((bRound) && (nPrecision > 0) && (nPrecision < 6))
 		{
-			FLOAT fRoundValue = 5;
+			float fRoundValue = 5;
 
 			for (int i = 0; i < nPrecision + 1; i++)
 			{
@@ -184,7 +189,7 @@ namespace ServerEngine
 
 		snprintf(szValue, 64, "%f", fValue);
 
-		CHAR* pChar = strchr(szValue, '.');
+		char* pChar = strchr(szValue, '.');
 		if (pChar == NULL)
 		{
 			return std::string(szValue);
@@ -237,7 +242,7 @@ namespace ServerEngine
 		return true;
 	}
 
-	bool ServerEngine::StringToVector(const char* pStrValue, INT32 IntVector[], INT32 nSize, char cDelim)
+	bool ServerEngine::StringToVector(const char* pStrValue, int32_t IntVector[], int32_t nSize, char cDelim)
 	{
 		if (pStrValue == NULL)
 		{
@@ -256,7 +261,7 @@ namespace ServerEngine
 			pEndPos = strchr(pBeginPos, cDelim);
 		}
 
-		INT32 nIndex = 0;
+		int32_t nIndex = 0;
 		while (pEndPos != NULL)
 		{
 			//*pEndPos = 0;
@@ -304,7 +309,8 @@ namespace ServerEngine
 	std::wstring ServerEngine::Utf8_To_Unicode(std::string strSrc)
 	{
 		wchar_t wBuff[1024] = { 0 };
-#ifdef WIN32
+
+#ifdef _MSC_BUILD
 		MultiByteToWideChar(CP_UTF8, 0, strSrc.c_str(), -1, wBuff, 1024);
 		std::wstring strRet = wBuff;
 		return strRet;
@@ -314,8 +320,9 @@ namespace ServerEngine
 
 	std::string ServerEngine::Unicode_To_Uft8(std::wstring wstrValue)
 	{
-		CHAR sBuff[1024] = { 0 };
-#ifdef WIN32
+		char sBuff[1024] = { 0 };
+
+#ifdef _MSC_BUILD
 		WideCharToMultiByte(CP_UTF8, 0, wstrValue.c_str(), -1, sBuff, 1024, NULL, NULL);
 		std::string strRet = sBuff;
 		return strRet;
@@ -326,8 +333,9 @@ namespace ServerEngine
 	std::wstring ServerEngine::Ansi_To_Unicode(std::string strSrc)
 	{
 		wchar_t wBuff[1024] = { 0 };
-		CHAR sBuff[1024] = { 0 };
-#ifdef WIN32
+		char sBuff[1024] = { 0 };
+
+#ifdef _MSC_BUILD
 		MultiByteToWideChar(CP_ACP, 0, strSrc.c_str(), -1, wBuff, 1024);
 		std::wstring strRet = wBuff;
 		return strRet;
@@ -337,8 +345,9 @@ namespace ServerEngine
 
 	std::string ServerEngine::Unicode_To_Ansi(std::wstring strValue)
 	{
-		CHAR sBuff[1024] = { 0 };
-#ifdef WIN32
+		char sBuff[1024] = { 0 };
+
+#ifdef _MSC_BUILD
 		WideCharToMultiByte(CP_ACP, 0, strValue.c_str(), -1, sBuff, 1024, NULL, NULL);
 		return std::string(sBuff);
 #else
@@ -349,8 +358,9 @@ namespace ServerEngine
 	std::string ServerEngine::Utf8_To_Ansi(std::string strSrc)
 	{
 		wchar_t wBuff[1024] = { 0 };
-		CHAR sBuff[1024] = { 0 };
-#ifdef WIN32
+		char sBuff[1024] = { 0 };
+
+#ifdef _MSC_BUILD
 		MultiByteToWideChar(CP_UTF8, 0, strSrc.c_str(), -1, wBuff, 1024);
 		WideCharToMultiByte(CP_ACP, 0, wBuff, -1, sBuff, 1024, NULL, NULL);
 		std::string strRet = sBuff;
@@ -362,8 +372,9 @@ namespace ServerEngine
 	std::string ServerEngine::Ansi_To_Uft8(std::string strSrc)
 	{
 		wchar_t wBuff[1024] = { 0 };
-		CHAR sBuff[1024] = { 0 };
-#ifdef WIN32
+		char sBuff[1024] = { 0 };
+
+#ifdef _MSC_BUILD
 		MultiByteToWideChar(CP_ACP, 0, strSrc.c_str(), -1, wBuff, 1024);
 		WideCharToMultiByte(CP_UTF8, 0, wBuff, -1, sBuff, 1024, NULL, NULL);
 		std::string strRet = sBuff;
@@ -372,11 +383,11 @@ namespace ServerEngine
 #endif
 	}
 
-	bool ServerEngine::IsTextUTF8(const char* str, UINT32 length)
+	bool ServerEngine::IsTextUTF8(const char* str, uint32_t length)
 	{
-		UINT32 i;
-		UINT32 nBytes = 0;//UFT8可用1-6个字节编码,ASCII用一个字节
-		UINT8 chr;
+		uint32_t i;
+		uint32_t nBytes = 0;//UFT8可用1-6个字节编码,ASCII用一个字节
+		uint8_t chr;
 		bool bAllAscii = true; //如果全部都是ASCII, 说明不是UTF-8
 		for (i = 0; i < length; i++)
 		{
@@ -436,21 +447,21 @@ namespace ServerEngine
 		return true;
 	}
 
-	UINT32 ServerEngine::VersionToInt(std::string& strVersion)
+	uint32_t ServerEngine::VersionToInt(std::string& strVersion)
 	{
-		INT32 nValue[3] = { 0 };
+		int32_t nValue[3] = { 0 };
 		StringToVector(strVersion.c_str(), nValue, 3, '.');
 		return nValue[0] * 1000000 + nValue[1] * 1000 + nValue[2];
 	}
 
-	INT32 ServerEngine::CountSymbol(char* pStr, char cSymbol)
+	int32_t ServerEngine::CountSymbol(char* pStr, char cSymbol)
 	{
 		if (pStr == NULL)
 		{
 			return 0;
 		}
 
-		INT32 nCount = 0;
+		int32_t nCount = 0;
 
 		char* pTemp = pStr;
 		while (*pTemp != '\0')
