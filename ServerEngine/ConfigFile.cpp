@@ -1,6 +1,4 @@
-﻿#define _CRT_SECURE_NO_WARNINGS  //TODO 이 매크로 뒤에 삭제해야 한다
-
-#include "CommonConvert.h"
+﻿#include "CommonConvert.h"
 #include "ConfigFile.h"
 
 
@@ -19,9 +17,10 @@ namespace ServerEngine
 
 	bool ConfigFile::Load(std::string strFileName)
 	{
-		FILE* pFile = fopen(strFileName.c_str(), "r+");
+		FILE* pFile = NULL;
+		auto err = fopen_s(&pFile, strFileName.c_str(), "r+");
 
-		if (pFile == NULL)
+		if (pFile != 0)
 		{
 			return false;
 		}

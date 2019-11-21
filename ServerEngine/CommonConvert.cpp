@@ -303,9 +303,9 @@ namespace ServerEngine
 
 	std::wstring ServerEngine::Utf8_To_Unicode(std::string strSrc)
 	{
-		wchar_t wBuff[102400] = { 0 };
+		wchar_t wBuff[1024] = { 0 };
 #ifdef WIN32
-		MultiByteToWideChar(CP_UTF8, 0, strSrc.c_str(), -1, wBuff, 102400);
+		MultiByteToWideChar(CP_UTF8, 0, strSrc.c_str(), -1, wBuff, 1024);
 		std::wstring strRet = wBuff;
 		return strRet;
 #else
@@ -314,9 +314,9 @@ namespace ServerEngine
 
 	std::string ServerEngine::Unicode_To_Uft8(std::wstring wstrValue)
 	{
-		CHAR sBuff[102400] = { 0 };
+		CHAR sBuff[1024] = { 0 };
 #ifdef WIN32
-		WideCharToMultiByte(CP_UTF8, 0, wstrValue.c_str(), -1, sBuff, 102400, NULL, NULL);
+		WideCharToMultiByte(CP_UTF8, 0, wstrValue.c_str(), -1, sBuff, 1024, NULL, NULL);
 		std::string strRet = sBuff;
 		return strRet;
 #else
@@ -325,10 +325,10 @@ namespace ServerEngine
 
 	std::wstring ServerEngine::Ansi_To_Unicode(std::string strSrc)
 	{
-		wchar_t wBuff[102400] = { 0 };
-		CHAR sBuff[102400] = { 0 };
+		wchar_t wBuff[1024] = { 0 };
+		CHAR sBuff[1024] = { 0 };
 #ifdef WIN32
-		MultiByteToWideChar(CP_ACP, 0, strSrc.c_str(), -1, wBuff, 102400);
+		MultiByteToWideChar(CP_ACP, 0, strSrc.c_str(), -1, wBuff, 1024);
 		std::wstring strRet = wBuff;
 		return strRet;
 #else
@@ -337,9 +337,9 @@ namespace ServerEngine
 
 	std::string ServerEngine::Unicode_To_Ansi(std::wstring strValue)
 	{
-		CHAR sBuff[102400] = { 0 };
+		CHAR sBuff[1024] = { 0 };
 #ifdef WIN32
-		WideCharToMultiByte(CP_ACP, 0, strValue.c_str(), -1, sBuff, 102400, NULL, NULL);
+		WideCharToMultiByte(CP_ACP, 0, strValue.c_str(), -1, sBuff, 1024, NULL, NULL);
 		return std::string(sBuff);
 #else
 
@@ -348,11 +348,11 @@ namespace ServerEngine
 
 	std::string ServerEngine::Utf8_To_Ansi(std::string strSrc)
 	{
-		wchar_t wBuff[102400] = { 0 };
-		CHAR sBuff[102400] = { 0 };
+		wchar_t wBuff[1024] = { 0 };
+		CHAR sBuff[1024] = { 0 };
 #ifdef WIN32
-		MultiByteToWideChar(CP_UTF8, 0, strSrc.c_str(), -1, wBuff, 102400);
-		WideCharToMultiByte(CP_ACP, 0, wBuff, -1, sBuff, 102400, NULL, NULL);
+		MultiByteToWideChar(CP_UTF8, 0, strSrc.c_str(), -1, wBuff, 1024);
+		WideCharToMultiByte(CP_ACP, 0, wBuff, -1, sBuff, 1024, NULL, NULL);
 		std::string strRet = sBuff;
 		return strRet;
 #else
@@ -361,11 +361,11 @@ namespace ServerEngine
 
 	std::string ServerEngine::Ansi_To_Uft8(std::string strSrc)
 	{
-		wchar_t wBuff[102400] = { 0 };
-		CHAR sBuff[102400] = { 0 };
+		wchar_t wBuff[1024] = { 0 };
+		CHAR sBuff[1024] = { 0 };
 #ifdef WIN32
-		MultiByteToWideChar(CP_ACP, 0, strSrc.c_str(), -1, wBuff, 102400);
-		WideCharToMultiByte(CP_UTF8, 0, wBuff, -1, sBuff, 102400, NULL, NULL);
+		MultiByteToWideChar(CP_ACP, 0, strSrc.c_str(), -1, wBuff, 1024);
+		WideCharToMultiByte(CP_UTF8, 0, wBuff, -1, sBuff, 1024, NULL, NULL);
 		std::string strRet = sBuff;
 		return strRet;
 #else

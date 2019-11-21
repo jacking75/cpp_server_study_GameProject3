@@ -176,7 +176,7 @@ namespace ServerEngine
 	{
 		if (m_dwLastTick == 0)
 		{
-			m_dwLastTick = GetTickCount();
+			m_dwLastTick = GetTickCountRefFunc();
 		}
 
 		CConnectionMgr::GetInstancePtr()->CheckConntionAvalible();
@@ -215,15 +215,14 @@ namespace ServerEngine
 
 		m_dwFps += 1;
 
-		if ((GetTickCount() - m_dwLastTick) > 1000)
+		if ((GetTickCountRefFunc() - m_dwLastTick) > 1000)
 		{
 			m_pPacketDispatcher->OnSecondTimer();
-
-			CLog::GetInstancePtr()->SetTitle("[FPS:%d]-[RecvNum:%d]--[SendNum:%d]", m_dwFps, m_dwRecvNum, m_dwSendNum);
+						
 			m_dwFps = 0;
 			m_dwRecvNum = 0;
 			m_dwSendNum = 0;
-			m_dwLastTick = GetTickCount();
+			m_dwLastTick = GetTickCountRefFunc();
 		}
 
 		TimerManager::GetInstancePtr()->UpdateTimer();

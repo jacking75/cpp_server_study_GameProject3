@@ -102,6 +102,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
+      <LanguageStandard>stdcpplatest</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -156,13 +157,11 @@
     <ClCompile Include="Log.cpp" />
     <ClCompile Include="NetManager.cpp" />
     <ClCompile Include="ServiceBase.cpp" />
-    <ClCompile Include="SharedMemory.cpp" />
     <ClCompile Include="TimerManager.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AstarFinder.h" />
     <ClInclude Include="atomic_ops.h" />
-    <ClInclude Include="AVLTree.h" />
     <ClInclude Include="CheckMacroDefine.h" />
     <ClInclude Include="CommandDef.h" />
     <ClInclude Include="CommandLine.h" />
@@ -194,7 +193,6 @@
     <ClInclude Include="Rank.h" />
     <ClInclude Include="ServerEngine.h" />
     <ClInclude Include="ServiceBase.h" />
-    <ClInclude Include="SharedMemory.h" />
     <ClInclude Include="SpinLock.h" />
     <ClInclude Include="TimerManager.h" />
     <ClInclude Include="WindowsDump.h" />

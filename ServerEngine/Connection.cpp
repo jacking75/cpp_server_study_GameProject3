@@ -5,6 +5,7 @@
 #include "Log.h"
 #include "DataBuffer.h"
 #include "CommonSocket.h"
+#include "CommonFunc.h"
 #include "PacketHeader.h"
 
 
@@ -312,7 +313,7 @@ namespace ServerEngine
 			return false;
 		}
 #endif
-		m_LastRecvTick = GetTickCount();
+		m_LastRecvTick = GetTickCountRefFunc();
 		return true;
 	}
 
@@ -351,7 +352,7 @@ namespace ServerEngine
 	{
 		m_bConnected = bOk;
 
-		m_LastRecvTick = GetTickCount();
+		m_LastRecvTick = GetTickCountRefFunc();
 
 		return true;
 	}
@@ -724,7 +725,7 @@ namespace ServerEngine
 	bool CConnectionMgr::CheckConntionAvalible()
 	{
 		return true;
-		UINT64 curTick = GetTickCount();
+		UINT64 curTick = GetTickCountRefFunc();
 
 		for (std::vector<CConnection*>::size_type i = 0; i < m_vtConnList.size(); i++)
 		{

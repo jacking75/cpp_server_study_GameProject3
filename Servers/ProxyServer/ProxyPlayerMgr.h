@@ -1,13 +1,11 @@
 ﻿#pragma once
 
-#ifdef _MSC_BUILD
-
-#else
+#ifndef _MSC_BUILD
 #include "..\..\ServerEngine\Platform.h"
 #endif
 
-#include "..\..\ServerEngine\AVLTree.h"
-
+#include <cstdint>
+#include <unordered_map>
 
 class  CProxyPlayer
 {
@@ -17,38 +15,38 @@ public:
 	~CProxyPlayer() {}
 
 public:
-	UINT32	GetGameSvrID() { return m_dwGameSvrID; }
+	uint32_t	GetGameSvrID() { return m_dwGameSvrID; }
 
-	void	SetGameSvrInfo(UINT32 dwSvrID, UINT32 dwCopyGuid);
+	void	SetGameSvrInfo(uint32_t dwSvrID, uint32_t dwCopyGuid);
 
-	void	SetConnID(UINT32 dwConnID);
+	void	SetConnID(uint32_t dwConnID);
 
-	UINT64	GetCharID() { return m_u64RoleID; }
+	uint64_t	GetCharID() { return m_u64RoleID; }
 
-	UINT32  GetConnID() { return m_dwConnID; }
+	uint32_t  GetConnID() { return m_dwConnID; }
 
-	UINT32  GetCopyGuid() { return m_dwCopyGuid; }
+	uint32_t  GetCopyGuid() { return m_dwCopyGuid; }
 
 public:
-	UINT64	m_u64RoleID;
+	uint64_t	m_u64RoleID;
 
-	UINT32	m_dwGameSvrID;
+	uint32_t	m_dwGameSvrID;
 
-	UINT32  m_dwConnID;
+	uint32_t  m_dwConnID;
 
-	UINT32  m_dwCopyGuid;
+	uint32_t  m_dwCopyGuid;
 };
 
-class CProxyPlayerMgr : public ServerEngine::AVLTree<UINT64, CProxyPlayer>
+class CProxyPlayerMgr
 {
 public:
 	static CProxyPlayerMgr* GetInstancePtr();
 
-	CProxyPlayer*	GetByCharID(UINT64 u64RoleID);
+	CProxyPlayer*	GetByCharID(uint64_t u64RoleID);
 
-	CProxyPlayer*	CreateProxyPlayer(UINT64 u64RoleID);
+	CProxyPlayer*	CreateProxyPlayer(uint64_t u64RoleID);
 
-	bool			RemoveByCharID(UINT64 u64RoleID);
+	bool			RemoveByCharID(uint64_t u64RoleID);
 
 	//bool			GetPlayerOnline(UINT64 u64RoleID);
 
@@ -56,5 +54,7 @@ public:
 private:
 	CProxyPlayerMgr(void);
 	~CProxyPlayerMgr(void);
+
+	std::unordered_map<uint64_t, CProxyPlayer> mPlayers;
 };
 

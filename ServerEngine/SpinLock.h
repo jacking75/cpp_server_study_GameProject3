@@ -1,6 +1,8 @@
 ﻿#pragma once
 
+#include "CommonFunc.h"
 #include <atomic>
+
 
 namespace ServerEngine
 {
@@ -24,8 +26,7 @@ namespace ServerEngine
 			{
 				if (k % 1024 == 0)
 				{
-					//TODO 수정하기
-					//CommonFunc::Sleep(1);
+					ServerEngine::Sleep(1);
 				}
 			}
 

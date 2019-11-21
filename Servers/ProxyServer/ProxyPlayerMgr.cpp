@@ -1,20 +1,17 @@
-﻿#ifndef WIN32_LEAN_AND_MEAN
-#define WIN32_LEAN_AND_MEAN
-#endif
-#include <Windows.h>
+﻿#include "ProxyPlayerMgr.h"
 
 #include "..\..\ServerEngine\Log.h"
-#include "ProxyPlayerMgr.h"
 
 
-void CProxyPlayer::SetGameSvrInfo( UINT32 dwSvrID, UINT32 dwCopyGuid )
+
+void CProxyPlayer::SetGameSvrInfo(uint32_t dwSvrID, uint32_t dwCopyGuid )
 {
 	m_dwGameSvrID = dwSvrID;
 	m_dwCopyGuid = dwCopyGuid;
 }
 
 
-void CProxyPlayer::SetConnID(UINT32 dwConnID)
+void CProxyPlayer::SetConnID(uint32_t dwConnID)
 {
 	m_dwConnID = dwConnID;
 }
@@ -34,24 +31,30 @@ CProxyPlayerMgr* CProxyPlayerMgr::GetInstancePtr()
 	return &_StaicPlayerMgr;
 }
 
-CProxyPlayer* CProxyPlayerMgr::GetByCharID(UINT64 u64RoleID)
+CProxyPlayer* CProxyPlayerMgr::GetByCharID(uint64_t u64RoleID)
 {
-	return GetByKey(u64RoleID);
+	auto iter = mPlayers.find(u64RoleID);
+	if (iter == mPlayers.end())
+	{
+		return nullptr;
+	}
+
+	return (CProxyPlayer*)&iter->second;
 }
 
-CProxyPlayer* CProxyPlayerMgr::CreateProxyPlayer(UINT64 u64RoleID)
+CProxyPlayer* CProxyPlayerMgr::CreateProxyPlayer(uint64_t u64RoleID)
 {
-	CProxyPlayer* pClientObj = InsertAlloc(u64RoleID);
-	ERROR_RETURN_NULL(pClientObj != NULL);
-
-	pClientObj->m_u64RoleID = u64RoleID;
-
-	return pClientObj;
+	CProxyPlayer pClientObj;
+	pClientObj.m_u64RoleID = u64RoleID;
+	
+	auto [iter, inserted] = mPlayers.insert({ u64RoleID, pClientObj });
+	return (CProxyPlayer*)&iter->second;
 }
 
-bool CProxyPlayerMgr::RemoveByCharID(UINT64 u64RoleID)
+bool CProxyPlayerMgr::RemoveByCharID(uint64_t u64RoleID)
 {
-	return Delete(u64RoleID);
+	return mPlayers.erase(u64RoleID) > 0 ? true : false;
+	//return Delete(u64RoleID);
 }
 
 

@@ -12,8 +12,6 @@ namespace ServerEngine
 {
 	CNetManager::CNetManager(void)
 	{
-		//TODO 수정하기
-		//m_hListenThread = (THANDLE)NULL;
 		m_hListenSocket = NULL;
 		m_hCompletePort = NULL;
 		m_bCloseEvent = true;
@@ -39,12 +37,10 @@ namespace ServerEngine
 #ifndef _MSC_BUILD
 		nNum = 1;
 #endif
-		//TODO 수정하기
-		/*for (UINT32 i = 0; i < nNum; ++i)
+		for (UINT32 i = 0; i < nNum; ++i)
 		{
-			THANDLE hThread = CommonThreadFunc::CreateThreadWrapFunc(_NetEventThread, (void*)NULL);
-			m_vtEventThread.push_back(hThread);
-		}*/
+			m_vtEventThread.emplace_back([this]() { WorkThread_ProcessEvent(); });
+		}
 
 		return true;
 	}
@@ -117,20 +113,15 @@ namespace ServerEngine
 			return false;
 		}
 
-		//TODO 수정하기
-		/*if ((m_hListenThread = CommonThreadFunc::CreateThreadWrapFunc(_NetListenThread, (void*)NULL)) == NULL)
-		{
-			CLog::GetInstancePtr()->LogError("创建监听线程失败:%s!", GetLastErrorStr(GetSocketLastError()).c_str());
-			return false;
-		}*/
-
+		m_hListenThread = std::thread([this]() { WorkThread_Listen(); });
+		
 		return true;
 	}
 
 
 #ifdef _MSC_BUILD
 
-	bool CNetManager::WorkThread_ProcessEvent(UINT32 nParam)
+	bool CNetManager::WorkThread_ProcessEvent()
 	{
 		ERROR_RETURN_FALSE(m_hCompletePort != INVALID_HANDLE_VALUE);
 
@@ -378,7 +369,7 @@ namespace ServerEngine
 		return true;
 	}
 
-	bool CNetManager::WorkThread_ProcessEvent(UINT32 nParam)
+	bool CNetManager::WorkThread_ProcessEvent()
 	{
 		struct epoll_event EpollEvent[20];
 		int nFd = 0;
@@ -565,8 +556,10 @@ namespace ServerEngine
 	{
 		CloseSocket(m_hListenSocket);
 
-		//TODO 수정하기
-		//CommonThreadFunc::WaitThreadExit(m_hListenThread);
+		if (m_hListenThread.joinable())
+		{
+			m_hListenThread.join();
+		}
 
 		return true;
 	}
@@ -743,41 +736,20 @@ namespace ServerEngine
 
 	bool CNetManager::CloseEventThread()	
 	{
-		//TODO 수정하기
-		/*m_bCloseEvent = true;
+		m_bCloseEvent = true;
 
-		for (std::vector<THANDLE>::iterator itor = m_vtEventThread.begin(); itor != m_vtEventThread.end(); ++itor)
+		for (auto& thread : m_vtEventThread)
 		{
-			CommonThreadFunc::WaitThreadExit(*itor);
-		}*/
-
+			if (thread.joinable())
+			{
+				thread.join();
+			}			
+		}
+				
 		return true;
 	}
 
-	//TODO 수정하기
-	/*Th_RetName _NetEventThread(void* pParam)
-	{
-		CNetManager* pNetManager = CNetManager::GetInstancePtr();
-
-		pNetManager->WorkThread_ProcessEvent(0);
-
-		CommonThreadFunc::ExitThread();
-
-		return Th_RetValue;
-	}
-
-	Th_RetName _NetListenThread(void* pParam)
-	{
-		CNetManager* pNetManager = CNetManager::GetInstancePtr();
-
-		pNetManager->WorkThread_Listen();
-
-		CommonThreadFunc::ExitThread();
-
-		return Th_RetValue;
-	}*/
-
-
+	
 	bool CNetManager::PostSendOperation(CConnection* pConnection, bool bCheck)
 	{
 		if (pConnection == NULL)

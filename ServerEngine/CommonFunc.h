@@ -3,10 +3,9 @@
 #include <string>
 #include <vector>
 
-#define WIN32_LEAN_AND_MEAN
-#include <Windows.h>
-
 #include "Platform.h"
+
+#include <cstdint>
 
 
 #define GET_BIT(X,Y) (((X) >> (Y-1)) & 1)
@@ -15,7 +14,7 @@
 
 namespace ServerEngine
 {
-UINT32			GetProcessorNum();
+uint32_t			GetProcessorNum();
 
 std::string		GetCurrentWorkDir();
 
@@ -27,51 +26,37 @@ bool			CreateDir(std::string& strDir);
 
 bool			GetDirFiles(const char* pszDir, char* pszFileType, std::vector<std::string>& vtFileList, bool bRecursion);
 
-bool			IsSameDay(UINT64 uTime);
+bool			IsSameDay(uint64_t uTime);
 
-UINT64			GetCurrTime(); //获取当前的秒数
+uint64_t			GetCurrTime(); //获取当前的秒数
 
 tm				GetCurrTmTime();
 
-UINT64			GetDayBeginTime(); //获取当前0点的秒数
+uint64_t			GetDayBeginTime(); //获取当前0点的秒数
 
-UINT64			GetWeekBeginTime(); //获取当前0点的秒数
+uint64_t			GetWeekBeginTime(); //获取当前0点的秒数
 
-time_t			YearTimeToSec(INT32 nYear, INT32 nMonth, INT32 nDay, INT32 nHour, INT32 nMin, INT32 nSec);
+time_t			YearTimeToSec(int32_t nYear, int32_t nMonth, int32_t nDay, int32_t nHour, int32_t nMin, int32_t nSec);
 
-UINT64			GetTickCountRefFunc();
+uint64_t			GetTickCountRefFunc();
 
-UINT32			GetCurThreadID();
+uint32_t			GetCurThreadID();
 
-UINT32			GetCurProcessID();
+uint32_t			GetCurProcessID();
 
-void			Sleep(UINT32 dwMilliseconds);
+void			Sleep(uint32_t dwMilliseconds);
 
-UINT32			GetFreePhysMemory();
+uint32_t			GetFreePhysMemory();
  
-INT32           GetRandNum(INT32 nType);
+int32_t           GetRandNum(int32_t nType);
 
-UINT32			GetLastErrorWrapFunc();
-
-// HANDLE       CreateShareMemory(std::string strName, INT32 nSize);
-//
-// HANDLE		OpenShareMemory(std::string strName);
-
-HANDLE          CreateShareMemory(UINT32 dwModuleID, INT32 nPage, INT32 nSize);
-
-HANDLE			OpenShareMemory(UINT32 dwModuleID, INT32 nPage);
-
-CHAR* 			GetShareMemory(HANDLE hShm);
-
-bool 			ReleaseShareMemory(CHAR* pMem);
-
-bool			CloseShareMemory(HANDLE hShm);
+uint32_t			GetLastErrorWrapFunc();
 
 bool			DbgTrace(char* format, ...);
 
-bool			KillProcess(UINT64 dwPid);
+bool			KillProcess(uint64_t dwPid);
 
-INT32			Min(INT32 nValue1, INT32 nValue2);
+int32_t			Min(int32_t nValue1, int32_t nValue2);
 }
 
 

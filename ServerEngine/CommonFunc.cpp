@@ -1,15 +1,19 @@
-﻿#define _CRT_SECURE_NO_WARNINGS  //TODO 이 매크로 뒤에 삭제해야 한다
-
-#include <io.h>
+﻿#include <io.h>
 #include <direct.h>
 #include <time.h>
 #include "CommonFunc.h"
 
+#ifdef _MSC_BUILD
+#define WIN32_LEAN_AND_MEAN
+#include <Windows.h>
+#endif
+
+
 namespace ServerEngine
 {
-	UINT32 GetProcessorNum()
+	uint32_t GetProcessorNum()
 	{
-		UINT32 dwNum = 0;
+		uint32_t dwNum = 0;
 #ifdef _MSC_BUILD
 		SYSTEM_INFO sysInfo;
 		GetSystemInfo(&sysInfo);
@@ -63,7 +67,7 @@ namespace ServerEngine
 		return true;
 	}
 
-	UINT64 GetCurrTime()
+	uint64_t GetCurrTime()
 	{
 		time_t t;
 
@@ -75,56 +79,62 @@ namespace ServerEngine
 	tm GetCurrTmTime()
 	{
 		time_t rawtime;
-		struct tm* timeinfo;
+		struct tm timeinfo;
 
 		time(&rawtime);
-		timeinfo = localtime(&rawtime);
+		localtime_s(&timeinfo, &rawtime);
 
-		return *timeinfo;
+		return timeinfo;
 	}
 
-	UINT64 GetDayBeginTime()
+	uint64_t GetDayBeginTime()
 	{
 		time_t t;
 		t = time(0);
-		tm* t_tm = localtime(&t);
-		t_tm->tm_hour = 0;
-		t_tm->tm_min = 0;
-		t_tm->tm_sec = 0;
-		t = mktime(t_tm);
-		return (UINT64)t;
+		tm t_tm;
+		localtime_s(&t_tm , &t);
+		t_tm.tm_hour = 0;
+		t_tm.tm_min = 0;
+		t_tm.tm_sec = 0;
+		t = mktime(&t_tm);
+		return (uint64_t)t;
 	}
 
-	UINT64 GetWeekBeginTime()
+	uint64_t GetWeekBeginTime()
 	{
 		time_t t;
 		t = time(0);
-		tm* t_tm = localtime(&t);
-		t_tm->tm_hour = 0;
-		t_tm->tm_min = 0;
-		t_tm->tm_sec = 0;
-		t_tm->tm_wday = 0;
-		t = mktime(t_tm);
+		
+		tm t_tm;
+		localtime_s(&t_tm , &t);
+
+		t_tm.tm_hour = 0;
+		t_tm.tm_min = 0;
+		t_tm.tm_sec = 0;
+		t_tm.tm_wday = 0;
+		t = mktime(&t_tm);
 		return (UINT64)t;
 	}
 
-	time_t YearTimeToSec(INT32 nYear, INT32 nMonth, INT32 nDay, INT32 nHour, INT32 nMin, INT32 nSec)
+	time_t YearTimeToSec(int32_t nYear, int32_t nMonth, int32_t nDay, int32_t nHour, int32_t nMin, int32_t nSec)
 	{
 		time_t timer;
 		time(&timer);
-		tm* t_tm = localtime(&timer);
+
+		tm t_tm;
+		localtime_s(&t_tm , &timer);
 
 		tm newtm;
-		newtm.tm_year = (nYear < 0) ? t_tm->tm_year : nYear;
-		newtm.tm_mon = (nMonth < 0) ? t_tm->tm_mon : nMonth;
-		newtm.tm_mday = (nDay < 0) ? t_tm->tm_mday : nDay;
-		newtm.tm_hour = (nHour < 0) ? t_tm->tm_hour : nHour;
-		newtm.tm_min = (nMin < 0) ? t_tm->tm_min : nMin;
-		newtm.tm_sec = (nSec < 0) ? t_tm->tm_sec : nSec;
-		return mktime(&newtm);;
+		newtm.tm_year = (nYear < 0) ? t_tm.tm_year : nYear;
+		newtm.tm_mon = (nMonth < 0) ? t_tm.tm_mon : nMonth;
+		newtm.tm_mday = (nDay < 0) ? t_tm.tm_mday : nDay;
+		newtm.tm_hour = (nHour < 0) ? t_tm.tm_hour : nHour;
+		newtm.tm_min = (nMin < 0) ? t_tm.tm_min : nMin;
+		newtm.tm_sec = (nSec < 0) ? t_tm.tm_sec : nSec;
+		return mktime(&newtm);
 	}
 
-	UINT64 GetTickCountRefFunc()
+	uint64_t GetTickCountRefFunc()
 	{
 #ifdef _MSC_BUILD
 		return ::GetTickCount64();
@@ -171,14 +181,14 @@ namespace ServerEngine
 
 		char   szTem[1024] = { 0 };
 		char   szDir[1024] = { 0 };
-		strcpy(szTem, pszDir);
+		strcpy_s(szTem, 1024, pszDir);
 		if (szTem[strlen(szTem) - 1] != '\\' || szTem[strlen(szTem) - 1] != '/')
 		{
-			strcat(szTem, "/");
+			strcat_s(szTem, "/");
 		}
 
-		strcpy(szDir, szTem);
-		strcat(szDir, pszFileType);
+		strcpy_s(szDir, 1024, szTem);
+		strcat_s(szDir, pszFileType);
 
 #ifdef _MSC_BUILD
 		struct _finddata_t  tFileInfo = { 0 };
@@ -198,12 +208,12 @@ namespace ServerEngine
 			if ((tFileInfo.attrib & _A_SUBDIR) && bRecursion)
 			{
 				char   szSub[1024] = { 0 };
-				strcpy(szSub, pszDir);
+				strcpy_s(szSub, 1024, pszDir);
 				if (szSub[strlen(szSub) - 1] != '\\' || szSub[strlen(szSub) - 1] != '/')
 				{
-					strcat(szSub, "/");
+					strcat_s(szSub, "/");
 				}
-				strcat(szSub, tFileInfo.name);
+				strcat_s(szSub, tFileInfo.name);
 				GetDirFiles(szSub, pszFileType, vtFileList, bRecursion);
 			}
 			else
@@ -246,19 +256,21 @@ namespace ServerEngine
 		return true;
 	}
 
-	bool IsSameDay(UINT64 uTime)
+	bool IsSameDay(uint64_t uTime)
 	{
 #ifdef _MSC_BUILD
-		return ((uTime - _timezone) / 86400) == ((GetCurrTime() - _timezone) / 86400);
+		long curTime = 0;
+		_get_timezone(&curTime);
+		return ((uTime - curTime) / 86400) == ((GetCurrTime() - curTime) / 86400);
 #else
 		return ((uTime - timezone) / 86400) == ((GetCurrTime() - timezone) / 86400);
 #endif
 
 	}
 
-	UINT32 GetCurThreadID()
+	uint32_t GetCurThreadID()
 	{
-		UINT32 dwThreadID = 0;
+		uint32_t dwThreadID = 0;
 #ifdef _MSC_BUILD
 		dwThreadID = ::GetCurrentThreadId();
 #else
@@ -267,9 +279,9 @@ namespace ServerEngine
 		return dwThreadID;
 	}
 
-	UINT32 GetCurProcessID()
+	uint32_t GetCurProcessID()
 	{
-		UINT32 dwProcessID = 0;
+		uint32_t dwProcessID = 0;
 #ifdef _MSC_BUILD
 		dwProcessID = ::GetCurrentProcessId();
 #else
@@ -279,7 +291,7 @@ namespace ServerEngine
 	}
 
 
-	void Sleep(UINT32 dwMilliseconds)
+	void Sleep(uint32_t dwMilliseconds)
 	{
 #ifdef _MSC_BUILD
 		::Sleep(dwMilliseconds);
@@ -292,9 +304,9 @@ namespace ServerEngine
 		return;
 	}
 
-	UINT32 GetFreePhysMemory()
+	uint32_t GetFreePhysMemory()
 	{
-		UINT32 dwFreeSize = 0;
+		uint32_t dwFreeSize = 0;
 #ifdef _MSC_BUILD
 		MEMORYSTATUSEX statex;
 
@@ -302,7 +314,7 @@ namespace ServerEngine
 
 		GlobalMemoryStatusEx(&statex);
 
-		dwFreeSize = (UINT32)(statex.ullAvailPhys / 1024 / 1024);
+		dwFreeSize = (uint32_t)(statex.ullAvailPhys / 1024 / 1024);
 #else
 		UINT32 dwPageSize;
 		UINT32 dwFreePages;
@@ -314,22 +326,22 @@ namespace ServerEngine
 		return dwFreeSize;
 	}
 
-	INT32 GetRandNum(INT32 nType)
+	int32_t GetRandNum(int32_t nType)
 	{
 		if (nType >= 100 || nType < 0)
 		{
 			return 0;
 		}
 
-		static INT32 nRandIndex[100] = { 0 };
-		static INT32 vtGlobalRankValue[10000];
+		static int32_t nRandIndex[100] = { 0 };
+		static int32_t vtGlobalRankValue[10000];
 		static bool  bInit = false;
 
 		if (bInit == false)
 		{
 			bInit = true;
-			INT32  nTempIndex;
-			UINT32 nTemp;
+			int32_t  nTempIndex;
+			uint32_t nTemp;
 			for (int j = 0; j < 10000; j++)
 			{
 				vtGlobalRankValue[j] = j + 1;
@@ -358,88 +370,14 @@ namespace ServerEngine
 		return errno;
 #endif
 	}
-
-	HANDLE CreateShareMemory(UINT32 dwModuleID, INT32 nPage, INT32 nSize)
-	{
-		HANDLE hShare = NULL;
-#ifdef _MSC_BUILD
-		wchar_t szMemName[128] = { 0 };
-		_snwprintf(szMemName, 128, L"SM_%d", dwModuleID << 16 | nPage);
-		hShare = CreateFileMapping(INVALID_HANDLE_VALUE, NULL, PAGE_READWRITE, 0, nSize, szMemName);
-		if (hShare != NULL)
-		{
-			if (GetLastErrorWrapFunc() == ERROR_ALREADY_EXISTS)
-			{
-				CloseHandle(hShare);
-				hShare = NULL;
-			}
-		}
-#else
-		hShare = shmget(dwModuleID << 16 | nPage, nSize, 0666 | IPC_CREAT | IPC_EXCL);
-		if (hShare == -1)
-		{
-			hShare = NULL;
-		}
-#endif
-		return hShare;
-	}
-
-
-
-	HANDLE OpenShareMemory(UINT32 dwModuleID, INT32 nPage)
-	{
-		HANDLE hShare = NULL;
-#ifdef _MSC_BUILD
-		wchar_t szMemName[128] = { 0 };
-		_snwprintf(szMemName, 128, L"SM_%d", dwModuleID << 16 | nPage);
-		hShare = OpenFileMapping(FILE_MAP_READ | FILE_MAP_WRITE, FALSE, szMemName);
-#else
-		hShare = shmget(dwModuleID << 16 | nPage, 0, 0);
-		if (hShare == -1)
-		{
-			return NULL;
-		}
-#endif
-		return hShare;
-	}
-
-
-
-	CHAR* GetShareMemory(HANDLE hShm)
-	{
-#ifdef _MSC_BUILD
-		CHAR* pdata = (CHAR*)MapViewOfFile(hShm, FILE_MAP_READ | FILE_MAP_WRITE, 0, 0, 0);
-#else
-		CHAR* pdata = (CHAR*)shmat(hShm, (void*)0, 0);
-#endif
-		return pdata;
-	}
-
-	bool ReleaseShareMemory(CHAR* pMem)
-	{
-#ifdef _MSC_BUILD
-		return UnmapViewOfFile(pMem);
-#else
-		return (0 == shmdt(pMem));
-#endif
-	}
-
-	bool CloseShareMemory(HANDLE hShm)
-	{
-#ifdef _MSC_BUILD
-		return  CloseHandle(hShm);
-#else
-		return (0 == shmctl(hShm, IPC_RMID, 0));
-#endif
-	}
-
+			
 	bool DbgTrace(wchar_t* format, ...)
 	{
 #if (defined _MSC_BUILD) && (defined _DEBUG)
 		wchar_t szLog[1024] = { 0 };
 		va_list argptr;
 		va_start(argptr, format);
-		_vsnwprintf(szLog, 1023, format, argptr);
+		_vsnwprintf_s(szLog, 1023, format, argptr);
 		va_end(argptr);
 		OutputDebugString(szLog);
 #endif
@@ -447,7 +385,7 @@ namespace ServerEngine
 		return true;
 	}
 
-	bool KillProcess(UINT64 dwPid)
+	bool KillProcess(uint64_t dwPid)
 	{
 #ifdef _MSC_BUILD
 		HANDLE hPrc;
@@ -478,7 +416,7 @@ namespace ServerEngine
 		return true;
 	}
 
-	INT32 Min(INT32 nValue1, INT32 nValue2)
+	int32_t Min(int32_t nValue1, int32_t nValue2)
 	{
 		return (nValue1 < nValue2) ? nValue1 : nValue2;
 	}

@@ -24,7 +24,7 @@ namespace ServerEngine
 		return &_TimerManager;
 	}
 
-	bool TimerManager::DelTimer(UINT32 dwSec, UINT32 dwData)
+	bool TimerManager::DelTimer(uint32_t dwSec, uint32_t dwData)
 	{
 		if (m_pHead == NULL)
 		{

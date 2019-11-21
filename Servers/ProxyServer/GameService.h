@@ -1,9 +1,10 @@
 ﻿#pragma once
 
-#include <Windows.h>
+#include "ProxyMsgHandler.h"
 
 #include "..\..\ServerEngine\IBufferHandler.h"
-#include "ProxyMsgHandler.h"
+
+#include <cstdint>
 
 namespace ServerEngine
 {
@@ -12,6 +13,13 @@ namespace ServerEngine
 	class IDataBuffer;
 }
 
+struct ServerConfig
+{
+	int LogLeve = 1;
+	int Index = 1;
+	unsigned int MaxConnCount = 0;
+	unsigned short Port = 0;
+};
 
 class CGameService  : public ServerEngine::IPacketDispatcher
 {
@@ -22,7 +30,7 @@ private:
 public:
 	static CGameService* GetInstancePtr();
 
-	bool		Init();
+	bool		Init(ServerConfig config);
 
 	bool		Uninit();
 
@@ -44,18 +52,18 @@ public:
 
 	bool		SendWatchHeartBeat();
 
-	bool		SetWatchIndex(UINT32 nIndex);
+	bool		SetWatchIndex(uint32_t nIndex);
 
 public:
 	CProxyMsgHandler	m_ProxyMsgHandler;
 
-	UINT32				m_dwLogicConnID;
+	uint32_t				m_dwLogicConnID;
 
-	UINT32				m_dwWatchSvrConnID;
-	UINT32				m_dwWatchIndex;
+	uint32_t				m_dwWatchSvrConnID;
+	uint32_t				m_dwWatchIndex;
 public:
-	//*********************消息处理定义开始******************************
+	//*********************메시지 처리 함수 정의 시작**************************
 	bool OnMsgWatchHeartBeatAck(ServerEngine::NetPacket* pNetPacket);
-	//*********************消息处理定义结束******************************
+	//*********************메시지 처리 함수 정의 끝****************************
 };
 

@@ -1,16 +1,15 @@
-﻿#ifndef WIN32_LEAN_AND_MEAN
-#define WIN32_LEAN_AND_MEAN
-#endif
-#include <Windows.h>
-
-#include "..\..\ServerEngine\CommonFunc.h"
-#include "..\..\ServerEngine\Connection.h"
-#include "..\..\ServerEngine\ServiceBase.h"
-#include "GameService.h"
+﻿#include "GameService.h"
 //#include "Position.h"
 //#include "../Message/Msg_Game.pb.h"
 //#include "../Message/Msg_RetCode.pb.h"
 //#include "../Message/Msg_ID.pb.h"
+
+#include "..\..\ServerEngine\Log.h"
+#include "..\..\ServerEngine\ConfigFile.h"
+#include "..\..\ServerEngine\CommonFunc.h"
+#include "..\..\ServerEngine\Connection.h"
+#include "..\..\ServerEngine\ServiceBase.h"
+
 
 CGameService::CGameService(void)
 {
@@ -30,7 +29,7 @@ CGameService* CGameService::GetInstancePtr()
 	return &_GameService;
 }
 
-bool CGameService::SetWatchIndex(UINT32 nIndex)
+bool CGameService::SetWatchIndex(uint32_t nIndex)
 {
 	m_dwWatchIndex = nIndex;
 
@@ -38,36 +37,42 @@ bool CGameService::SetWatchIndex(UINT32 nIndex)
 }
 
 
-bool CGameService::Init()
+bool CGameService::Init(ServerConfig config)
 {
 	ServerEngine::SetCurrentWorkDir("");
 
-	/*if(!CLog::GetInstancePtr()->StartLog("ProxyServer", "log"))
+	if(!CLog::GetInstancePtr()->StartLog("ProxyServer", "log"))
 	{
 		return false;
 	}
 
-	ServerEngine::CLog::GetInstancePtr()->LogError("---------服务器开始启动-----------");
+	CLog::GetInstancePtr()->LogError("---------서버 초기화-----------");
 
-	if(!CConfigFile::GetInstancePtr()->Load("servercfg.ini"))
+	auto pConfigFileInst = ServerEngine::ConfigFile::GetInstancePtr();
+
+	if(!pConfigFileInst->Load("servercfg.ini"))
 	{
-		CLog::GetInstancePtr()->LogError("配制文件加载失败!");
+		CLog::GetInstancePtr()->LogError("환경 설정 정보 로딩 실패!");
 		return false;
 	}
 
-	ServerEngine::CLog::GetInstancePtr()->SetLogLevel(CConfigFile::GetInstancePtr()->GetIntValue("proxy_log_level"));
+	CLog::GetInstancePtr()->SetLogLevel(config.LogLeve);
 
-	UINT16 nPort = ServerEngine::CConfigFile::GetInstancePtr()->GetIntValue("proxy_svr_port");
-	INT32  nMaxConn = ServerEngine::CConfigFile::GetInstancePtr()->GetIntValue("proxy_svr_max_con");
-	if(!ServiceBase::GetInstancePtr()->StartNetwork(nPort, nMaxConn, this))
+	UINT16 nPort = config.Port;
+	INT32  nMaxConn = config.MaxConnCount;
+	if(ServerEngine::ServiceBase::GetInstancePtr()->StartNetwork(nPort, nMaxConn, this) == false)
 	{
-		CLog::GetInstancePtr()->LogError("启动服务失败!");
+		CLog::GetInstancePtr()->LogError("서비스 초기화 실패!");
 		return false;
 	}
 
-	ERROR_RETURN_false(m_ProxyMsgHandler.Init(0));
-
-	CLog::GetInstancePtr()->LogError("---------服务器启动成功!--------");*/
+	if (m_ProxyMsgHandler.Init(0) == false)
+	{
+		CLog::GetInstancePtr()->LogError("서비스 초기화 실패! - m_ProxyMsgHandler");
+		return false;
+	}
+	
+	CLog::GetInstancePtr()->LogError("---------서버 초기화 성공!--------");
 
 	return true;
 }
@@ -112,43 +117,37 @@ bool CGameService::OnSecondTimer()
 
 bool CGameService::DispatchPacket(ServerEngine::NetPacket* pNetPacket)
 {
-	/*switch(pNetPacket->m_dwMsgID)
-	{
-			PROCESS_MESSAGE_ITEM(MSG_WATCH_HEART_BEAT_ACK, OnMsgWatchHeartBeatAck)
-	}
-
 	if (m_ProxyMsgHandler.DispatchPacket(pNetPacket))
 	{
 		return true;
-	}*/
+	}
 
 	return false;
 }
 
-UINT32 CGameService::GetLogicConnID()
+uint32_t CGameService::GetLogicConnID()
 {
 	return m_dwLogicConnID;
 }
 
 bool CGameService::ConnectToLogicSvr()
 {
-	/*if (m_dwLogicConnID != 0)
+	if (m_dwLogicConnID != 0)
 	{
 		return true;
 	}
-	UINT32 nLogicPort = CConfigFile::GetInstancePtr()->GetIntValue("logic_svr_port");
-	std::string strLogicIp = CConfigFile::GetInstancePtr()->GetStringValue("logic_svr_ip");
-	CConnection* pConn = ServiceBase::GetInstancePtr()->ConnectTo(strLogicIp, nLogicPort);
-	ERROR_RETURN_FALSE(pConn != NULL);
-	m_dwLogicConnID = pConn->GetConnectionID();*/
+	
+	//uint32_t nLogicPort = CConfigFile::GetInstancePtr()->GetIntValue("logic_svr_port");
+	//std::string strLogicIp = CConfigFile::GetInstancePtr()->GetStringValue("logic_svr_ip");
+	//CConnection* pConn = ServiceBase::GetInstancePtr()->ConnectTo(strLogicIp, nLogicPort);
+	//ERROR_RETURN_FALSE(pConn != NULL);
+	//m_dwLogicConnID = pConn->GetConnectionID();
 	return true;
 }
 
 bool CGameService::Uninit()
 {
-	/*ServiceBase::GetInstancePtr()->StopNetwork();
-	google::protobuf::ShutdownProtobufLibrary();*/
-
+	ServerEngine::ServiceBase::GetInstancePtr()->StopNetwork();	
 	return true;
 }
 
@@ -156,9 +155,9 @@ bool CGameService::Run()
 {
 	while(true)
 	{
-		/*ServiceBase::GetInstancePtr()->Update();
+		ServerEngine::ServiceBase::GetInstancePtr()->Update();
 
-		CommonFunc::Sleep(1);*/
+		ServerEngine::Sleep(1);
 	}
 
 	return true;
@@ -191,7 +190,6 @@ bool CGameService::OnMsgWatchHeartBeatAck(ServerEngine::NetPacket* pNetPacket)
 
 	return true;
 }
-
 
 bool CGameService::ConnectToWatchServer()
 {

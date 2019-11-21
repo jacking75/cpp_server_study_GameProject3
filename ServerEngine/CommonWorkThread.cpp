@@ -6,6 +6,7 @@
 #include "CheckMacroDefine.h"
 #include "CommonWorkThread.h"
 #include "CommonEvent.h"
+#include "CommonFunc.h"
 #include "DataBuffer.h"
 #include "PacketHeader.h"
 
@@ -15,7 +16,7 @@ namespace ServerEngine
 	{
 		m_bRun = false;
 
-		m_dwLastTick = GetTickCount();
+		m_dwLastTick = GetTickCountRefFunc();
 	}
 
 	CCommonWorkThread::~CCommonWorkThread()
@@ -47,14 +48,8 @@ namespace ServerEngine
 	{
 		m_bRun = true;
 
-		//TODO 수정하기
-		/*m_hThread = CommonThreadFunc::CreateThreadWrapFunc(_CommonWorkThread, this);
-
-		if (m_hThread != NULL)
-		{
-			return true;
-		}*/
-
+		m_hThread = std::thread([this]() { ThreadFunc(); });
+		
 		return false;
 	}
 
@@ -62,9 +57,11 @@ namespace ServerEngine
 	{
 		m_bRun = false;
 
-		//TODO 수정하기
-		//CommonThreadFunc::WaitThreadExitWrapFunc(m_hThread);
-
+		if (m_hThread.joinable())
+		{
+			m_hThread.join();
+		}
+		
 		return true;
 	}
 
@@ -107,22 +104,15 @@ namespace ServerEngine
 	}
 
 
-	//TODO 수정하기
-	/*Th_RetName _CommonWorkThread(void* pParam)
+	void CCommonWorkThread::ThreadFunc()
 	{
-		CCommonWorkThread* pThread = (CCommonWorkThread*)pParam;
-
-		if (!pThread->OnThreadBegin())
+		if (OnThreadBegin() == false)
 		{
 			ASSERT_FAIELD;
-
-			return Th_RetValue;
 		}
 
-		pThread->Run();
+		Run();
 
-		pThread->OnThreadEnd();
-
-		return Th_RetValue;
-	}*/
+		OnThreadEnd();
+	}
 }

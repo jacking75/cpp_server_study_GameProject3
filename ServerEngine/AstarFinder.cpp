@@ -1,18 +1,13 @@
-﻿#include <stdlib.h>
+﻿#include "AstarFinder.h"
 
-#include "Platform.h"
-#include "AstarFinder.h"
+#include <stdlib.h>
 
 
 namespace ServerEngine
 {
 	AstarFinder::AstarFinder()
 	{
-		m_pOpenList = NULL;
-		m_pClosedList = NULL;
-		m_pCurPath = NULL;
 		m_pStack = (STACK*)calloc(1, sizeof(STACK));
-		m_pTileMap = NULL;
 	}
 
 	////////////////////////////////////////////////////////////////////////////////
@@ -21,8 +16,9 @@ namespace ServerEngine
 	{
 		FreeNodes();
 		free(m_pStack);
+
 #ifdef MAPDATANOCOPY
-		m_pTileMap = NULL;
+		m_pTileMap = nullptr;
 #else
 		if (m_pTileMap != NULL)
 		{
@@ -37,11 +33,12 @@ namespace ServerEngine
 	////////////////////////////////////////////////////////////////////////////////
 
 
-	bool AstarFinder::InitAstarMap(BYTE* pMap, INT32 w, INT32 h)
+	bool AstarFinder::InitAstarMap(uint8_t* pMap, int32_t w, int32_t h)
 	{
 		m_nColCnt = w;	// 장애물 맵의 넓이
 		m_nRowCnt = h;	// 장애물 맵의 높이
 		m_nTotalTiles = m_nRowCnt * m_nColCnt; // 장애물 맵의 크기
+
 #ifdef MAPDATANOCOPY
 		m_pTileMap = pMap;
 #else
@@ -52,7 +49,7 @@ namespace ServerEngine
 		}
 		unsigned long BufSize;
 		BufSize = (m_nTotalTiles + 7) >> 3;
-		m_pTileMap = new BYTE[BufSize];
+		m_pTileMap = new uint8_t[BufSize];
 		memcpy(m_pTileMap, pMap, BufSize);
 #endif
 
@@ -69,14 +66,14 @@ namespace ServerEngine
 			FindPath(sx, sy, dx, dy);
 		}
 
-		return m_pCurPath != NULL;
+		return m_pCurPath != nullptr;
 	}
 
 	////////////////////////////////////////////////////////////////////////////////
 
 	bool AstarFinder::IsReached(void) // check it's return value before getting
 	{
-		if (m_pCurPath->Parent == NULL)
+		if (m_pCurPath->Parent == nullptr)
 		{
 			return false;
 		}
@@ -86,7 +83,7 @@ namespace ServerEngine
 
 	bool AstarFinder::PathNextNode(void)
 	{
-		if (m_pCurPath->Parent != NULL)
+		if (m_pCurPath->Parent != nullptr)
 		{
 			m_pCurPath = m_pCurPath->Parent;
 			return true;
@@ -97,7 +94,7 @@ namespace ServerEngine
 		}
 	}
 
-	INT32 AstarFinder::NodeGetX()
+	int32_t AstarFinder::NodeGetX()
 	{
 		return m_pCurPath->x;
 	}
@@ -146,10 +143,10 @@ namespace ServerEngine
 	void AstarFinder::FreeNodes(void)
 	{
 		NODE* Node, * OldNode;
-		if (m_pOpenList != NULL)
+		if (m_pOpenList != nullptr)
 		{
 			Node = m_pOpenList->NextNode;
-			while (Node != NULL)
+			while (Node != nullptr)
 			{
 				OldNode = Node;
 				Node = Node->NextNode;
@@ -157,10 +154,10 @@ namespace ServerEngine
 			}
 		}
 
-		if (m_pClosedList != NULL)
+		if (m_pClosedList != nullptr)
 		{
 			Node = m_pClosedList->NextNode;
-			while (Node != NULL)
+			while (Node != nullptr)
 			{
 				OldNode = Node;
 				Node = Node->NextNode;
@@ -192,7 +189,7 @@ namespace ServerEngine
 		for (;;)
 		{
 			BestNode = GetBestNode();
-			if (BestNode == NULL)
+			if (BestNode == nullptr)
 			{
 				break;
 			}
@@ -212,9 +209,9 @@ namespace ServerEngine
 		* AstarFinder::GetBestNode(void) //열린 목록에서 f가 가장 작은 노드를 반환하고이 노드를 가까운 목록에 삽입합니다.
 	{
 		NODE* tmp;
-		if (m_pOpenList->NextNode == NULL)
+		if (m_pOpenList->NextNode == nullptr)
 		{
-			return NULL;;
+			return nullptr;
 		}
 
 		// Pick Node with lowest f, in this case it's the first node in list
@@ -287,10 +284,10 @@ namespace ServerEngine
 		g = BestNode->g + 1;	  // g(Successor)=g(BestNode)+cost of getting from BestNode to Successor
 		TileNumS = GetTileNum(x, y); // identification purposes
 
-		if ((Old = CheckOPEN(TileNumS)) != NULL) // if equal to NULL then not in OPEN list, else it returns the Node in Old
+		if ((Old = CheckOPEN(TileNumS)) != nullptr) // if equal to NULL then not in OPEN list, else it returns the Node in Old
 		{
 			for (c = 0; c < 8; c++)
-				if (BestNode->Child[c] == NULL) // Add Old to the list of BestNode's Children (or Successors).
+				if (BestNode->Child[c] == nullptr) // Add Old to the list of BestNode's Children (or Successors).
 				{
 					break;
 				}
@@ -303,10 +300,10 @@ namespace ServerEngine
 				Old->f = g + Old->h;
 			}
 		}
-		else if ((Old = CheckCLOSED(TileNumS)) != NULL) // if equal to NULL then not in CLOSE list, else it returns the Node in Old
+		else if ((Old = CheckCLOSED(TileNumS)) != nullptr) // if equal to NULL then not in CLOSE list, else it returns the Node in Old
 		{
 			for (c = 0; c < 8; c++)
-				if (BestNode->Child[c] == NULL) // Add Old to the list of BestNode's Children (or Successors).
+				if (BestNode->Child[c] == nullptr) // Add Old to the list of BestNode's Children (or Successors).
 				{
 					break;
 				}
@@ -334,7 +331,7 @@ namespace ServerEngine
 			Successor->NodeNum = TileNumS;
 			Insert(Successor);     // Insert Successor on OPEN list wrt f
 			for (c = 0; c < 8; c++)
-				if (BestNode->Child[c] == NULL) // Add Old to the list of BestNode's Children (or Successors).
+				if (BestNode->Child[c] == nullptr) // Add Old to the list of BestNode's Children (or Successors).
 				{
 					break;
 				}
@@ -344,13 +341,12 @@ namespace ServerEngine
 
 	////////////////////////////////////////////////////////////////////////////////
 
-	AstarFinder::NODE
-		* AstarFinder::CheckOPEN(int tilenum) //열린 목록을 탐색하여 타일 번호가 있는지 확인한다.
+	AstarFinder::NODE* AstarFinder::CheckOPEN(int tilenum) //열린 목록을 탐색하여 타일 번호가 있는지 확인한다.
 	{
 		NODE* tmp;
 
 		tmp = m_pOpenList->NextNode;
-		while (tmp != NULL)
+		while (tmp != nullptr)
 		{
 			if (tmp->NodeNum == tilenum)
 			{
@@ -361,19 +357,18 @@ namespace ServerEngine
 				tmp = tmp->NextNode;
 			}
 		}
-		return(NULL);
+		return(nullptr);
 	}
 
 	////////////////////////////////////////////////////////////////////////////////
 
-	AstarFinder::NODE
-		* AstarFinder::CheckCLOSED(int tilenum) //닫힌 목록을 탐색하여 타일 번호가 있는지 확인한다
+	AstarFinder::NODE* AstarFinder::CheckCLOSED(int tilenum) //닫힌 목록을 탐색하여 타일 번호가 있는지 확인한다
 	{
 		NODE* tmp;
 
 		tmp = m_pClosedList->NextNode;
 
-		while (tmp != NULL)
+		while (tmp != nullptr)
 		{
 			if (tmp->NodeNum == tilenum)
 			{
@@ -384,7 +379,7 @@ namespace ServerEngine
 				tmp = tmp->NextNode;
 			}
 		}
-		return(NULL);
+		return nullptr;
 	}
 
 	////////////////////////////////////////////////////////////////////////////////
@@ -394,7 +389,7 @@ namespace ServerEngine
 		NODE* tmp1, * tmp2;
 		int f;
 
-		if (m_pOpenList->NextNode == NULL)
+		if (m_pOpenList->NextNode == nullptr)
 		{
 			m_pOpenList->NextNode = Successor;
 			return;
@@ -404,7 +399,7 @@ namespace ServerEngine
 		tmp1 = m_pOpenList;
 		tmp2 = m_pOpenList->NextNode;
 
-		while ((tmp2 != NULL) && (tmp2->f < f))
+		while ((tmp2 != nullptr) && (tmp2->f < f))
 		{
 			tmp1 = tmp2;
 			tmp2 = tmp2->NextNode;
@@ -424,7 +419,7 @@ namespace ServerEngine
 		g = Old->g;            // alias.
 		for (c = 0; c < 8; c++)
 		{
-			if ((Child = Old->Child[c]) == NULL) // create alias for faster access.
+			if ((Child = Old->Child[c]) == nullptr) // create alias for faster access.
 			{
 				break;
 			}
@@ -437,12 +432,12 @@ namespace ServerEngine
 			}     // checked out. Remember the new cost must be propagated down.
 		}
 
-		while (m_pStack->pNextStack != NULL)
+		while (m_pStack->pNextStack != nullptr)
 		{
 			Father = Pop();
 			for (c = 0; c < 8; c++)
 			{
-				if ((Child = Father->Child[c]) == NULL) // we may stop the propagation 2 ways: either
+				if ((Child = Father->Child[c]) == nullptr) // we may stop the propagation 2 ways: either
 				{
 					break;
 				}
@@ -472,8 +467,7 @@ namespace ServerEngine
 	}
 
 	////////////////////////////////////////////////////////////////////////////////
-	AstarFinder::NODE
-		* AstarFinder::Pop(void) //리턴 노드 포인터
+	AstarFinder::NODE* AstarFinder::Pop(void) //리턴 노드 포인터
 	{
 		NODE* tmp;
 		STACK* tmpSTK;

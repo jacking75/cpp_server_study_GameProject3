@@ -1,13 +1,12 @@
 ﻿#pragma once
 
-#include <map>
-
-
-
 #ifdef _MSC_BUILD
 #else
 #include "..\..\ServerEngine\Platform.h"
 #endif
+
+#include <cstdint>
+#include <map>
 
 
 namespace ServerEngine
@@ -26,7 +25,7 @@ public:
 
 	~CProxyMsgHandler();
 
-	bool		Init(UINT32 dwReserved);
+	bool		Init(uint32_t dwReserved);
 
 	bool		Uninit();
 
@@ -40,11 +39,11 @@ public:
 
 	bool		RelayToLogicServer(ServerEngine::IDataBuffer* pBuffer);
 
-	bool        RelayToConnect(UINT32 dwConnID, ServerEngine::IDataBuffer* pBuffer);
+	bool        RelayToConnect(uint32_t dwConnID, ServerEngine::IDataBuffer* pBuffer);
 
-	UINT32      GetGameSvrConnID(UINT32 dwSvrID);
+	uint32_t      GetGameSvrConnID(uint32_t dwSvrID);
 
-	bool		IsServerConnID(UINT32 dwConnID);
+	bool		IsServerConnID(uint32_t dwConnID);
 	//*********************消息处理定义开始******************************
 public:
 	bool		OnMsgGameSvrRegister(ServerEngine::NetPacket* pPacket);
@@ -54,7 +53,7 @@ public:
 	bool		OnMsgRoleLogoutReq(ServerEngine::NetPacket* pPacket);
 	bool		OnMsgKickoutNty(ServerEngine::NetPacket* pPacket);
 public:
-	std::map<UINT32, UINT32> m_mapSvrIDtoConnID;
+	std::map<uint32_t, uint32_t> m_mapSvrIDtoConnID;
 
 };
 

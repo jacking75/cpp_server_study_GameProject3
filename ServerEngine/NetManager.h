@@ -1,7 +1,7 @@
 ﻿#pragma once
 
 #include <string>
-
+#include <thread>
 
 
 #include "Connection.h"
@@ -60,7 +60,7 @@ namespace ServerEngine
 
 		bool    CloseEventThread();
 
-		bool	WorkThread_ProcessEvent(UINT32 nParam);
+		bool	WorkThread_ProcessEvent();
 
 		bool	WorkThread_Listen();
 
@@ -83,13 +83,16 @@ namespace ServerEngine
 
 		IDataHandler* m_pBufferHandler;
 
-#ifdef _MSC_BUILD
-		HANDLE				 m_hListenThread;
-		std::vector<HANDLE> m_vtEventThread;
-#else
-		pthread_t				 m_hListenThread;
-		std::vector<pthread_t> m_vtEventThread;
-#endif
+//#ifdef _MSC_BUILD
+//		HANDLE				 m_hListenThread;
+//		std::vector<HANDLE> m_vtEventThread;
+//#else
+//		pthread_t				 m_hListenThread;
+//		std::vector<pthread_t> m_vtEventThread;
+//#endif
+		std::thread m_hListenThread;
+		std::vector<std::thread> m_vtEventThread;
+
 
 #ifndef _MSC_BUILD
 

@@ -1,6 +1,7 @@
 ﻿#pragma once
 
 #include <string>
+#include <cstdint>
 #include "CritSec.h"
 
 
@@ -31,22 +32,20 @@
 
 		void LogError(const char* lpszFormat, ...);
 
-		void LogInfo(char* lpszFormat, ...);
+		void LogInfo(const char* lpszFormat, ...);
 
 		void SetLogLevel(int Level);
-
-		void SetTitle(const char* lpszFormat, ...);
 
 		void Flush();
 
 	protected:
 		ServerEngine::CCritSec			m_CritSec;
 
-		INT32				m_LogCount;
+		int32_t				m_LogCount;
 
 		FILE* m_pLogFile;
 
-		INT32				m_LogLevel;
+		int32_t				m_LogLevel;
 
 		std::string         m_strPrefix;
 	};

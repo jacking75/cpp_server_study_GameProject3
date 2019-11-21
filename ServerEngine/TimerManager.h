@@ -2,13 +2,15 @@
 
 #include "CommonFunc.h"
 
+#include <cstdint>
+
 namespace ServerEngine
 {
 	class CTimerSlotBase
 	{
 	public:
 		virtual ~CTimerSlotBase() {}
-		virtual bool operator()(UINT32 pData) { return true; }
+		virtual bool operator()(uint32_t pData) { return true; }
 		virtual void* GetThisAddr() { return 0; }
 	};
 
@@ -17,16 +19,16 @@ namespace ServerEngine
 	template<typename T>
 	class CTimerSlot : public CTimerSlotBase
 	{
-		typedef bool(T::* FuncType)(UINT32);
+		typedef bool(T::* FuncType)(uint32_t);
 	public:
-		CTimerSlot(bool(T::* FuncType)(UINT32), T* pObj)
+		CTimerSlot(bool(T::* FuncType)(uint32_t), T* pObj)
 			: m_pFuncPtr(FuncType), m_pThis(pObj)
 		{
 
 		}
 		virtual ~CTimerSlot() {}
 
-		virtual bool operator() (UINT32 pData)
+		virtual bool operator() (uint32_t pData)
 		{
 			if (m_pThis != NULL && m_pFuncPtr != NULL)
 			{
@@ -82,13 +84,13 @@ namespace ServerEngine
 			}
 		}
 
-		UINT64 m_dwFireTime;  //트리거 시간
-		UINT32 m_dwSec;
-		UINT32 m_dwData;
+		uint64_t m_dwFireTime;  //트리거 시간
+		uint32_t m_dwSec;
+		uint32_t m_dwData;
 		TimeEvent* m_pPrev; //이전 노드
 		TimeEvent* m_pNext; //다음 노드
-		UINT32  m_dwType;   //이벤트 유형, 1 절대 시간 타이머, 2 상대 시간 타이머
-		INT32   m_dwRepeateTimes;
+		uint32_t  m_dwType;   //이벤트 유형, 1 절대 시간 타이머, 2 상대 시간 타이머
+		int32_t   m_dwRepeateTimes;
 		CTimerSlotBase* m_pTimerFuncSlot;
 	};
 
@@ -104,7 +106,7 @@ namespace ServerEngine
 	public:
 
 		template<typename T>
-		bool AddFixTimer(UINT32 dwSec, UINT32 dwData, bool(T::* FuncPtr)(UINT32), T* pObj)
+		bool AddFixTimer(uint32_t dwSec, uint32_t dwData, bool(T::* FuncPtr)(uint32_t), T* pObj)
 		{
 			TimeEvent* pNewEvent = NULL;
 			if (m_pFree == NULL)
@@ -144,7 +146,7 @@ namespace ServerEngine
 		}
 
 		template<typename T>
-		bool AddDiffTimer(UINT32 dwSec, UINT32 dwData, bool(T::* FuncPtr)(UINT32), T* pObj)
+		bool AddDiffTimer(uint32_t dwSec, uint32_t dwData, bool(T::* FuncPtr)(uint32_t), T* pObj)
 		{
 			TimeEvent* pNewEvent = NULL;
 			if (m_pFree == NULL)
@@ -183,7 +185,7 @@ namespace ServerEngine
 			return true;
 		}
 
-		bool DelTimer(UINT32 dwSec, UINT32 dwData);
+		bool DelTimer(uint32_t dwSec, uint32_t dwData);
 
 		void UpdateTimer();
 
@@ -197,9 +199,9 @@ namespace ServerEngine
 
 		TimeEvent* m_pFree;
 
-		UINT64     m_dwCurTime;
+		uint64_t     m_dwCurTime;
 
-		UINT64     m_dwInitTime;  //타이머 작동 시작(작업 시간 시작 전 타이머가 아님)
+		uint64_t     m_dwInitTime;  //타이머 작동 시작(작업 시간 시작 전 타이머가 아님)
 	
 	};
 

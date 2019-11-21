@@ -4,6 +4,8 @@
 #include "IBufferHandler.h"
 #include "LockFreeQueue.h"
 
+#include <thread>
+
 namespace ServerEngine
 {	
 	class CCommonWorkThread
@@ -27,13 +29,14 @@ namespace ServerEngine
 
 		bool			OnThreadEnd();
 
+
 	protected:
-#ifdef _MSC_BUILD
-		HANDLE					m_hThread;
-#else
-		pthread_t					m_hThread;
-#endif
+		void ThreadFunc();
+
+
 		bool					m_bRun;
+
+		std::thread m_hThread;
 
 		IThreadHandler* m_pThreadHandler;
 

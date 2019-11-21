@@ -1,6 +1,4 @@
-﻿#define _WINSOCK_DEPRECATED_NO_WARNINGS  //TODO 이 매크로 뒤에 삭제해야 한다
-
-#include <string>
+﻿#include <string>
 
 #include "Platform.h"
 #include "CommonSocket.h"
@@ -121,14 +119,21 @@ std::string ServerEngine::GetLocalIP()
 		return "";
 	}
 
-	hostent* host = gethostbyname(hostname);
-	if (host == NULL)
+	struct addrinfo hints, * res0;
+	ZeroMemory(&hints, sizeof(hints));
+	hints.ai_family = AF_INET;
+	hints.ai_socktype = SOCK_STREAM;
+	hints.ai_protocol = IPPROTO_TCP;
+
+	auto err = getaddrinfo(hostname, NULL, &hints, &res0);		
+	if (err != 0)
 	{
 		return "";
 	}
 
 	char szIp[256] = { 0 };
-	strcpy_s(szIp, 256, inet_ntoa(*(in_addr*)*host->h_addr_list));
+	IN_ADDR addr = ((LPSOCKADDR_IN)res0->ai_addr)->sin_addr;
+	InetNtopA(AF_INET, &addr, szIp, sizeof(szIp));
 	return std::string(szIp);
 }
 

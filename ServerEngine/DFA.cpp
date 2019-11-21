@@ -1,5 +1,3 @@
-#define _CRT_SECURE_NO_WARNINGS  //TODO 이 매크로 뒤에 삭제해야 한다
-
 #include <algorithm>
 
 #include "Platform.h"
@@ -151,9 +149,10 @@ namespace ServerEngine
 	{
 		ClearChildNode();
 
-		FILE* pFile = fopen(filename.c_str(), "r+");
+		FILE* pFile = NULL;
 
-		if (pFile == NULL)
+		auto err = fopen_s(&pFile, filename.c_str(), "r+");
+		if (err != 0)
 		{
 			return false;
 		}
@@ -179,7 +178,7 @@ namespace ServerEngine
 				continue;
 			}
 
-			strcat(line, "#");
+			strcat_s(line, "#");
 
 			std::string tmpline = line;
 
