@@ -1,12 +1,10 @@
 ﻿#pragma once
 
+#include "Platform.h"
+
 #include <unordered_map>
 #include <string>
 
-#define WIN32_LEAN_AND_MEAN
-#include <Windows.h>
-
-#include "Platform.h"
 
 namespace ServerEngine
 {
@@ -24,11 +22,11 @@ namespace ServerEngine
 
 		std::string GetStringValue(std::string strName);
 
-		INT32 GetIntValue(std::string VarName);
+		int32_t GetIntValue(std::string VarName);
 
-		FLOAT GetFloatValue(std::string VarName);
+		float GetFloatValue(std::string VarName);
 
-		DOUBLE GetDoubleValue(std::string VarName);
+		double GetDoubleValue(std::string VarName);
 
 	private:
 		std::unordered_map<std::string, std::string> m_Values;

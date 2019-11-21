@@ -2,375 +2,76 @@
 
 #include "Platform.h"
 
-#include <string>
-
+#ifdef _MSC_BUILD
 #define WIN32_LEAN_AND_MEAN
 #include <ws2tcpip.h>
 #include <mswsock.h>
 #include <Mstcpip.h>
+#endif
+
 
 
 namespace ServerEngine
 {
 #define SOCKET_ERROR 		(-1)
 
-bool		SetSocketReuseable(SOCKET hSocket)
-{
-	char nReuse = 1;
+//设置套接字为可重用状态
+bool		SetSocketReuseable(SOCKET hSocket);
 
-	if (0 != setsockopt(hSocket, SOL_SOCKET, SO_REUSEADDR, (char*)&nReuse, sizeof(int)))
-		if (0 != setsockopt(hSocket, SOL_SOCKET, SO_REUSEADDR, (char*)&nReuse, sizeof(int)))
-		{
-			return false;
-		}
+//设置套接字为非阻塞状态
+bool		SetSocketNonblock(SOCKET hSocket);
 
-	return true;
-}
+//设置套接字为阻塞状态
+bool		SetSocketBlock(SOCKET hSocket);
 
-bool		SetSocketNonblock(SOCKET hSocket)
-{
-#ifdef _MSC_BUILD
-	u_long iMode = 1;
-	ioctlsocket(hSocket, FIONBIO, &iMode);
-#else
-	int flags = fcntl(hSocket, F_GETFL, 0);
-	fcntl(hSocket, F_SETFL, flags | O_NONBLOCK);
-#endif
+bool		SetSocketNoDelay(SOCKET hSocket);
 
-	return true;
-}
+bool		SetSocketKeepAlive( SOCKET hSocket, int nKeepInterval, int nKeepCount, int nKeepIdle );
 
-bool    SetSocketBlock(SOCKET hSocket)
-{
-#ifdef _MSC_BUILD
-	u_long iMode = 0;
-	ioctlsocket(hSocket, FIONBIO, &iMode);
-#else
-	int flags = fcntl(hSocket, F_GETFL, 0);
-	fcntl(hSocket, F_SETFL, flags & (~O_NONBLOCK));
-#endif
+//初始化网络
+bool		InitNetwork();
 
-	return true;
-}
+//反初始化网络
+bool		UninitNetwork();
 
-bool    SetSocketNoDelay(SOCKET hSocket)
-{
-	int bOn = 1;
+SOCKET		CreateSocket( int af = AF_INET, int type = SOCK_STREAM, int protocol = 0);
 
-	if (0 != setsockopt(hSocket, IPPROTO_TCP, TCP_NODELAY, (char*)&bOn, sizeof(bOn)))
-	{
-		return false;
-	}
+bool		BindSocket( SOCKET hSocket, const struct sockaddr* pAddr, int nNamelen);
 
-	return true;
-}
+bool		ListenSocket( SOCKET hSocket, int nBacklog);
 
-bool SetSocketKeepAlive(SOCKET hSocket, int nKeepInterval, int nKeepCount, int nKeepIdle)
-{
-	bool bKeepAlive = true;
-	setsockopt(hSocket, SOL_SOCKET, SO_KEEPALIVE, (char*)&bKeepAlive, sizeof(bKeepAlive));
-#ifdef _MSC_BUILD
-	tcp_keepalive  alive_in = { 0 }, alive_out = { 0 };
-	alive_in.keepalivetime = nKeepIdle;                // 开始首次KeepAlive探测前的TCP空闭时间
-	alive_in.keepaliveinterval = nKeepInterval;            // 两次KeepAlive探测间的时间间隔
-	alive_in.onoff = true;
-	unsigned long ulBytesReturn = 0;
-	int nRet = WSAIoctl(hSocket, SIO_KEEPALIVE_VALS, &alive_in, sizeof(alive_in),
-		&alive_out, sizeof(alive_out), &ulBytesReturn, NULL, NULL);
+bool		ConnectSocket(SOCKET hSocket, const char* pAddr, short sPort);
 
-	if (nRet == SOCKET_ERROR)
-	{
-		return false;
-	}
-#else
-	setsockopt(hSocket, SOL_TCP, TCP_KEEPIDLE, (void*)&nKeepIdle, sizeof(nKeepIdle));
-	setsockopt(hSocket, SOL_TCP, TCP_KEEPINTVL, (void*)&nKeepInterval, sizeof(nKeepInterval));
-	setsockopt(hSocket, SOL_TCP, TCP_KEEPCNT, (void*)&nKeepCount, sizeof(nKeepCount));
-#endif
+INT32		GetSocketLastError();
 
+bool		IsSocketValid(SOCKET hSocket);
 
-	return true;
-}
+//关闭套接字发送
+void		ShutDownSend(SOCKET hSocket);
 
-bool   InitNetwork()
-{
-#if _MSC_BUILD
-	WSADATA wsaData;
-	if (0 != WSAStartup(MAKEWORD(2, 2), &wsaData))
-	{
-		return false;
-	}
-#endif
-	return true;
-}
+//关闭套接字接收
+void		ShutDownRecv(SOCKET hSocket);
 
-bool   UninitNetwork()
-{
-#if _MSC_BUILD
-	return (0 == WSACleanup());
-#endif
-	return true;
-}
+//关闭套接字
+void		CloseSocket(SOCKET hSocket);
 
-SOCKET		CreateSocket( int af = AF_INET, int type = SOCK_STREAM, int protocol = 0)
-{
-#ifdef _MSC_BUILD
-	return WSASocket(af, type, protocol, NULL, 0, WSA_FLAG_OVERLAPPED);
-#else
-	return socket(af, type, protocol);
-#endif
-}
+//取本机IP地址
+std::string GetLocalIP();
 
-bool		BindSocket( SOCKET hSocket, const struct sockaddr* pAddr, int nNamelen)
-{
-	if (0 != bind(hSocket, pAddr, nNamelen))
-	{
-		return false;
-	}
+std::string GetLastErrorStr(INT32 nError);
 
-	return true;
-}
+UINT32		IpAddrStrToInt(CHAR* pszIpAddr);
 
-bool		ListenSocket( SOCKET hSocket, int nBacklog)
-{
-	if (0 != listen(hSocket, nBacklog))
-	{
-		return false;
-	}
+UINT32		IpAddrStrToInt(const CHAR* pszIpAddr);
 
-	return true;
-}
+std::string IpAddrIntToStr(UINT32 dwIpAddr);
 
-int32_t		GetSocketLastError()
-{
-#ifdef _MSC_BUILD
-	return WSAGetLastError();
-#else
-	return errno;
-#endif
-}
-
-bool		ConnectSocket(SOCKET hSocket, const char* pAddr, short sPort)
-{
-	if (pAddr == NULL)
-	{
-		return false;
-	}
-
-	sockaddr_in  svrAddr;
-	memset(&svrAddr, 0, sizeof(svrAddr));
-	svrAddr.sin_family = AF_INET;
-	svrAddr.sin_port = htons(sPort);
-	inet_pton(AF_INET, pAddr, &svrAddr.sin_addr);
-
-	if (0 == connect(hSocket, (const sockaddr*)&svrAddr, sizeof(svrAddr)))
-	{
-		return true;
-	}
-
-	int nError = GetSocketLastError();
-	if ((WSAEWOULDBLOCK == nError) || (WSAEINPROGRESS == nError))
-	{
-		return true;
-	}
-
-	return false;
-}
-
-bool		IsSocketValid(SOCKET hSocket)
-{
-	if ((hSocket == 0) || (hSocket == INVALID_SOCKET))
-	{
-		return false;
-	}
-
-	return true;
-}
-
-void		ShutDownSend(SOCKET hSocket)
-{
-	shutdown(hSocket, 0);
-}
-
-void		ShutDownRecv(SOCKET hSocket)
-{
-	shutdown(hSocket, 1);
-}
-
-void   CloseSocket(SOCKET hSocket)
-{
-#ifdef _MSC_BUILD
-	closesocket(hSocket);
-#else
-	close(hSocket);
-#endif
-
-	hSocket = -1;
-
-	return;
-}
-
-std::string GetLocalIP()
-{
-	char hostname[256];
-	int ret = gethostname(hostname, sizeof(hostname));
-	if (ret == SOCKET_ERROR)
-	{
-		return "";
-	}
-
-	struct addrinfo hints, * res0;
-	ZeroMemory(&hints, sizeof(hints));
-	hints.ai_family = AF_INET;
-	hints.ai_socktype = SOCK_STREAM;
-	hints.ai_protocol = IPPROTO_TCP;
-
-	auto err = getaddrinfo(hostname, NULL, &hints, &res0);
-	if (err != 0)
-	{
-		return "";
-	}
-
-	char szIp[256] = { 0 };
-	IN_ADDR addr = ((LPSOCKADDR_IN)res0->ai_addr)->sin_addr;
-	InetNtopA(AF_INET, &addr, szIp, sizeof(szIp));
-	return std::string(szIp);
-}
-
-
-std::string GetLastErrorStr(INT32 nError)
-{
-	std::string strErrorText;
-#ifdef _MSC_BUILD
-	LPSTR lpMsgBuf = nullptr;
-	FormatMessageA(FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM | FORMAT_MESSAGE_IGNORE_INSERTS, NULL, nError, MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT), lpMsgBuf, 0, NULL);
-
-	strErrorText = (char*)lpMsgBuf;
-
-	LocalFree(lpMsgBuf);
-#else
-	strErrorText = strerror(nError);
-#endif
-
-	return strErrorText;
-}
-
-uint32_t  IpAddrStrToInt(char* pszIpAddr)
-{
-	sockaddr_in SvrAddr;
-
-	inet_pton(AF_INET, pszIpAddr, &SvrAddr.sin_addr);
-
-	return SvrAddr.sin_addr.s_addr;
-}
-
-uint32_t  IpAddrStrToInt(const char* pszIpAddr)
-{
-	sockaddr_in SvrAddr;
-
-	inet_pton(AF_INET, pszIpAddr, &SvrAddr.sin_addr);
-
-	return SvrAddr.sin_addr.s_addr;
-}
-
-std::string IpAddrIntToStr(uint32_t dwIpAddr)
-{
-	in_addr Addr;
-
-	Addr.s_addr = dwIpAddr;
-
-	CHAR szIpBuffer[100] = { 0 };
-	inet_ntop(AF_INET, &Addr, szIpBuffer, 100);
-	return std::string(szIpBuffer);
-}
-
-bool    SetSocketBuffSize(SOCKET hSocket, INT32 nRecvSize, INT32 nSendSize)
-{
-	if (nRecvSize > 0)
-	{
-		if (0 != setsockopt(hSocket, IPPROTO_TCP, SO_RCVBUF, (char*)&nRecvSize, sizeof(INT32)))
-		{
-			return false;
-		}
-	}
-
-	if (nSendSize > 0)
-	{
-		if (0 != setsockopt(hSocket, IPPROTO_TCP, SO_SNDBUF, (char*)&nSendSize, sizeof(INT32)))
-		{
-			return false;
-		}
-	}
-
-	return true;
-}
+bool		SetSocketBuffSize(SOCKET hSocket, INT32 nRecvSize, INT32 nSendSize);
 
 #ifdef _MSC_BUILD
-bool		ConnectSocketEx(SOCKET hSocket, const char* pAddr, short sPort, LPOVERLAPPED lpOverlapped)
-{
-	LPFN_CONNECTEX lpfnConnectEx = NULL;
+bool		ConnectSocketEx(SOCKET hSocket, const char* pAddr, short sPort, LPOVERLAPPED lpOverlapped);
 
-	DWORD dwBytes;
-	GUID GuidConnectEx = WSAID_CONNECTEX;
-	if (SOCKET_ERROR == WSAIoctl(hSocket, SIO_GET_EXTENSION_FUNCTION_POINTER,
-		&GuidConnectEx, sizeof(GuidConnectEx),
-		&lpfnConnectEx, sizeof(lpfnConnectEx),
-		&dwBytes, NULL, NULL))
-	{
-		return false;
-	}
-
-	sockaddr_in  svrAddr;
-
-	svrAddr.sin_family = AF_INET;
-
-	svrAddr.sin_port = htons(0);
-
-	svrAddr.sin_addr.s_addr = INADDR_ANY;
-
-	BindSocket(hSocket, (const sockaddr*)&svrAddr, sizeof(sockaddr_in));
-
-	svrAddr.sin_port = htons(sPort);
-
-	inet_pton(AF_INET, pAddr, &svrAddr.sin_addr);
-
-	if (!lpfnConnectEx(hSocket, (const sockaddr*)&svrAddr, sizeof(sockaddr_in), NULL, NULL, NULL, lpOverlapped))
-	{
-		if (ERROR_IO_PENDING != GetSocketLastError())
-		{
-			return false;
-		}
-	}
-
-	return true;
-}
-
-bool		AcceptSocketEx(SOCKET hListenSocket, LPOVERLAPPED lpOverlapped)
-{
-	LPFN_ACCEPTEX lpfnAcceptEx = NULL;
-
-	DWORD dwBytes;
-	GUID GuidAcceptEx = WSAID_ACCEPTEX;
-	if (SOCKET_ERROR == WSAIoctl(hListenSocket, SIO_GET_EXTENSION_FUNCTION_POINTER,
-		&GuidAcceptEx, sizeof(GuidAcceptEx),
-		&lpfnAcceptEx, sizeof(lpfnAcceptEx),
-		&dwBytes, NULL, NULL))
-	{
-		return false;
-	}
-
-	SOCKET hAcceptSocket = CreateSocket();
-
-	if (!lpfnAcceptEx(hListenSocket, hAcceptSocket, NULL, NULL, NULL, NULL, NULL, lpOverlapped))
-	{
-		if (ERROR_IO_PENDING != GetSocketLastError())
-		{
-			return false;
-		}
-	}
-
-	return true;
-}
+bool		AcceptSocketEx(SOCKET hListenSocket, LPOVERLAPPED lpOverlapped);
 #endif
 }
 

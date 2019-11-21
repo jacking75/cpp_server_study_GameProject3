@@ -1,7 +1,6 @@
 ﻿#include "CommonConvert.h"
 #include "ConfigFile.h"
-
-
+#include "Log.h"
 
 namespace ServerEngine
 {
@@ -75,22 +74,22 @@ namespace ServerEngine
 			return itor->second;
 		}
 
-		//CLog::GetInstancePtr()->LogError("无效的配制选项: [%s]", strName.c_str());
+		CLog::GetInstancePtr()->LogError("잘못된 구성 옵션: [%s]", strName.c_str());
 
 		return "";
 	}
 
-	INT32 ConfigFile::GetIntValue(std::string VarName)
+	int32_t ConfigFile::GetIntValue(std::string VarName)
 	{
 		return atoi(GetStringValue(VarName).c_str());
 	}
 
-	FLOAT ConfigFile::GetFloatValue(std::string VarName)
+	float ConfigFile::GetFloatValue(std::string VarName)
 	{
 		return (float)atof(GetStringValue(VarName).c_str());
 	}
 
-	DOUBLE ConfigFile::GetDoubleValue(std::string VarName)
+	double ConfigFile::GetDoubleValue(std::string VarName)
 	{
 		return atof(GetStringValue(VarName).c_str());
 	}

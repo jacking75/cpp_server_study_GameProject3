@@ -4,7 +4,6 @@
     <ClCompile Include="AstarFinder.cpp" />
     <ClCompile Include="CommonConvert.cpp" />
     <ClCompile Include="CommonFunc.cpp" />
-    <ClCompile Include="CommonWorkThread.cpp" />
     <ClCompile Include="ConfigFile.cpp" />
     <ClCompile Include="Connection.cpp" />
     <ClCompile Include="CrashReport.cpp" />
@@ -14,6 +13,7 @@
     <ClCompile Include="NetManager.cpp" />
     <ClCompile Include="ServiceBase.cpp" />
     <ClCompile Include="TimerManager.cpp" />
+    <ClCompile Include="CommonSocket.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AstarFinder.h" />
@@ -26,7 +26,6 @@
     <ClInclude Include="CommonMsgQueue.h" />
     <ClInclude Include="CommonMsgQueueEx.h" />
     <ClInclude Include="CommonSocket.h" />
-    <ClInclude Include="CommonWorkThread.h" />
     <ClInclude Include="ConfigFile.h" />
     <ClInclude Include="Connection.h" />
     <ClInclude Include="CrashReport.h" />
