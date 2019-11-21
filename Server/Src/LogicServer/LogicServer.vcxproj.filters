@@ -1,18 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <Filter Include="源文件">
-      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
-      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
-    </Filter>
-    <Filter Include="头文件">
-      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
-      <Extensions>h;hpp;hxx;hm;inl;inc;xsd</Extensions>
-    </Filter>
-    <Filter Include="资源文件">
-      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
-      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav</Extensions>
-    </Filter>
     <Filter Include="ServerData">
       <UniqueIdentifier>{913de128-cbda-4ce2-9716-099610d60508}</UniqueIdentifier>
     </Filter>
@@ -27,53 +15,11 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="GameService.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="GameSvrMgr.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="PlayerObject.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="stdafx.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="PlayerManager.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="EquipModule.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="BagModule.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="ModuleBase.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="RoleModule.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="DataPool.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="CopyModule.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
     <ClCompile Include="..\StaticData\StaticData.cpp">
       <Filter>StaticData</Filter>
     </ClCompile>
-    <ClCompile Include="PetModule.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
     <ClCompile Include="..\Message\Msg_RetCode.pb.cc">
       <Filter>Proto</Filter>
-    </ClCompile>
-    <ClCompile Include="GlobalDataMgr.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="PartnerModule.cpp">
-      <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="..\Message\Msg_Copy.pb.cc">
       <Filter>Proto</Filter>
@@ -87,53 +33,8 @@
     <ClCompile Include="..\Message\Msg_LoginCltData.pb.cc">
       <Filter>Proto</Filter>
     </ClCompile>
-    <ClCompile Include="RankMananger.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="TaskModule.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="Guild.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="ActivityModule.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="MailModule.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="GuildManager.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="SimpleManager.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="ActivityManager.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
     <ClCompile Include="..\Message\Game_Define.pb.cc">
       <Filter>Proto</Filter>
-    </ClCompile>
-    <ClCompile Include="MountModule.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="GroupMailMgr.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="Main.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="LogicMsgHandler.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="CounterModule.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="FriendModule.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="PayManager.cpp">
-      <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="..\Message\Msg_ID.pb.cc">
       <Filter>Proto</Filter>
@@ -141,64 +42,48 @@
     <ClCompile Include="..\StaticData\CppSQLite3.cpp">
       <Filter>StaticData</Filter>
     </ClCompile>
-    <ClCompile Include="LogManager.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="StoreModule.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="GemModule.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="GmCommand.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="WebCommandHandler.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="SkillModule.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
+    <ClCompile Include="ActivityManager.cpp" />
+    <ClCompile Include="ActivityModule.cpp" />
+    <ClCompile Include="BagModule.cpp" />
+    <ClCompile Include="CopyModule.cpp" />
+    <ClCompile Include="CounterModule.cpp" />
+    <ClCompile Include="DataPool.cpp" />
+    <ClCompile Include="EquipModule.cpp" />
+    <ClCompile Include="FriendModule.cpp" />
+    <ClCompile Include="GameService.cpp" />
+    <ClCompile Include="GameSvrMgr.cpp" />
+    <ClCompile Include="GemModule.cpp" />
+    <ClCompile Include="GlobalDataMgr.cpp" />
+    <ClCompile Include="GmCommand.cpp" />
+    <ClCompile Include="GroupMailMgr.cpp" />
+    <ClCompile Include="Guild.cpp" />
+    <ClCompile Include="GuildManager.cpp" />
+    <ClCompile Include="LogicMsgHandler.cpp" />
+    <ClCompile Include="LogManager.cpp" />
+    <ClCompile Include="MailModule.cpp" />
+    <ClCompile Include="Main.cpp" />
+    <ClCompile Include="ModuleBase.cpp" />
+    <ClCompile Include="MountModule.cpp" />
+    <ClCompile Include="PartnerModule.cpp" />
+    <ClCompile Include="PayManager.cpp" />
+    <ClCompile Include="PetModule.cpp" />
+    <ClCompile Include="PlayerManager.cpp" />
+    <ClCompile Include="PlayerObject.cpp" />
+    <ClCompile Include="RankMananger.cpp" />
+    <ClCompile Include="RoleModule.cpp" />
+    <ClCompile Include="SimpleManager.cpp" />
+    <ClCompile Include="SkillModule.cpp" />
+    <ClCompile Include="stdafx.cpp" />
+    <ClCompile Include="StoreModule.cpp" />
+    <ClCompile Include="TaskModule.cpp" />
+    <ClCompile Include="WebCommandHandler.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="GameService.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="GameSvrMgr.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="PlayerObject.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="stdafx.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="PlayerManager.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="BagModule.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="EquipModule.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="ModuleBase.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="RoleModule.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="DataPool.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
     <ClInclude Include="..\ServerData\ServerStruct.h">
       <Filter>ServerData</Filter>
     </ClInclude>
     <ClInclude Include="..\ServerData\RoleData.h">
       <Filter>ServerData</Filter>
-    </ClInclude>
-    <ClInclude Include="CopyModule.h">
-      <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="..\ServerData\ServerDefine.h">
       <Filter>ServerData</Filter>
@@ -212,23 +97,14 @@
     <ClInclude Include="..\ServerData\PetData.h">
       <Filter>ServerData</Filter>
     </ClInclude>
-    <ClInclude Include="PetModule.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
     <ClInclude Include="..\Message\Msg_RetCode.pb.h">
       <Filter>Proto</Filter>
-    </ClInclude>
-    <ClInclude Include="GlobalDataMgr.h">
-      <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="..\ServerData\GlobalData.h">
       <Filter>ServerData</Filter>
     </ClInclude>
     <ClInclude Include="..\ServerData\EquipData.h">
       <Filter>ServerData</Filter>
-    </ClInclude>
-    <ClInclude Include="PartnerModule.h">
-      <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="..\ServerData\PartnerData.h">
       <Filter>ServerData</Filter>
@@ -245,50 +121,17 @@
     <ClInclude Include="..\Message\Msg_LoginDBData.pb.h">
       <Filter>Proto</Filter>
     </ClInclude>
-    <ClInclude Include="RankMananger.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="TaskModule.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
     <ClInclude Include="..\ServerData\GuildData.h">
       <Filter>ServerData</Filter>
-    </ClInclude>
-    <ClInclude Include="Guild.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="ActivityModule.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="MailModule.h">
-      <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="..\ServerData\MailData.h">
       <Filter>ServerData</Filter>
     </ClInclude>
-    <ClInclude Include="GuildManager.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="SimpleManager.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="ActivityManager.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
     <ClInclude Include="..\Message\Game_Define.pb.h">
       <Filter>Proto</Filter>
     </ClInclude>
-    <ClInclude Include="MountModule.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
     <ClInclude Include="..\ServerData\MountData.h">
       <Filter>ServerData</Filter>
-    </ClInclude>
-    <ClInclude Include="GroupMailMgr.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="LogicMsgHandler.h">
-      <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="..\StaticData\ConfigDefine.h">
       <Filter>StaticData</Filter>
@@ -299,17 +142,8 @@
     <ClInclude Include="..\ServerData\CounterData.h">
       <Filter>ServerData</Filter>
     </ClInclude>
-    <ClInclude Include="CounterModule.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="FriendModule.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
     <ClInclude Include="..\ServerData\FriendData.h">
       <Filter>ServerData</Filter>
-    </ClInclude>
-    <ClInclude Include="PayManager.h">
-      <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="..\Message\Msg_ID.pb.h">
       <Filter>Proto</Filter>
@@ -317,41 +151,52 @@
     <ClInclude Include="..\StaticData\CppSQLite3.h">
       <Filter>StaticData</Filter>
     </ClInclude>
-    <ClInclude Include="LogManager.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="StoreModule.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
     <ClInclude Include="..\ServerData\StoreData.h">
       <Filter>ServerData</Filter>
-    </ClInclude>
-    <ClInclude Include="GemModule.h">
-      <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="..\ServerData\GemData.h">
       <Filter>ServerData</Filter>
     </ClInclude>
-    <ClInclude Include="GmCommand.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
     <ClInclude Include="..\ServerData\TaskData.h">
       <Filter>ServerData</Filter>
-    </ClInclude>
-    <ClInclude Include="SkillModule.h">
-      <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="..\ServerData\SkillData.h">
       <Filter>ServerData</Filter>
     </ClInclude>
-    <ClInclude Include="..\StaticData\StaticData.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="..\StaticData\StaticStruct.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="ReadMe.txt" />
+    <ClInclude Include="ActivityManager.h" />
+    <ClInclude Include="ActivityModule.h" />
+    <ClInclude Include="BagModule.h" />
+    <ClInclude Include="CopyModule.h" />
+    <ClInclude Include="CounterModule.h" />
+    <ClInclude Include="DataPool.h" />
+    <ClInclude Include="EquipModule.h" />
+    <ClInclude Include="FriendModule.h" />
+    <ClInclude Include="GameService.h" />
+    <ClInclude Include="GameSvrMgr.h" />
+    <ClInclude Include="GemModule.h" />
+    <ClInclude Include="GlobalDataMgr.h" />
+    <ClInclude Include="GmCommand.h" />
+    <ClInclude Include="GroupMailMgr.h" />
+    <ClInclude Include="Guild.h" />
+    <ClInclude Include="GuildManager.h" />
+    <ClInclude Include="LogicMsgHandler.h" />
+    <ClInclude Include="LogManager.h" />
+    <ClInclude Include="MailModule.h" />
+    <ClInclude Include="ModuleBase.h" />
+    <ClInclude Include="MountModule.h" />
+    <ClInclude Include="PartnerModule.h" />
+    <ClInclude Include="PayManager.h" />
+    <ClInclude Include="PetModule.h" />
+    <ClInclude Include="PlayerManager.h" />
+    <ClInclude Include="PlayerObject.h" />
+    <ClInclude Include="RankMananger.h" />
+    <ClInclude Include="RoleModule.h" />
+    <ClInclude Include="SimpleManager.h" />
+    <ClInclude Include="SkillModule.h" />
+    <ClInclude Include="..\StaticData\StaticData.h" />
+    <ClInclude Include="..\StaticData\StaticStruct.h" />
+    <ClInclude Include="stdafx.h" />
+    <ClInclude Include="StoreModule.h" />
+    <ClInclude Include="TaskModule.h" />
   </ItemGroup>
 </Project>
