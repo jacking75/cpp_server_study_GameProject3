@@ -147,7 +147,6 @@
     <ClCompile Include="AstarFinder.cpp" />
     <ClCompile Include="CommonConvert.cpp" />
     <ClCompile Include="CommonFunc.cpp" />
-    <ClCompile Include="CommonSocket.cpp" />
     <ClCompile Include="CommonWorkThread.cpp" />
     <ClCompile Include="ConfigFile.cpp" />
     <ClCompile Include="Connection.cpp" />

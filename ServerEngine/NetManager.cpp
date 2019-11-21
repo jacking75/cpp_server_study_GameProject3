@@ -57,7 +57,7 @@ namespace ServerEngine
 			{
 				break;
 			}
-			SetSocketUnblock(hClientSocket);
+			SetSocketNonblock(hClientSocket);
 			CConnection* pConnection = AssociateCompletePort(hClientSocket, false);
 			if (pConnection != NULL)
 			{
@@ -591,7 +591,7 @@ namespace ServerEngine
 			return NULL;
 		}
 
-		SetSocketUnblock(hSocket);
+		SetSocketNonblock(hSocket);
 
 		pConnection->SetConnectionOK(true);
 
@@ -615,7 +615,7 @@ namespace ServerEngine
 			return NULL;
 		}
 
-		SetSocketUnblock(hSocket);
+		SetSocketNonblock(hSocket);
 
 		SetSocketNoDelay(hSocket);
 

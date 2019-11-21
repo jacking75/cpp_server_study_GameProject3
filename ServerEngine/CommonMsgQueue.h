@@ -6,6 +6,9 @@
 
 namespace CommonQueue
 {
+	// 스레드 세이프 하다
+	// 만약 큐에 데이터가 없으면 지정 시간까지 대기한 후 false를 반환한다.
+	// 큐에 데이터가 만땅이거나 빈 공간이 없을 때 일정 시간 대기를 하므로 주의해야 한다.
 	template <typename ELEM_T, int dwSize=512>
 	class CMessageQueue
 	{

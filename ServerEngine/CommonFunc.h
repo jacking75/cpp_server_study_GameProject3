@@ -28,13 +28,13 @@ bool			GetDirFiles(const char* pszDir, char* pszFileType, std::vector<std::strin
 
 bool			IsSameDay(uint64_t uTime);
 
-uint64_t			GetCurrTime(); //获取当前的秒数
+uint64_t			GetCurrTime(); //현재 초 수를 가져옵니다
 
 tm				GetCurrTmTime();
 
-uint64_t			GetDayBeginTime(); //获取当前0点的秒数
+uint64_t			GetDayBeginTime(); //현재 0 포인트를 초 단위로 가져옵니다
 
-uint64_t			GetWeekBeginTime(); //获取当前0点的秒数
+uint64_t			GetWeekBeginTime(); //현재 0 포인트를 초 단위로 가져옵니다
 
 time_t			YearTimeToSec(int32_t nYear, int32_t nMonth, int32_t nDay, int32_t nHour, int32_t nMin, int32_t nSec);
 
