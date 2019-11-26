@@ -79,7 +79,7 @@ bool    ServerEngine::SetSocketNoDelay(SOCKET hSocket)
 
 bool   ServerEngine::InitNetwork()
 {
-#if _MSC_BUILD
+#ifdef _MSC_BUILD
 	WSADATA wsaData;
 	if(0 != WSAStartup(MAKEWORD(2, 2), &wsaData))
 	{
@@ -91,7 +91,7 @@ bool   ServerEngine::InitNetwork()
 
 bool   ServerEngine::UninitNetwork()
 {
-#if _MSC_BUILD
+#ifdef _MSC_BUILD
 	return (0 == WSACleanup());
 #endif
 	return true;
@@ -152,6 +152,7 @@ SOCKET	ServerEngine::CreateSocket( int af, int type, int protocol)
 {
 #ifdef _MSC_BUILD
 	return WSASocket(af, type, protocol, NULL, 0, WSA_FLAG_OVERLAPPED);
+	//WSASocket(AF_INET, SOCK_STREAM, IPPROTO_IP, NULL, 0, WSA_FLAG_OVERLAPPED);
 #else
 	return socket(af, type, protocol);
 #endif

@@ -92,7 +92,7 @@ namespace ServerEngine
 
 		SvrAddr.sin_addr.s_addr = htonl(INADDR_ANY);		//支持多IP地址监听
 
-		m_hListenSocket = CreateSocket(AF_INET, SOCK_STREAM, 0);
+		m_hListenSocket = CreateSocket(AF_INET, SOCK_STREAM);
 		if (m_hListenSocket == INVALID_SOCKET)
 		{
 			CLog::GetInstancePtr()->LogError("청취 소켓 장애를 생성하는 이유:%s!", GetLastErrorStr(GetSocketLastError()).c_str());

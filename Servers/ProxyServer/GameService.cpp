@@ -50,11 +50,11 @@ bool CGameService::Init(ServerConfig config)
 
 	auto pConfigFileInst = ServerEngine::ConfigFile::GetInstancePtr();
 
-	if(!pConfigFileInst->Load("servercfg.ini"))
+	/*if(!pConfigFileInst->Load("servercfg.ini"))
 	{
 		CLog::GetInstancePtr()->LogError("환경 설정 정보 로딩 실패!");
 		return false;
-	}
+	}*/
 
 	CLog::GetInstancePtr()->SetLogLevel(config.LogLeve);
 
